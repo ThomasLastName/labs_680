@@ -1,17 +1,25 @@
 
 exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
 use_tensorflow = False  # ~~~ leave `False` if you do not have tensorflow installed; otherwise, set `True` to see the examples involving neural networks
-
+use_progress_bar = False
 
 #
 # ~~~ Standard python libraries
 import warnings     # ~~~ to not get many low rank warnings when we do CV for the degree of polynomial regression
 import numpy as np
 from matplotlib import pyplot as plt
+
+#
+# ~~~ Extra features if you have tensorflow installed
 if use_tensorflow:
-    import os                   # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection
+    import os               # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection in conjunction with sys
+    import sys                  # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection
     from itertools import product   # ~~~ used for conviently assembling a list of candidate NN architecturesin the example of CV for NN architecture selection
     import tensorflow as tf             # ~~~ one of the major python machine learning libraries
+
+#
+# ~~~ In order to reproduce the neural network CV that I ran before lab, you'll "need" the package alive_progres (otherwise, you'll just need to sligly edit my code)
+if use_progress_bar:
     from alive_progress import alive_bar    # ~~~ sorry, I'm gonna make you install this package lol
 
 
@@ -115,11 +123,11 @@ if exercise_mode:
 else:
     #
     # ~~~ Load my values for these variables from the file `ch1.py`` in the folder `answers_680` (this requires said folder to be within your python's `Lib` folder)
-    from answers_680.ch1 import x_train_a           as my_x_train
-    from answers_680.ch1 import y_train_a           as my_y_train
-    from answers_680.ch1 import f_a                 as my_ground_truth
-    from answers_680.ch1 import explanation_a_4     as my_explanation_4
-    from answers_680.ch1 import explanation_a_10    as my_explanation_10
+    from answers_680.answers_week_1 import x_train_a        as my_x_train
+    from answers_680.answers_week_1 import y_train_a        as my_y_train
+    from answers_680.answers_week_1 import f_a              as my_ground_truth
+    from answers_680.answers_week_1 import explanation_a_4  as my_explanation_4
+    from answers_680.answers_week_1 import explanation_a_10 as my_explanation_10
 
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
@@ -137,11 +145,11 @@ if exercise_mode:
 else:
     #
     # ~~~ Load my values for these variables from the file `ch1.py`` in the folder `answers_680` (this requires said folder to be within your python's `Lib` folder)
-    from answers_680.ch1 import x_train_b           as my_x_train
-    from answers_680.ch1 import y_train_b           as my_y_train
-    from answers_680.ch1 import f_b                 as my_ground_truth
-    from answers_680.ch1 import explanation_b_4     as my_explanation_4
-    from answers_680.ch1 import explanation_b_10    as my_explanation_10
+    from answers_680.answers_week_1 import x_train_b        as my_x_train
+    from answers_680.answers_week_1 import y_train_b        as my_y_train
+    from answers_680.answers_week_1 import f_b              as my_ground_truth
+    from answers_680.answers_week_1 import explanation_b_4  as my_explanation_4
+    from answers_680.answers_week_1 import explanation_b_10 as my_explanation_10
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
 dodeca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
@@ -249,7 +257,7 @@ if exercise_mode:
 else:
     #
     # ~~~ Load my answer
-    from answers_680.ch1 import my_univar_poly_fit
+    from answers_680.answers_week_1 import my_univar_poly_fit
 
 #
 # ~~~ Validate our code by checking that our routine implements polynomial regression correctly (compare to the numpy implementation of polynmoial regression)
@@ -268,7 +276,7 @@ if exercise_mode:
 else:
     #
     # ~~~ Load my answer
-    from answers_680.ch1 import univar_spline_fit
+    from answers_680.answers_week_1 import univar_spline_fit
 
 #
 # ~~~ A demonstration of both underfitting and overfitting with spline regression
@@ -466,14 +474,14 @@ if use_tensorflow:
     n_splits = 2
     #
     # ~~~ Add save+load functionality
-    folder = os.path.join( os.getcwd(), 'Lib', 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
+    folder = os.path.join( os.path.dirname(sys.executable), 'Lib', 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
     file_name = 'results_of_cv_ch1.npy'
     assert os.path.exists(folder)
     file_path = os.path.join( folder, file_name )
     #
     # ~~~ Do cross validation
     i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently = False
-    if i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
+    if use_progress_bar and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
         scores = []
         current_scores = [np.nan,np.nan]
         with support_for_progress_bars():
@@ -497,7 +505,6 @@ if use_tensorflow:
         #
         # ~~~ Load the results from a saved file (you must first place the saved file in the correct path)
         scores = np.load(file_path)
-
     #
     # ~~~ Take the best hyperparameter and train using the full data
     if use_tensorflow:
