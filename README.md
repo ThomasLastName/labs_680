@@ -26,7 +26,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 Each week, create a blank `.py` file wherever you prefer, copy the code from this week's `.py` file in GitHub, and paste it into your blank `.py` file. Then, modify the code at the following two points:
  - Replace `install_assist = False` with `install_assist = True`
- - Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = install_assist`
+ - Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = True`
 
 If these two changes are implemented, then the code will automatically download various `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) each time it is executed, including earsing and replacing those files (effectively updating them) if they were already present. In other words, the code will effectively follow the [Installation Using the Graphical Interface](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended) instuctions every time it is executed.
 
