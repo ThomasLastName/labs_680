@@ -101,7 +101,7 @@ if use_tensorflow:
 
 
 ### ~~~ 
-## ~~~ DEMONSTRATION 1 of 4: What Underfitting and Overfitting Look Like (reproduce https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb)
+## ~~~ DEMONSTRATION 1 of 5: What Underfitting and Overfitting Look Like (reproduce https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb)
 ### ~~~
 
 #
@@ -224,7 +224,7 @@ side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 2 of 4: The Present Discussion Applies to Neural Networks, too, as they are Also an Instance of Empirical Risk Minimization
+## ~~~ DEMONSTRATION 2 of 5: The Present Discussion Applies to Neural Networks, too, as they are Also an Instance of Empirical Risk Minimization
 ### ~~~
 
 #
@@ -296,7 +296,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 3 of 4: We can Change the Hypothesis Class in More Radical Ways, too
+## ~~~ DEMONSTRATION 3 of 5: We can Change the Hypothesis Class in More Radical Ways, too
 ### ~~~
 
 #
@@ -367,7 +367,7 @@ side_by_side_prediction_plots( x_train, y_train, f, poly, spline, r"Polynomials 
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 4 of 4: **Cross validation** -- a standard workflow for model selection (which in this case means selecting the appropriate polynomial degree)
+## ~~~ DEMONSTRATION 4 of 5: **Cross validation** -- a standard workflow for model selection (which in this case means selecting the appropriate polynomial degree)
 ### ~~~
 
 warnings.filterwarnings( "ignore", message="Polyfit may be poorly conditioned" )    # ~~~ otherwise crossvalidation will spit out th[is warning a million times
@@ -457,7 +457,7 @@ print(scores)           # ~~~ returns [1.408731127467586, 1.1814320746081544]; b
 
 #
 # ~~~ Make enough executive decisions that all that remains is for someone to supply us with the data
-def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot_like_Foucart=False ):
+def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot=True, plot_like_Foucart=False ):
     #
     # ~~~ Set hyperhyperparameters: those which will be used when determining the hyperparameters
     max_degree = 20
@@ -476,19 +476,20 @@ def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot_like_F
     # ~~~ Take the best hyperparameter and train using the full data
     best_degree = possible_hyperparameters[ np.median(scores,axis=1).argmin() ] # ~~~ lowest median "generalization" error of trianing on only a subset of the data
     best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
-    points_with_curves(
-            x = x_train,
-            y = y_train,
-            curves = (best_poly,f),
-            title = f"Bassed on CV, Choose Degree {best_degree} Polynomial Regression, Resulting in a Test MSE of {mean_squared_error(best_poly(x_test),y_test):.6}",
-            xlim = [-1,1] if plot_like_Foucart else None,       # ~~~ `None` reverts to default settings of `points_with_curves`
-            ylim = [-1.3,5.3] if plot_like_Foucart else None    # ~~~ `None` reverts to default settings of `points_with_curves`
-        )
+    if plot:
+        points_with_curves(
+                x = x_train,
+                y = y_train,
+                curves = (best_poly,f),
+                title = f"Bassed on CV, Choose Degree {best_degree} Polynomial Regression, Resulting in a Test MSE of {mean_squared_error(best_poly(x_test),y_test):.6}",
+                xlim = [-1,1] if plot_like_Foucart else None,       # ~~~ `None` reverts to default settings of `points_with_curves`
+                ylim = [-1.3,5.3] if plot_like_Foucart else None    # ~~~ `None` reverts to default settings of `points_with_curves`
+            )
     return scores
 
 
 #
-# ~~~ Collect the data; IRL these 2 lines of code would not exist; instead, our company or whatever would just hand us x_train, y_train, x_test, y_test
+# ~~~ Try it on some relatively good data
 np.random.seed(680)
 x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=50, noise=0.1 ) 
 scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test )
@@ -500,6 +501,7 @@ x_train, y_train = Foucarts_training_data()
 x_test = np.linspace(-1,1,101)
 y_test = np.abs(x_test)
 scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot_like_Foucart=True )
+
 
 #
 # ~~~ In fact, this particular instance of cross validation failed to find to the best model: the quadratic model is better
@@ -521,7 +523,7 @@ points_with_curves(
 
 
 ### ~~~
-## ~~~ We can do CV with neural networks, too
+## ~~~ DEMONSTRATION 5 OF 5: We can do CV with neural networks, too
 ### ~~~
 
 if use_tensorflow:
@@ -548,6 +550,8 @@ if use_tensorflow:
     # ~~~ Do cross validation
     i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently = False
     if use_progress_bar and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
+        #
+        # ~~~ Run the computations locally
         scores = []
         current_scores = [np.nan,np.nan]
         with support_for_progress_bars():
@@ -570,17 +574,26 @@ if use_tensorflow:
     #
     # ~~~ Take the best hyperparameter and train using the full data
     if os.path.exists(file_path):
-        scores = np.load(file_path)
+        #
+        # ~~~ Load the results of the computations
+        scores = np.load(file_path)     # ~~~ reaquires 'results_of_cv_ch1.npy' to be located in Lib\answers_680 along with the answer keys
+        #
+        # ~~~ Train on the full data a neural network with hyperparameters selected by CV
         best_hyperparameters = possible_hyperparameters[ np.median(scores,axis=1).argmin() ]    # ~~~ lowest median "generalization" error when trianed on only a subset of the data
         architecture, n_epochs = best_hyperparameters
         best_nn = make_and_train_1d_network( x_train, y_train, hidden_layers=architecture, epochs=n_epochs, verbose=0 )[0]
-        points_with_curves(
-                x=x_train,
-                y=y_train,
-                curves=(best_nn,f),
-                title=f"Test MSE {mean_squared_error(best_nn(x_test),y_test):.6} | {len(architecture)} Hidden Layers | widths {architecture} | {n_epochs} epochs"
-            )
-
+        #
+        # ~~~ Compare with polynomial regression
+        np.random.seed(680)
+        x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=50, noise=0.1 ) 
+        scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot=False )
+        degrees_tested = np.arange(20)+1
+        best_degree = degrees_tested[ np.median(scores,axis=1).argmin() ] # ~~~ lowest median "generalization" error of trianing on only a subset of the data
+        best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
+        #
+        # ~~~ Plot the results
+        side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
+ 
 # #
 # # ~~~ Examine whether or not we experience double descent (we do not)
 # architectures_300,  scores_300 =  [], []
