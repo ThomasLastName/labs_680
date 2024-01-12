@@ -15,7 +15,6 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 **List of Requirements in Order to Use this Code:**
 - [x] Have python installed and know how to edit and run python files
-- [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective REDAME's for more info
 - [x] Have the prerequisite standard packages installed:
     - `numpy` and `matplotlib` for minimal functionality
     - `tensorflow`, `pytorch`, `sklearn` for ~98% functionality
@@ -23,13 +22,24 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 ---
 
-# "Installation" Using Copy+Paste (recommended)
+# Installation Using Copy+Paste (recommended)
 
-Each week, create a blank `.py` file wherever you prefer, copy the code from this week's `.py` file in GitHub, and paste it into your blank `.py` file.
+Each week, create a blank `.py` file wherever you prefer, copy the code from this week's `.py` file in GitHub, and paste it into your blank `.py` file. Then, modify the code at the following two points:
+ - Replace `install_assist = False` with `install_assist = True`
+ - Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = install_assist`
+
+If these two changes are implemented, then the code will automatically download various `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) each time it is executed, including earsing and replacing those files (effectively updating them) if they were already present. In other words, the code will effectively follow the [Installation Using the Graphical Interface](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended) instuctions every time it is executed.
+
+**Disclaimer:** By implementing those two changes in your code, you are consenting to me modifying the files on your computer, with the understanding that it is possible I will make a mistake.
+
+**Warning:** If you _coincidentally_ have files which you don't want to lose installed in the same place as the donwloads are targetted to, and if your file has the same name as the one being downloaded, then your file will be erased and replaced by the downloaded one. To see the names of the file Ctrl+f `files = [`, which should appear in two separate places a few lines apart.
 
 ---
 
 # Installation Using the Graphical Interface (not recommended)
+
+**Additional Prerequisites Using the Graphical Interface:**
+- [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective README's for more info
 
 **Installation Steps Using the Graphical Interface:** Click the colorful `<> Code` button at [https://github.com/ThomasLastName/labs_680](https://github.com/ThomasLastName/labs_680) and select `Download ZIP` from the dropdown menu. This should download a zipped folder called `labs_680` containing within it an unzipped folder of the same name, which you just need to click and drag (or copy and paste) to wherever you want to keep these files (anywhere is fine).
 
@@ -39,9 +49,10 @@ Each week, create a blank `.py` file wherever you prefer, copy the code from thi
 
 ---
 
-# Installation Using git (not recommended)
+# Installation Using git
 
 **Additional Prerequisites Using git:**
+- [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective README's for more info
 - [x] Have git installed on your computer
 
 **Installation Steps Using git:** In the shell or command line, navigate to wherever you want to store these demos on your computer (anywhere is fine), and within that directory command `git clone https://github.com/ThomasLastName/labs_680.git`, which will create and populate a folder called `labs_680` in the same directory.
