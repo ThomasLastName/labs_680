@@ -5,7 +5,7 @@ This is some code that I wrote as a teaching assistant for the python labs of th
 ---
 
 # Usage
-Each of the files in the `labs_680` contains multiple reproducible demonstations, as well as 1-3 exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
+Each of these files contains multiple reproducible demonstations, as well as 1-3 exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
 
 ---
 
