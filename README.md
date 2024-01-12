@@ -1,5 +1,5 @@
 # MATH 680 LABS
-This is some code that I wrote as a teaching assistant for the class MATH 680 at Texas A&amp;M University (TAMU) for the class's python labs. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, including several exercises.
+This is some code that I wrote as a teaching assistant for the class MATH 680 at Texas A&amp;M University (TAMU) for the class's python labs. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, including several exercises. I wrote these as the TA for the class in spring 2024.
 
 ---
 
