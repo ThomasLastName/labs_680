@@ -1,27 +1,32 @@
 
 exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
-use_tensorflow = True   # ~~~ leave `False` if you do not have tensorflow installed; otherwise, set `True` to see the examples involving neural networks
-use_progress_bar = False
 
 #
 # ~~~ Standard python libraries
-import warnings     # ~~~ to not get many low rank warnings when we do CV for the degree of polynomial regression
+import warnings
 import numpy as np
 from matplotlib import pyplot as plt
 
 #
 # ~~~ Extra features if you have tensorflow installed
-if use_tensorflow:
-    import os               # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection in conjunction with sys
-    import sys                  # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection
-    from itertools import product   # ~~~ used for conviently assembling a list of candidate NN architecturesin the example of CV for NN architecture selection
+try:
+    import os               # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection
+    import sys                  # ~~~ used in conjunction with os that one time
+    from itertools import product   # ~~~ used for conviently assembling a list of candidate NN architectures in the example of CV for NN's
     import tensorflow as tf             # ~~~ one of the major python machine learning libraries
+    use_tensorflow = True
+except Exception as probably_ModuleNotFoundError:
+    if type(probably_ModuleNotFoundError) is ModuleNotFoundError:
+        use_tensorflow = False
 
 #
 # ~~~ In order to reproduce the neural network CV that I ran before lab, you'll "need" the package alive_progres (otherwise, you'll just need to sligly edit my code)
-if use_progress_bar:
-    from alive_progress import alive_bar    # ~~~ sorry, I'm gonna make you install this package lol
-
+try:
+    from alive_prgress import alive_bar    # ~~~ sorry, I'm gonna make you install this package lol
+    use_progress_bar = True
+except Exception as probably_ModuleNotFoundError:
+    if type(probably_ModuleNotFoundError) is ModuleNotFoundError:
+        use_progress_bar = False
 
 #
 # ~~~ Custom modules for brevity. Alternatively, replace these import statements by the copy-pasted definitoins of the imported functions, themselves (e.g., replace `from quality_of_life.my_numpy_utils import generate_random_1d_data` by the definition of the function generate_random_1d_data, itself, which can be found in the file my_numpy_utils.py)
