@@ -592,7 +592,7 @@ if use_tensorflow:
         best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
         #
         # ~~~ Plot the results
-        side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
+        side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
  
 # #
 # # ~~~ Examine whether or not we experience double descent (we do not)
