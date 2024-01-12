@@ -1,6 +1,6 @@
 
 exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
-use_tensorflow = False  # ~~~ leave `False` if you do not have tensorflow installed; otherwise, set `True` to see the examples involving neural networks
+use_tensorflow = True   # ~~~ leave `False` if you do not have tensorflow installed; otherwise, set `True` to see the examples involving neural networks
 use_progress_bar = False
 
 #
@@ -191,7 +191,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
     f = lambda x: np.abs(x)     # ~~~ the so called "ground truth" by which x causes y
-    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Training Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
+    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
     #
     # ~~~ Example 2/4: A complicated/aggressive/expressive model (in this case, more training epochs) might be appropriate when the data is not too noisy
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -202,7 +202,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     width = 6
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
-    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Even with Relatively Clean Data, {e} Epochs of Training May not be Enough", f"{E-e} Additional Epochs May be Appropriate when the Data is not Too Noisy" )
+    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Even with Simple Data, {e} Epochs of Training May Underfit", f"{E-e} Additional Epochs May Help when the Data isn't Too Noisy" )
     #
     # ~~~ Example 3/4: Underfitting and Overfitting due to Architecture Decisions
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -286,7 +286,7 @@ x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_tr
 n,N = 5,15
 simple_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,n) )
 complex_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,N) )
-side_by_side_prediction_plots( x_train, y_train, f, simple_spline, complex_spline, r"With Continuous Linear Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
+side_by_side_prediction_plots( x_train, y_train, f, simple_spline, complex_spline, r"With Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
 
 
 #
