@@ -16,7 +16,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 - [x] Have python installed and know how to edit and run python files
 - [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective REDAME's for more info
 - [x] Have the prerequisite standard packages installed:
-    - `numpy`, `matplotlib`, and `quality_of_life` for minimal functionality
+    - `numpy`, `matplotlib` for minimal functionality
     - `tensorflow`, `pytorch`, `sklearn` for ~98% functionality
     -  `alive_progress` is kind of optional (only used in 1 or 2 examples; will not provoke an error)
 
