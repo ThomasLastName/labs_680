@@ -93,7 +93,7 @@ if install_assist:
 # ~~~ Toms helper routines; maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import points_with_curves, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
-from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars    # ~~~ optional: print outputs in green
+from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars, red_errors    # ~~~ optional: print outputs in green
 colored_console_output(warn=False)
 red_errors()
 if use_tensorflow:
