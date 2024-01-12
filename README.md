@@ -43,7 +43,7 @@ Each week, create a blank `.py` file wherever you prefer, copy the code from thi
 **Additional Prerequisites Using git:**
 - [x] Have git installed on your computer
 
-**Installation Steps Using git:** In the shell or command line, navigate to wherever you want to store these demos on your computer (anywhere is fine), and within that directory command `git clone https://github.com/ThomasLastName/labs_680.git`, which will create and populate folder called `labs_680` in the same directory.
+**Installation Steps Using git:** In the shell or command line, navigate to wherever you want to store these demos on your computer (anywhere is fine), and within that directory command `git clone https://github.com/ThomasLastName/labs_680.git`, which will create and populate a folder called `labs_680` in the same directory.
 
 For example, if I just want this folder to be on my desktop, then the directory that I need to navigate to would be `C:\Users\thoma\OneDrive\Desktop` on my personal computer. To get there, I would paste `cd C:\Users\thoma\OneDrive\Desktop` into the Windows command line. Then, having navigated to the directory where I want to create the folder, I am ready to paste `git clone https://github.com/ThomasLastName/labs_680.git` into the command line. That's it!
 
