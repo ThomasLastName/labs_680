@@ -1,8 +1,8 @@
 
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
-exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
-install_assist = False
+exercise_mode = False   # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage
+install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
 
 
 ### ~~~
@@ -567,13 +567,10 @@ if use_tensorflow:
         #
         # ~~~ Save the result of all that for future convenience
         np.save( file_path, np.array(scores) )
-    else:
-        #
-        # ~~~ Load the results from a saved file (you must first place the saved file in the correct path)
-        scores = np.load(file_path)
     #
     # ~~~ Take the best hyperparameter and train using the full data
-    if use_tensorflow:
+    if os.path.exists(file_path):
+        scores = np.load(file_path)
         best_hyperparameters = possible_hyperparameters[ np.median(scores,axis=1).argmin() ]    # ~~~ lowest median "generalization" error when trianed on only a subset of the data
         architecture, n_epochs = best_hyperparameters
         best_nn = make_and_train_1d_network( x_train, y_train, hidden_layers=architecture, epochs=n_epochs, verbose=0 )[0]
