@@ -1,4 +1,6 @@
 
+# ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
+
 exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
 
 #
