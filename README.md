@@ -13,7 +13,7 @@ Each of these files contains multiple reproducible demonstations, as well as 1-3
 Besides some standard libraries, this repo depends on the folder of code [answers_680](https://github.com/ThomasLastName/answers_680) and, in turn, both depend on the folder of code [quality_of_life](https://github.com/ThomasLastName/quality_of_life). The former's existence is analogous to placing the answers to exercises in the back of a textbook, rather in the same place where the exercises are assigned. The latter is simply a collection of coding shortcuts that I want to be able to use when writing these demos, and in every other python project that I engage in.
 
 **List of Requirements in Order to Use this Code:**
-- [x] Have python installed and know how to edit run python files
+- [x] Have python installed and know how to edit and run python files
 - [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective REDAME's for more info
 - [x] Have the prerequisite standard packages installed:
     - `numpy`, `matplotlib`, and `quality_of_life` for minimal functionality
