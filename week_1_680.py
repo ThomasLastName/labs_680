@@ -2,6 +2,13 @@
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
 exercise_mode = False   # ~~~ when `False`, my solutions to exercises will be imported; otherwise, you'll need to add code to this file, yourself (Ctrl+F: EXERCISE)
+install_assist = False
+confirm_permission_to_modify_files = not install_assist
+
+
+### ~~~
+## ~~~ Boiler plate stuff
+### ~~~
 
 #
 # ~~~ Standard python libraries
@@ -31,7 +38,58 @@ except Exception as probably_ModuleNotFoundError:
         use_progress_bar = False
 
 #
-# ~~~ Custom modules for brevity. Alternatively, replace these import statements by the copy-pasted definitoins of the imported functions, themselves (e.g., replace `from quality_of_life.my_numpy_utils import generate_random_1d_data` by the definition of the function generate_random_1d_data, itself, which can be found in the file my_numpy_utils.py)
+# ~~~ An automation of th process "Installation Using the Graphical Interface" described at https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended
+if install_assist and confirm_permission_to_modify_files:
+    import os
+    import sys
+    from urllib.request import urlretrieve
+    #
+    # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
+    def download_dotpy_from_GitHub_raw( url_to_raw, file_name, name_of_desired_folder, desired_folder_in_Lib=True, verbose=True ):
+        #
+        # ~~~ Put together the appropriate path
+        python_directory = os.path.dirname(sys.executable)  # ~~~ as far as I understand, this is basically where python is installed on your computer
+        if desired_folder_in_Lib:
+            folder_path = os.path.join( "Lib", name_of_desired_folder )
+            folder_path = os.path.join( python_directory, folder_path )
+        else:
+            folder_path = os.path.join( python_directory, name_of_desired_folder )
+        file_path = os.path.join( folder_path, file_name )
+        #
+        # ~~~ Create the folder if it doesn't already exist
+        if not os.path.exists(folder_path):
+            os.makedirs(folder_path)
+            if verbose:
+                print("")
+                print(f"Folder '{name_of_desired_folder}' created at '{folder_path}'.")
+                print("")
+        #
+        # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
+        preffix = "Updated" if os.path.exists(file_path) else "Created"
+        urlretrieve( url_to_raw, file_path )
+        if verbose:
+            print( preffix + f" file {file_name} at {file_path}" )
+    #
+    # ~~~ A routine that downloads from Tom's GitHub repos
+    def intstall_Toms_code( folder_name, files, repo_name=None ):
+        if repo_name is None:
+            repo_name = folder_name
+        base_url = "https://raw.githubusercontent.com/ThomasLastName/" + repo_name + "/main/"
+        for file_name in files:
+            download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, name_of_desired_folder=folder )
+    #
+    # ~~~ "Install/update" quality_of_life
+    folder = "quality_of_life"
+    files = [ "ansi.py", "my_base_utils.py", "my_keras_utils.py", "my_numpy_utils.py", "my_visualization_utils.py" ]
+    intstall_Toms_code( folder, files )
+    #
+    # ~~~ "Install/update" answers_680
+    folder = "answers_680"
+    files = [ "answers_week_1.py" ]
+    intstall_Toms_code( folder, files )
+
+#
+# ~~~ Toms helper routines; maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import points_with_curves, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
 from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars    # ~~~ optional: print outputs in green
