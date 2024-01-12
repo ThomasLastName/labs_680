@@ -48,7 +48,7 @@ Each week, create a blank `.py` file wherever you prefer, copy the code from thi
 For example, if I just want this folder to be on my desktop, then the directory that I need to navigate to would be `C:\Users\thoma\OneDrive\Desktop` on my personal computer. To get there, I would paste `cd C:\Users\thoma\OneDrive\Desktop` into the Windows command line. Then, having navigated to the directory where I want to create the folder, I am ready to paste `git clone https://github.com/ThomasLastName/labs_680.git` into the command line. That's it!
 
 **Subsequent Updates Using git:**
-Navigate the the directory of the folder that you created, and within that directory command `git pull https://github.com/ThomasLastName/labs_680.git`.
+Navigate to the directory of the folder that you created, and within that directory command `git pull https://github.com/ThomasLastName/labs_680.git`.
 
 For instance, to continue the example above, if I created the folder `labs_680` on my desktop `C:\Users\thoma\OneDrive\Desktop`, then I'll want to navigate there by pasting `cd C:\Users\thoma\OneDrive\Desktop\labs_680` into the Windows command line. Next, I paste `git pull https://github.com/ThomasLastName/labs_680.git` into the command line.
 
