@@ -1,10 +1,12 @@
 # MATH 680 LABS
-This is some code that I wrote as a teaching assistant for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional exercises for students who want to go the extra mile. I wrote these as the TA for the class in spring 2024, typically building on top of the codebase that accompanies the course: [https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition). In order to participate in the optional exercise(s), switch from `exercise_mode=False` to `exercise_mode=True` before the import statements. The code will then prompt errors unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
+This is some code that I wrote as a teaching assistant for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional exercises for students who want to go the extra mile. I wrote these as the TA for the class in spring 2024, typically building on top of the codebase that accompanies the course: [https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
 
 ---
 
 # Usage
 Each of these files contains multiple reproducible demonstations, as well as 1-3 exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
+
+In order to participate in the optional exercise(s), switch from `exercise_mode=False` to `exercise_mode=True` before the import statements. The code will then prompt errors unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
 
 ---
 
