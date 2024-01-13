@@ -91,7 +91,7 @@ if install_assist:
 
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
-from quality_of_life.my_visualization_utils import points_with_curves, buffer
+from quality_of_life.my_visualization_utils import side_by_side_prediction_plots, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
 from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars, red_errors    # ~~~ optional: print outputs in green
 colored_console_output(warn=False)
@@ -132,37 +132,13 @@ def Foucarts_training_data():
     return x_train, y_train
 
 #
-# ~~~ A helper routine for plotting (and thus comparing) results
-def side_by_side_prediction_plots( x, y, true_fun, pred_a, pred_b, title_a="One Model", title_b="Another Model", like_Foucart=False ):
-    fig,(ax2,ax20) = plt.subplots(1,2)
-    #
-    # ~~~ `None` reverts to default behavior of `points_with_curves, otherwise use what Fouract did in https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb
-    fig,ax2 = points_with_curves(
-            x = x, 
-            y = y, 
-            grid = np.linspace(-1,1,1001) if like_Foucart else None, 
-            curves = (pred_a,true_fun), 
-            title = title_a, 
-            xlim = [-1.1,1.1] if like_Foucart else None, 
-            ylim = [-1.3,5.3] if like_Foucart else None, 
-            show = False, 
-            fig = fig, 
-            ax = ax2
-        )
-    fig,ax20 = points_with_curves(
-            x = x, 
-            y = y, 
-            grid = np.linspace(-1,1,1001) if like_Foucart else None, 
-            curves = (pred_b,true_fun), 
-            title = title_b, 
-            xlim = [-1.1,1.1] if like_Foucart else None, 
-            ylim = [-1.3,5.3] if like_Foucart else None, 
-            show = False, 
-            fig = fig, 
-            ax = ax20
-        )
-    fig.tight_layout()
-    plt.show()
+# ~~~ Wrap the the function `side_by_side_prediction_plots` from https://github.com/ThomasLastName/quality_of_life with an on/off switch for reproducing the graphical settings of https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb
+def compare_models_like_Foucart( *args, like_Foucart=False, **kwargs ):
+    grid = np.linspace(-1,1,1001) if like_Foucart else None
+    xlim = [-1.1,1.1] if like_Foucart else None
+    ylim = [-1.3,5.3] if like_Foucart else None
+    side_by_side_prediction_plots( *args, grid=grid, xlim=xlim, ylim=ylim, **kwargs )
+
 
 #
 # ~~~ Retrieve our data and train our two models, then plot the results (reproduces https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb)
@@ -171,7 +147,7 @@ d,D = 2,20
 quadratic_fit,_ = univar_poly_fit( x_train, y_train, degree=d )     # ~~~ degree 2 polynomial regression
 dodeca_fit,_ = univar_poly_fit( x_train, y_train, degree=D )        # ~~~ degree 20 polynomial regression
 f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
-side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, f"Underfitting with a Degree {d} Polynomial", f"Overfitting with a Degree {D} Polynomial", like_Foucart=True )
+compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"Underfitting with a Degree {d} Polynomial", f"Overfitting with a Degree {D} Polynomial", like_Foucart=True )
 
 
 
@@ -199,7 +175,7 @@ else:
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
 dodeca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
+compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
 
 if exercise_mode:
     #
@@ -220,7 +196,7 @@ else:
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
 dodeca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
+compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
 
 
 
@@ -258,7 +234,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
     f = lambda x: np.abs(x)     # ~~~ the so called "ground truth" by which x causes y
-    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
+    compare_models_like_Foucart( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
     #
     # ~~~ Example 2/4: A complicated/aggressive/expressive model (in this case, more training epochs) might be appropriate when the data is not too noisy
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -269,7 +245,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     width = 6
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
-    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Even with Simple Data, {e} Epochs of Training May Underfit", f"{E-e} Additional Epochs May Help when the Data isn't Too Noisy" )
+    compare_models_like_Foucart( x_train, y_train, f, under_trained, over_trained, f"Even with Simple Data, {e} Epochs of Training May Underfit", f"{E-e} Additional Epochs May Help when the Data isn't Too Noisy" )
     #
     # ~~~ Example 3/4: Underfitting and Overfitting due to Architecture Decisions
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -281,7 +257,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     d = 8
     shallow,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(w,), epochs=epochs )   # ~~~ too few epochs for this architecture
     deep,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=[w]*d, epochs=epochs )     # ~~~ too many epochs for this architecture
-    side_by_side_prediction_plots( x_train, y_train, f, shallow, deep, f"This Shallow Network Isn't Expressive Enough to Capture the Sharp Turn", f"{d} Hidden Layers (Same Training) may Overfit Even Fairly Clean Data" )
+    compare_models_like_Foucart( x_train, y_train, f, shallow, deep, f"This Shallow Network Isn't Expressive Enough to Capture the Sharp Turn", f"{d} Hidden Layers (Same Training) may Overfit Even Fairly Clean Data" )
     #
     # ~~~ Example 4/4: A complicated/aggressive/expressive model (in this case, a bigger network architecture) might be appropriate when the ground truth is complex
     f = lambda x: np.exp(x)*np.cos(3*x*np.exp(x))                       # ~~~ a more complicated choice of ground truth
@@ -292,7 +268,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     d = 4
     shallow,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(w,), epochs=epochs )   # ~~~ too few epochs for this architecture
     deep,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=[w]*d, epochs=epochs )     # ~~~ too many epochs for this architecture
-    side_by_side_prediction_plots( x_train, y_train, f, shallow, deep, f"A Shallow Network May Fail to Approximate a Complex Ground Truth", f"{d} Hidden Layers (Same Training) Offers Better Approximation Power" )
+    compare_models_like_Foucart( x_train, y_train, f, shallow, deep, f"A Shallow Network May Fail to Approximate a Complex Ground Truth", f"{d} Hidden Layers (Same Training) Offers Better Approximation Power" )
     
 
 
@@ -307,7 +283,7 @@ if use_tensorflow:
     x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_train=50, noise=0.1 )     # ~~~ increased sample size and decreased noise for a more meaningful example
     tanh_network,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(5,5), epochs=1500 )
     relu_network,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(5,5), epochs=1500, activations="relu" )
-    side_by_side_prediction_plots( x_train, y_train, f, tanh_network, relu_network, r"$\tanh$ Networks are Smooth, Implying $f \notin \mathcal{H}$", r"ReLU Networks are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
+    compare_models_like_Foucart( x_train, y_train, f, tanh_network, relu_network, r"$\tanh$ Networks are Smooth, Implying $f \notin \mathcal{H}$", r"ReLU Networks are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
 
 
 
@@ -353,7 +329,7 @@ x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_tr
 n,N = 5,15
 simple_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,n) )
 complex_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,N) )
-side_by_side_prediction_plots( x_train, y_train, f, simple_spline, complex_spline, r"With Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
+compare_models_like_Foucart( x_train, y_train, f, simple_spline, complex_spline, r"With Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
 
 
 #
@@ -363,7 +339,7 @@ np.random.seed(680)         # ~~~ for improved reproducibility
 x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_train=50, noise=0.1 )     # ~~~ increased sample size and decreased noise for a more meaningful example
 poly,_ = univar_poly_fit( x_train, y_train, degree=4 )                  # ~~~ dim(H)==5 (the length of the returned `coeffs` vector)
 spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,3) )   # ~~~ dim(H)==4 (the length of the returned `coeffs` vector)
-side_by_side_prediction_plots( x_train, y_train, f, poly, spline, r"Polynomials are Smooth, Implying $f \notin \mathcal{H}$", r"Continuous Linear Splines are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
+compare_models_like_Foucart( x_train, y_train, f, poly, spline, r"Polynomials are Smooth, Implying $f \notin \mathcal{H}$", r"Continuous Linear Splines are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
 
 
 
@@ -593,7 +569,7 @@ if use_tensorflow:
         best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
         #
         # ~~~ Plot the results
-        side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
+        compare_models_like_Foucart( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
  
  
 
