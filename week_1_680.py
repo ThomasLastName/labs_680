@@ -176,7 +176,7 @@ side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, f
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 2 (easy): A Simpler Model is *not* Always Best
+## ~~~ EXERCISE 1 of 4 (easy): A Simpler Model is *not* Always Best
 ### ~~~
 
 if exercise_mode:
@@ -312,7 +312,7 @@ if use_tensorflow:
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 2 (hard): Just as we can get better results using *piecewise linear neural networks*, we can linkewise get better results by using *piecewise linear polynomial regression*: implement it and see for yourself!
+## ~~~ EXERCISE 2 of 4 (hard): Just as we can get better results using *piecewise linear neural networks*, we can linkewise get better results by using *piecewise linear polynomial regression*: implement it and see for yourself!
 ### ~~~
 
 if exercise_mode:
@@ -374,19 +374,11 @@ side_by_side_prediction_plots( x_train, y_train, f, poly, spline, r"Polynomials 
 warnings.filterwarnings( "ignore", message="Polyfit may be poorly conditioned" )    # ~~~ otherwise crossvalidation will spit out th[is warning a million times
 
 #
-# ~~~ Define the metric by which we will assess accurcay
-def mean_squared_error( true, predicted ):
-    return np.mean( (true-predicted)**2 )
-    # ~~~ usually you'd load this or one of the other options from sklearn.meatrics (https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values)
-    # ~~~ we have defined it explicitly for transparency and simplicity
-
-#
 # ~~~ Measure how well the model does when certain subsets of the data are withheld from training (written to mimic the sklearn.model_selection function of the same name)
 def cross_val_score( estimator, eventual_x_train, eventual_y_train, cv, scoring, shuffle=False, plot=False, ncol=None, nrow=None, f=None, grid=None ):
     #
     # ~~~ Boiler plate stuff, not important
     scores = []
-    # models = []
     if plot:
         ncol = 1 if ncol is None else ncol
         nrow = cv if nrow is None else nrow
@@ -434,96 +426,104 @@ def cross_val_score( estimator, eventual_x_train, eventual_y_train, cv, scoring,
     return scores
 
 #
+# ~~~ Define the metric by which we will assess accurcay: mean squared error
+def mean_squared_error( true, predicted ):
+    return np.mean( (true-predicted)**2 )
+    # ~~~ usually you'd load this or one of the other options from sklearn.meatrics (https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values)
+    # ~~~ we have defined it explicitly for transparency and simplicity
+
+#
+# ~~~ A simple wrapper
+def poly_cv( degree, x, y, **kwargs ):
+    polynomial_regression = lambda x_train,y_train: univar_poly_fit( x_train, y_train, degree=degree )[0]       # ~~~ define the modeling technique    
+    return cross_val_score( estimator=polynomial_regression, eventual_x_train=x, eventual_y_train=y, **kwargs ) # ~~~ do cv with this modeling technique and data
+
+#
 # ~~~ Example usage of the big bad function we just defined
 x_train, y_train = Foucarts_training_data() # ~~~ for improved reproducibility
-polynomial_regression = lambda x_train,y_train: univar_poly_fit( x_train, y_train, degree=2 )[0]        # ~~~ define the modeling technique
-scores = cross_val_score( polynomial_regression, x_train, y_train, cv=2, scoring=mean_squared_error )   # ~~~ do cv with this modeling technique and data
-print(scores)           # ~~~ returns [5.659962939942039, 434.55267825346857], meaning that the model trained on the second half of the data performed terribly
+scores =  poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error )
+print(scores)  # ~~~ returns [5.659962939942039, 434.55267825346857], meaning that the model trained on the second half of the data performed terribly
 
 #
 # ~~~ Investigate further by specifying `plot=True`
-_ = cross_val_score( polynomial_regression, x_train, y_train, cv=2, scoring=mean_squared_error, plot=True )
+_ = poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error, plot=True )
 
 #
 # ~~~ And that's why people shuffle their data...
 np.random.seed(680)     # ~~~ fix seed for improved reproducibility
-scores = cross_val_score( polynomial_regression, x_train, y_train, cv=2, scoring=mean_squared_error, shuffle=True, plot=True )
+scores = poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error, shuffle=True, plot=True )
 print(scores)           # ~~~ returns [1.408731127467586, 1.1814320746081544]; both models fit about as well as they can given how noisy the data is
 
 
 
 ### ~~~
-## ~~~ Simulate the full cross validation workflow on simulated data
+## ~~~ EXERCISE 3 of 4 (hard): Experiement with CV and implement a full CV work flow
 ### ~~~
 
 #
-# ~~~ Make enough executive decisions that all that remains is for someone to supply us with the data
-def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, n_splits=2, plot=True, plot_like_Foucart=False ):
-    #
-    # ~~~ Set hyperhyperparameters: those which will be used when determining the hyperparameters
-    max_degree = 20
-    possible_hyperparameters = np.arange(max_degree)+1      # ~~~ i.e., np.array([1,2,...,max_degree])
-    scores = []     # ~~~ an object in which to record the results
-    #
-    # ~~~ For each possible degree that we're considering for polynomial regression
-    for deg in possible_hyperparameters:
-        #
-        # ~~~ Do cross validation
-        estimator = lambda x_train,y_train: univar_poly_fit( x_train, y_train, degree=deg )[0]  # ~~~ wrapper that fits a polynomial of degree `deg` to the data y_train ~ x_train
-        current_scores = cross_val_score( estimator, x_train, y_train, cv=n_splits, scoring=mean_squared_error )
-        scores.append(current_scores)
-    #
-    # ~~~ Take the best hyperparameter and train using the full data
-    best_degree = possible_hyperparameters[ np.median(scores,axis=1).argmin() ] # ~~~ lowest median "generalization" error of trianing on only a subset of the data
-    best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
-    if plot:
-        points_with_curves(
-                x = x_train,
-                y = y_train,
-                curves = (best_poly,f),
-                title = f"Based on CV, Choose Degree {best_degree} Polynomial Regression, Resulting in a Test MSE of {mean_squared_error(best_poly(x_test),y_test):.6}",
-                xlim = [-1,1] if plot_like_Foucart else None,       # ~~~ `None` reverts to default settings of `points_with_curves`
-                ylim = [-1.3,5.3] if plot_like_Foucart else None    # ~~~ `None` reverts to default settings of `points_with_curves`
-            )
-    return scores
-
+# ~~~ Implement a full CV workflow for polynomial regressions of degree 1 through 20 **WITHOUT** shuffling the data (for reproducibility)
+if exercise_mode:
+    def full_CV_and_plot_the_result( x_train, y_train, n_bins, any_other_arguments_you_desire, ground_truth ):
+        # YOUR CODE HERE FOR CHOOSING THE POLYNOMIAL DEGREE WITH MINIMAL MEDIAN ERROR (hint: loop over poly_cv)
+        # ALSO, FIT A POLYNOMIAL OF THE SELECTED DEGREE AND PLOT IT ALONG WITH THE FUNCTION ground_truth
+        return array_of_scores_of_all_degree_models_on_all_bins   # should have shape (20,n_bins)
+else:
+    from answers_680.answers_week_1 import Toms_example_of_the_cv_workflow as full_CV_and_plot_the_result
 
 #
-# ~~~ Try it on some relatively good data
+# ~~~ A simple helper routine for improved organization
+def recall_data():
+    f = lambda x: abs(x)
+    x_train, y_train = Foucarts_training_data()
+    np.random.seed(680)
+    reordered_indices = np.random.permutation( len(y_train) )
+    x_train = x_train[reordered_indices]
+    y_train = y_train[reordered_indices]
+    return x_train, y_train
+
+#
+# ~~~ Do CV for polynomial regression on the data we started out with
+x_train, y_train = recall_data()
+my_scores = full_CV_and_plot_the_result( x_train, y_train, n_bins=2, ground_truth=f )
+true_scores = np.array([[2.31622333e+00, 1.75726951e+00],
+                        [1.40873113e+00, 1.18143207e+00],
+                        [2.53187114e+00, 3.46624062e+00],
+                        [1.51372680e+00, 3.84275913e+01],
+                        [1.39844359e+01, 4.71534761e+01],
+                        [1.00247114e+01, 1.82661686e+02],
+                        [1.53434202e+03, 1.39837248e+02],
+                        [5.35387860e+02, 2.33165702e+02],
+                        [6.25159890e+02, 2.61438676e+02],
+                        [3.51934459e+02, 3.91230926e+02],
+                        [4.29632292e+02, 4.64074269e+02],
+                        [3.54558153e+02, 6.48744669e+02],
+                        [4.49513970e+02, 7.58878078e+02],
+                        [4.62513534e+02, 1.00320451e+03],
+                        [5.94445044e+02, 1.13920810e+03],
+                        [6.68594552e+02, 1.43462920e+03],
+                        [8.53879297e+02, 1.57885767e+03],
+                        [9.83273230e+02, 1.90664495e+03],
+                        [1.23514684e+03, 2.03958356e+03],
+                        [1.41839306e+03, 2.37728170e+03]])
+assert abs(my_scores-true_scores).max() < 1e-4  # ~~~ the tolerance is high to account for numerical instability (recall the warning the we've surpressed)
+
+#
+# ~~~ Observe what happens when you toggle the number of subsets into which you split the training data
+x_train, y_train = recall_data()
+for n in [2,3,4,5,6,7,8]:
+    _ = full_CV_and_plot_the_result( x_train, y_train, n_bins=n, ground_truth=f )
+
+#
+# ~~~ With a better data set the behavior is different
 np.random.seed(680)
-x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=50, noise=0.1 ) 
-scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test )
-
-#
-# ~~~ As for the data we started out with...
 f = lambda x: abs(x)
-x_train, y_train = Foucarts_training_data()
-x_test = np.linspace(-1,1,101)
-y_test = np.abs(x_test)
-scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot_like_Foucart=True )
-
-
-#
-# ~~~ In fact, this particular instance of cross validation failed to find to the best model: the quadratic model is better
-x_train, y_train = Foucarts_training_data()     # ~~~ same data as above
-affine_fit,_ = univar_poly_fit( x_train, y_train, degree=1 )     # ~~~ degree 1 polynomial regression, also known as ordinary least squares
-quadratic_fit,_ = univar_poly_fit( x_train, y_train, degree=2 )     # ~~~ degree 2 polynomial regression
-f = lambda x: abs(x)                            # ~~~ same data as above
-x_test = np.linspace(-1,1,101)                  # ~~~ same data as above
-y_test = np.abs(x_test)                         # ~~~ same data as above
-points_with_curves(
-            x = x_train,
-            y = y_train,
-            curves = (affine_fit,quadratic_fit,f),  # ~~~ `points_with_curves` makes the last curve green dashed by default; deactivate this by passing `model_fit=False`
-            title = f"A Degree 2 Polynomial Regression (not Chosen by CV) Results in a Test MSE of {mean_squared_error(quadratic_fit(x_test),y_test):.3} Instead of the Test MSE of {mean_squared_error(affine_fit(x_test),y_test):.3} Resulting from Degree 1 Polynomial Regression",
-            xlim = [-1,1],
-            ylim = [-1.3,5.3]
-        )
-
+x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=500, noise=0.1 )
+for n in [2,3,4,5,10,15,20,30,40]:
+    _ = full_CV_and_plot_the_result( x_train, y_train, n_bins=n, ground_truth=f )
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 5 OF 5: We can do CV with neural networks, too
+## ~~~ DEMONSTRATION 5 of 5: We can do CV with neural networks, too
 ### ~~~
 
 if use_tensorflow:
@@ -539,7 +539,7 @@ if use_tensorflow:
     possible_architectures += list(product(foo,foo,foo,foo)) + list(product(foo,foo,foo,foo,foo))  + list(product(foo,foo,foo,foo,foo,foo))
     possible_n_epochs = [300,500,1000,1500]
     possible_hyperparameters = list(product( possible_architectures, possible_n_epochs ))
-    n_splits = 2
+    n_bins = 2
     #
     # ~~~ Add save+load functionality
     folder = os.path.join( os.path.dirname(sys.executable), 'Lib', 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
@@ -563,7 +563,7 @@ if use_tensorflow:
                     #
                     # ~~~ Begin key functionality (c.f., `"Do cross validation" for a bunch of different polynomial degrees`)
                     estimator = lambda x_train,y_train: make_and_train_1d_network( x_train, y_train, hidden_layers=architecture, epochs=n_epochs )[0]  # ~~~ as before
-                    current_scores = cross_val_score( estimator, x_train, y_train, cv=n_splits, scoring=mean_squared_error )                        # ~~~ as before
+                    current_scores = cross_val_score( estimator, x_train, y_train, cv=n_bins, scoring=mean_squared_error )                        # ~~~ as before
                     scores.append(current_scores)                                                                                                   # ~~~ as before
                     # ~~~ End key functionality
                     #
@@ -585,8 +585,9 @@ if use_tensorflow:
         #
         # ~~~ Compare with polynomial regression
         np.random.seed(680)
-        x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=50, noise=0.1 ) 
-        scores = an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot=False )
+        x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=50, noise=0.1 )
+        from answers_680.answers_week_1 import Toms_example_of_the_cv_workflow
+        scores = Toms_example_of_the_cv_workflow( x_train, y_train, plot=False )
         degrees_tested = np.arange(20)+1
         best_degree = degrees_tested[ np.median(scores,axis=1).argmin() ] # ~~~ lowest median "generalization" error of trianing on only a subset of the data
         best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
@@ -594,38 +595,10 @@ if use_tensorflow:
         # ~~~ Plot the results
         side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
  
-# #
-# # ~~~ Examine whether or not we experience double descent (we do not)
-# architectures_300,  scores_300 =  [], []
-# architectures_500,  scores_500 =  [], []
-# architectures_1000, scores_1000 = [], []
-# architectures_1500, scores_1500 = [], []
+ 
 
-# #
-# #~~~ Filter items based on the number of epochs for a more apples-to-apples comparisson
-# assert len(scores)==len(possible_hyperparameters)
-# for j in range(len(scores)):
-#     architecture, epochs = possible_hyperparameters[j]
-#     if epochs == 300:
-#         scores_300.append(scores[j])
-#         architectures_300.append(architecture)
-#     elif epochs == 500:
-#         scores_500.append(scores[j])
-#         architectures_500.append(architecture)
-#     elif epochs == 1000:
-#         scores_1000.append(scores[j])
-#         architectures_1000.append(architecture)
-#     elif epochs == 1500:
-#         scores_1500.append(scores[j])
-#         architectures_1500.append(architecture)
+### ~~~
+## ~~~ EXERCISE 4 of 4 (hard): Using CV as above, select a good relu network and good spline regression, and compare the results
+### ~~~
 
-# assert len(scores_300)==len(architectures_300)
-# assert len(scores_500)==len(architectures_500)
-# assert len(scores_1000)==len(architectures_1000)
-# assert len(scores_1500)==len(architectures_1500)
-# assert architectures_1500==architectures_1000==architectures_500==architectures_300
-# arthitectures = [ list(architecture) for architecture in architectures_300 ]
-# complexity = [ np.prod(architecture) for architecture in arthitectures ]
-# # n_hidden_layers = [ len(architecture) for architecture in arthitectures ]
-# # avg_width = [ np.mean(architecture) for architecture in arthitectures ]
-# plt.scatter( np.log(complexity), np.median(scores_1500,axis=1) ); plt.show()
+# (hint: to do CV on ReLU instsead of tanh networks, basically, just pass `activations="relu` to make_and_train_1d_network)
