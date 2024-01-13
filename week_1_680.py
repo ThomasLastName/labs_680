@@ -90,7 +90,7 @@ if install_assist:
         intstall_Toms_code( folder, files )
 
 #
-# ~~~ Toms helper routines; maintained at https://github.com/ThomasLastName/quality_of_life
+# ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import points_with_curves, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
 from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars    # ~~~ optional: print outputs in green
@@ -457,12 +457,11 @@ print(scores)           # ~~~ returns [1.408731127467586, 1.1814320746081544]; b
 
 #
 # ~~~ Make enough executive decisions that all that remains is for someone to supply us with the data
-def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot=True, plot_like_Foucart=False ):
+def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, n_splits=2, plot=True, plot_like_Foucart=False ):
     #
     # ~~~ Set hyperhyperparameters: those which will be used when determining the hyperparameters
     max_degree = 20
     possible_hyperparameters = np.arange(max_degree)+1      # ~~~ i.e., np.array([1,2,...,max_degree])
-    n_splits = 2    # ~~~ when this is higher, the models are trained on less data but tested on more data; this will tend to make generalization more challenging and, then, simpler models will beprefered
     scores = []     # ~~~ an object in which to record the results
     #
     # ~~~ For each possible degree that we're considering for polynomial regression
@@ -481,7 +480,7 @@ def an_example_of_the_cv_workflow( x_train, y_train, x_test, y_test, plot=True, 
                 x = x_train,
                 y = y_train,
                 curves = (best_poly,f),
-                title = f"Bassed on CV, Choose Degree {best_degree} Polynomial Regression, Resulting in a Test MSE of {mean_squared_error(best_poly(x_test),y_test):.6}",
+                title = f"Based on CV, Choose Degree {best_degree} Polynomial Regression, Resulting in a Test MSE of {mean_squared_error(best_poly(x_test),y_test):.6}",
                 xlim = [-1,1] if plot_like_Foucart else None,       # ~~~ `None` reverts to default settings of `points_with_curves`
                 ylim = [-1.3,5.3] if plot_like_Foucart else None    # ~~~ `None` reverts to default settings of `points_with_curves`
             )
