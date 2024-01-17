@@ -41,44 +41,41 @@ except Exception as probably_ModuleNotFoundError:
 if install_assist:
     confirm_permission_to_modify_files = not install_assist
     if install_assist and confirm_permission_to_modify_files:
+        #
+        # ~~~ Packages for downloading files
         import os
         import sys
         from urllib.request import urlretrieve
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
-        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, name_of_desired_folder, desired_folder_in_Lib=False, verbose=True ):
+        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, desired_folder_in_Lib=False, verbose=True ):
             #
             # ~~~ Put together the appropriate path
             python_directory = os.path.dirname(sys.executable)      # ~~~ I basically understand this to be the path where (the version being utilized of) python is installed on your computer
-            python_directory = python_directory.strip("/usr/bin")   # ~~~ seemingly not necessary on Windows, but necessary in Google Colab. I have not actually tested Mac or Linux...
+            python_directory = python_directory.strip("/usr/bin")   # ~~~ seemingly not necessary on Windows, but necessary in Google Colab? I have not actually tested Mac...
             if desired_folder_in_Lib:
-                folder_path = os.path.join( "Lib", name_of_desired_folder )
-                folder_path = os.path.join( python_directory, folder_path )
-            else:
-                folder_path = os.path.join( python_directory, name_of_desired_folder )
+                folder_name = os.path.join( "Lib", folder_name )
+            folder_path = os.path.join( python_directory, folder_name )
             file_path = os.path.join( folder_path, file_name )
             #
             # ~~~ Create the folder if it doesn't already exist
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
                 if verbose:
-                    print("")
-                    print(f"Folder '{name_of_desired_folder}' created at '{folder_path}'.")
-                    print("")
+                    print(f"\nFolder '{folder_name}' created at '{folder_path}'.\n")
             #
             # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
-            preffix = "Updated" if os.path.exists(file_path) else "Created"
+            prefix = "Updated" if os.path.exists(file_path) else "Created"
             urlretrieve( url_to_raw, file_path )
             if verbose:
-                print( preffix + f" file {file_name} at {file_path}" )
+                print(f"{prefix} file {file_name} at {file_path}")
         #
         # ~~~ A routine that downloads from Tom's GitHub repos
         def intstall_Toms_code( folder_name, files, repo_name=None ):
-            if repo_name is None:
-                repo_name = folder_name
-            base_url = "https://raw.githubusercontent.com/ThomasLastName/" + repo_name + "/main/"
+            repo_name = folder_name if repo_name is None else repo_name
+            base_url = f"https://raw.githubusercontent.com/ThomasLastName/{repo_name}/main/"
             for file_name in files:
-                download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, name_of_desired_folder=folder )
+                download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, folder_name=folder_name )
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
@@ -87,7 +84,7 @@ if install_assist:
         #
         # ~~~ "Install/update" answers_680
         folder = "answers_680"
-        files = [ "answers_week_1.py" ]
+        files = [ f"answers_week_{(j+1)}.py" for j in range(15) ]
         intstall_Toms_code( folder, files )
 
 #
@@ -134,11 +131,8 @@ def Foucarts_training_data():
 
 #
 # ~~~ Wrap the the function `side_by_side_prediction_plots` from https://github.com/ThomasLastName/quality_of_life with an on/off switch for reproducing the graphical settings of https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb
-def compare_models_like_Foucart( *args, like_Foucart=False, **kwargs ):
-    grid = np.linspace(-1,1,1001) if like_Foucart else None
-    xlim = [-1.1,1.1] if like_Foucart else None
-    ylim = [-1.3,5.3] if like_Foucart else None
-    side_by_side_prediction_plots( *args, grid=grid, xlim=xlim, ylim=ylim, **kwargs )
+def compare_models_like_Foucart( *args, **kwargs ):
+    side_by_side_prediction_plots( *args, grid=np.linspace(-1,1,1001), xlim=[-1.1,1.1], ylim=[-1.3,5.3], **kwargs )
 
 
 #
@@ -184,9 +178,9 @@ else:
     from answers_680.answers_week_1 import explanation_a_10 as my_explanation_10
 
 
-quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
-deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 ) # ~~~ degree 4 polynomial regression
+deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )   # ~~~ degree 10 polynomial regression
+side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
 
 if exercise_mode:
     #
@@ -205,9 +199,9 @@ else:
     from answers_680.answers_week_1 import explanation_b_4  as my_explanation_4
     from answers_680.answers_week_1 import explanation_b_10 as my_explanation_10
 
-quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
-deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 ) # ~~~ degree 4 polynomial regression
+deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )   # ~~~ degree 10 polynomial regression
+side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
 
 
 
@@ -245,7 +239,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
     f = lambda x: np.abs(x)     # ~~~ the so called "ground truth" by which x causes y
-    compare_models_like_Foucart( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
+    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Stopping at {e} Epochs Underfits a Shallow Width {width} Network", f"{E} Training Epochs Overfits the Same Shallow Width {width} Network" )
     #
     # ~~~ Example 2/4: A complicated/aggressive/expressive model (in this case, more training epochs) might be appropriate when the data is not too noisy
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -256,7 +250,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     width = 6
     under_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=e )  # ~~~ too few epochs for this architecture
     over_trained,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(width,), epochs=E )   # ~~~ too many epochs for this architecture
-    compare_models_like_Foucart( x_train, y_train, f, under_trained, over_trained, f"Even with Simple Data, {e} Epochs of Training May Underfit", f"{E-e} Additional Epochs May Help when the Data isn't Too Noisy" )
+    side_by_side_prediction_plots( x_train, y_train, f, under_trained, over_trained, f"Even with Simple Data, {e} Epochs of Training May Underfit", f"{E-e} Additional Epochs May Help when the Data isn't Too Noisy" )
     #
     # ~~~ Example 3/4: Underfitting and Overfitting due to Architecture Decisions
     f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
@@ -268,7 +262,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     d = 8
     shallow,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(w,), epochs=epochs )   # ~~~ too few epochs for this architecture
     deep,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=[w]*d, epochs=epochs )     # ~~~ too many epochs for this architecture
-    compare_models_like_Foucart( x_train, y_train, f, shallow, deep, f"This Shallow Network Isn't Expressive Enough to Capture the Sharp Turn", f"{d} Hidden Layers (Same Training) may Overfit Even Fairly Clean Data" )
+    side_by_side_prediction_plots( x_train, y_train, f, shallow, deep, f"This Shallow Network Isn't Expressive Enough to Capture the Sharp Turn", f"{d} Hidden Layers (Same Training) may Overfit Even Fairly Clean Data" )
     #
     # ~~~ Example 4/4: A complicated/aggressive/expressive model (in this case, a bigger network architecture) might be appropriate when the ground truth is complex
     f = lambda x: np.exp(x)*np.cos(3*x*np.exp(x))                       # ~~~ a more complicated choice of ground truth
@@ -279,7 +273,7 @@ if use_tensorflow:  # ~~~ Note: this block takes a minute or two because the cod
     d = 4
     shallow,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(w,), epochs=epochs )   # ~~~ too few epochs for this architecture
     deep,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=[w]*d, epochs=epochs )     # ~~~ too many epochs for this architecture
-    compare_models_like_Foucart( x_train, y_train, f, shallow, deep, f"A Shallow Network May Fail to Approximate a Complex Ground Truth", f"{d} Hidden Layers (Same Training) Offers Better Approximation Power" )
+    side_by_side_prediction_plots( x_train, y_train, f, shallow, deep, f"A Shallow Network May Fail to Approximate a Complex Ground Truth", f"{d} Hidden Layers (Same Training) Offers Better Approximation Power" )
     
 
 
@@ -294,7 +288,7 @@ if use_tensorflow:
     x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_train=50, noise=0.1 )     # ~~~ increased sample size and decreased noise for a more meaningful example
     tanh_network,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(5,5), epochs=1500 )
     relu_network,_ = make_and_train_1d_network( x_train, y_train, hidden_layers=(5,5), epochs=1500, activations="relu" )
-    compare_models_like_Foucart( x_train, y_train, f, tanh_network, relu_network, r"$\tanh$ Networks are Smooth, Implying $f \notin \mathcal{H}$", r"ReLU Networks are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
+    side_by_side_prediction_plots( x_train, y_train, f, tanh_network, relu_network, r"$\tanh$ Networks are Smooth, Implying $f \notin \mathcal{H}$", r"ReLU Networks are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
 
 
 
@@ -340,7 +334,7 @@ x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_tr
 n,N = 5,15
 simple_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,n) )
 complex_spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,N) )
-compare_models_like_Foucart( x_train, y_train, f, simple_spline, complex_spline, r"With Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
+side_by_side_prediction_plots( x_train, y_train, f, simple_spline, complex_spline, r"With Splines, as Always, if $\mathcal{H}$ is too Small, we Get Underfitting", r"Likewise, if $\mathcal{H}$ is too Big (e.g., $\mathrm{dim}(\mathcal{H})$ is Large), we Get Overfitting"  )
 
 
 #
@@ -350,7 +344,7 @@ np.random.seed(680)         # ~~~ for improved reproducibility
 x_train, y_train, x_test, y_test = generate_random_1d_data( ground_truth=f, n_train=50, noise=0.1 )     # ~~~ increased sample size and decreased noise for a more meaningful example
 poly,_ = univar_poly_fit( x_train, y_train, degree=4 )                  # ~~~ dim(H)==5 (the length of the returned `coeffs` vector)
 spline,_ = univar_spline_fit( x_train, y_train, np.linspace(-1,1,3) )   # ~~~ dim(H)==4 (the length of the returned `coeffs` vector)
-compare_models_like_Foucart( x_train, y_train, f, poly, spline, r"Polynomials are Smooth, Implying $f \notin \mathcal{H}$", r"Continuous Linear Splines are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
+side_by_side_prediction_plots( x_train, y_train, f, poly, spline, r"Polynomials are Smooth, Implying $f \notin \mathcal{H}$", r"Continuous Linear Splines are Piecewise Linear, in Fact $f \in \mathcal{H}$" )
 
 
 
@@ -580,7 +574,7 @@ if use_tensorflow:
         best_poly,_ = univar_poly_fit( x_train, y_train, degree=best_degree )
         #
         # ~~~ Plot the results
-        compare_models_like_Foucart( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
+        side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
  
  
 
