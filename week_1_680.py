@@ -46,10 +46,11 @@ if install_assist:
         from urllib.request import urlretrieve
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
-        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, name_of_desired_folder, desired_folder_in_Lib=True, verbose=True ):
+        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, name_of_desired_folder, desired_folder_in_Lib=False, verbose=True ):
             #
             # ~~~ Put together the appropriate path
-            python_directory = os.path.dirname(sys.executable)  # ~~~ as far as I understand, this is basically where python is installed on your computer
+            python_directory = os.path.dirname(sys.executable)      # ~~~ I basically understand this to be the path where (the version being utilized of) python is installed on your computer
+            python_directory = python_directory.strip("/usr/bin")   # ~~~ seemingly not necessary on Windows, but necessary in Google Colab. I have not actually tested Mac or Linux...
             if desired_folder_in_Lib:
                 folder_path = os.path.join( "Lib", name_of_desired_folder )
                 folder_path = os.path.join( python_directory, folder_path )
@@ -147,7 +148,17 @@ d,D = 2,20
 quadratic_fit,_ = univar_poly_fit( x_train, y_train, degree=d )     # ~~~ degree 2 polynomial regression
 dodeca_fit,_ = univar_poly_fit( x_train, y_train, degree=D )        # ~~~ degree 20 polynomial regression
 f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
-compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"Underfitting with a Degree {d} Polynomial", f"Overfitting with a Degree {D} Polynomial", like_Foucart=True )
+compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"Underfitting with a Degree {d} Polynomial", f"Overfitting with a Degree {D} Polynomial" )
+
+
+#
+# ~~~ Degree 4 polynomial regression still gives plausibale results, while degree 10 does does not do much better than 20
+x_train, y_train = Foucarts_training_data()
+d,D = 4,10
+quartic_fit,_ = univar_poly_fit( x_train, y_train, degree=4 )   # ~~~ degree 4 polynomial regression
+deca_fit,_ = univar_poly_fit( x_train, y_train, degree=10 )     # ~~~ degree 10 polynomial regression
+f = lambda x: np.abs(x)                                         # ~~~ the so called "ground truth" by which x causes y
+side_by_side_prediction_plots( x_train, y_train, f, quartic_fit, deca_fit, f"A Degree {d} Polynomial Still Gives Relatively Palusible Predictions", f"A Degree {D} is Implausibly Wiggly" )
 
 
 
@@ -174,8 +185,8 @@ else:
 
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
-dodeca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
+deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
+compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
 
 if exercise_mode:
     #
@@ -195,8 +206,8 @@ else:
     from answers_680.answers_week_1 import explanation_b_10 as my_explanation_10
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 )     # ~~~ degree 4 polynomial regression
-dodeca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, dodeca_fit, my_explanation_4, my_explanation_10 )
+deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )     # ~~~ degree 10 polynomial regression
+compare_models_like_Foucart( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
 
 
 
