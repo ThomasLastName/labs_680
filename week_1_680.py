@@ -2,7 +2,7 @@
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
 exercise_mode = False   # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage
-install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
+install_assist = True  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
 
 
 ### ~~~
@@ -39,7 +39,7 @@ except Exception as probably_ModuleNotFoundError:
 #
 # ~~~ An automation of the process "Installation Using the Graphical Interface" described at https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended
 if install_assist:
-    confirm_permission_to_modify_files = not install_assist
+    confirm_permission_to_modify_files = install_assist
     if install_assist and confirm_permission_to_modify_files:
         #
         # ~~~ Packages for downloading files
@@ -57,13 +57,13 @@ if install_assist:
             folder_path = os.path.join( "Lib", folder_name ) if desired_folder_in_Lib else folder_name
             folder_path = os.path.join( python_directory, folder_path )
             file_path = os.path.join( folder_path, file_name )
-            print_path = os.path.join("content",folder_path) if this_is_running_in_collab else folder_path  # ~~~ apparently, Colab puts files in "content" by default, but if you tell it to put files in "content" then it will create a new folder "content" inside of the intended folder "content" and place files there... Hence, the path `file_path` where we tell the computer to download our files will not include "content", but the path `print_path` where the files end up located at will include "content"
+            print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_collab else file_path
             #
             # ~~~ Create the folder if it doesn't already exist
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
                 if verbose:
-                    print(f"\nFolder '{folder_name}' created at '{print_path}'\n")
+                    print(f"\nFolder {folder_name} created at {os.path.dirname(print_path)}\n")
             #
             # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
             prefix = "Updated" if os.path.exists(file_path) else "Created"
