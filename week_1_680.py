@@ -46,7 +46,7 @@ if install_assist:
         import os
         import sys
         from urllib.request import urlretrieve
-        this_is_running_in_collab = ('google.colab' in sys.modules)
+        this_is_running_in_colab = ('google.colab' in sys.modules)
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
         def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, desired_folder_in_Lib=False, verbose=True ):
@@ -57,7 +57,7 @@ if install_assist:
             folder_path = os.path.join( "Lib", folder_name ) if desired_folder_in_Lib else folder_name
             folder_path = os.path.join( python_directory, folder_path )
             file_path = os.path.join( folder_path, file_name )
-            print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_collab else file_path
+            print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_colab else file_path
             #
             # ~~~ Create the folder if it doesn't already exist
             if not os.path.exists(folder_path):
@@ -69,7 +69,7 @@ if install_assist:
             prefix = "Updated" if os.path.exists(file_path) else "Created"
             urlretrieve( url_to_raw, file_path )
             if verbose:     # ~~~ craft a message
-                suffix = " (click the folder on the left)" if this_is_running_in_collab else ""
+                suffix = " (click the folder on the left)" if this_is_running_in_colab else ""
                 print( f"{prefix} file {file_name} at {print_path}{suffix}" )
         #
         # ~~~ A routine that downloads from Tom's GitHub repos
