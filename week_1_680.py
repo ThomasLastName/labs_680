@@ -2,7 +2,7 @@
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
 exercise_mode = False   # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage
-install_assist = True  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
+install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
 
 
 ### ~~~
@@ -39,7 +39,7 @@ except Exception as probably_ModuleNotFoundError:
 #
 # ~~~ An automation of the process "Installation Using the Graphical Interface" described at https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended
 if install_assist:
-    confirm_permission_to_modify_files = install_assist
+    confirm_permission_to_modify_files = not install_assist
     if install_assist and confirm_permission_to_modify_files:
         #
         # ~~~ Packages for downloading files
