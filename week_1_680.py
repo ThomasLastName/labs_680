@@ -6,7 +6,7 @@ install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab
 
 
 ### ~~~
-## ~~~ Boiler plate stuff
+## ~~~ Boiler plate stuff; basically just loading packages
 ### ~~~
 
 #
@@ -46,6 +46,7 @@ if install_assist:
         import os
         import sys
         from urllib.request import urlretrieve
+        this_is_running_in_collab = ('google.colab' in sys.modules)
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
         def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, desired_folder_in_Lib=False, verbose=True ):
@@ -53,29 +54,30 @@ if install_assist:
             # ~~~ Put together the appropriate path
             python_directory = os.path.dirname(sys.executable)      # ~~~ I basically understand this to be the path where (the version being utilized of) python is installed on your computer
             python_directory = python_directory.strip("/usr/bin")   # ~~~ seemingly not necessary on Windows, but necessary in Google Colab? I have not actually tested Mac...
-            if desired_folder_in_Lib:
-                folder_name = os.path.join( "Lib", folder_name )
-            folder_path = os.path.join( python_directory, folder_name )
+            folder_path = os.path.join( "Lib", folder_name ) if desired_folder_in_Lib else folder_name
+            folder_path = os.path.join( python_directory, folder_path )
             file_path = os.path.join( folder_path, file_name )
+            print_path = os.path.join("content",folder_path) if this_is_running_in_collab else folder_path  # ~~~ apparently, Colab puts files in "content" by default, but if you tell it to put files in "content" then it will create a new folder "content" inside of the intended folder "content" and place files there... Hence, the path `file_path` where we tell the computer to download our files will not include "content", but the path `print_path` where the files end up located at will include "content"
             #
             # ~~~ Create the folder if it doesn't already exist
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
                 if verbose:
-                    print(f"\nFolder '{folder_name}' created at '{folder_path}'.\n")
+                    print(f"\nFolder '{folder_name}' created at '{print_path}'\n")
             #
             # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
             prefix = "Updated" if os.path.exists(file_path) else "Created"
             urlretrieve( url_to_raw, file_path )
-            if verbose:
-                print(f"{prefix} file {file_name} at {file_path}")
+            if verbose:     # ~~~ craft a message
+                suffix = " (click the folder on the left)" if this_is_running_in_collab else ""
+                print( f"{prefix} file {file_name} at {print_path}{suffix}" )
         #
         # ~~~ A routine that downloads from Tom's GitHub repos
-        def intstall_Toms_code( folder_name, files, repo_name=None ):
+        def intstall_Toms_code( folder_name, files, repo_name=None, verbose=True ):
             repo_name = folder_name if repo_name is None else repo_name
             base_url = f"https://raw.githubusercontent.com/ThomasLastName/{repo_name}/main/"
             for file_name in files:
-                download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, folder_name=folder_name )
+                download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, folder_name=folder_name, verbose=verbose )
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
@@ -91,9 +93,7 @@ if install_assist:
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import side_by_side_prediction_plots, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
-from quality_of_life.my_base_utils          import colored_console_output, support_for_progress_bars, red_errors    # ~~~ optional: print outputs in green
-colored_console_output(warn=False)
-red_errors()
+from quality_of_life.my_base_utils          import support_for_progress_bars 
 if use_tensorflow:
     from quality_of_life.my_keras_utils     import keras_seed, make_keras_network   # ~~~ optional: only necessary for the examples involving neural networks
 
@@ -304,7 +304,7 @@ if exercise_mode:
         return fitted_polynomial, coefficients
 else:
     #
-    # ~~~ Load my answer
+    # ~~~ Load Tom's answer
     from answers_680.answers_week_1 import my_univar_poly_fit
 
 #
@@ -323,7 +323,7 @@ if exercise_mode:
         return fitted_spline, coefficients
 else:
     #
-    # ~~~ Load my answer
+    # ~~~ Load Tom's answer
     from answers_680.answers_week_1 import univar_spline_fit
 
 #
