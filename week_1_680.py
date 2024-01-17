@@ -63,7 +63,9 @@ if install_assist:
             if not os.path.exists(folder_path):
                 os.makedirs(folder_path)
                 if verbose:
-                    print(f"\nFolder {folder_name} created at {os.path.dirname(print_path)}\n")
+                    print("")
+                    print(f"Folder {folder_name} created at {os.path.dirname(print_path)}")
+                    print("")
             #
             # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
             prefix = "Updated" if os.path.exists(file_path) else "Created"
