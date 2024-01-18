@@ -24,9 +24,9 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 # Installation
 
-I've made an effort to write this code such that it "magically just works" if you Copy+Paste it into a Colab notebook (where it's your prerogative to split the code into cells if you desire).
+I've made an effort to write this code such that it, if you simply Copy+Paste it into a Colab notebook, then it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
 
-Broadly and simply, in order for the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders on the path: i.e., put those folders in a direcory such that import statements like `from quality_of_life import ansi` work. There are a variety of places you can put the folders such that this will work, depending on your Python environment.
+More generally, in order for the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders on the path: i.e., put those folders in a direcory such that import statements like `from quality_of_life import ansi` work. There are a variety of places you can put the folders such that this will work, depending on your Python environment.
 
 **Advanced Users:** You can do this yourself by git cloning this as well as the aforementioned two repos to the location of your preference.
  
