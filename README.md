@@ -30,7 +30,7 @@ More generally, in order for the `.py` files in this repo to run correctly, you 
 
 **Advanced Users:** You can do this yourself by git cloning this as well as the aforementioned two repos to the location of your preference.
  
-**All Users:** I recommend following the [Installation Using Copy+Paste](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended) instructions, below.
+**All Users:** I recommend following the [Installation Using Copy+Paste](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-using-copypaste-environments-other-than-colab) instructions, below.
 
 ---
 
