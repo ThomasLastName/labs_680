@@ -89,7 +89,6 @@ if install_assist:
         # ~~~ "Install/update" answers_680
         folder = "answers_680"
         files = [ "answers_week_1.py" ]
-        # files = [ f"answers_week_{(j+1)}.py" for j in range(15) ]
         intstall_Toms_code( folder, files )
 
 #
