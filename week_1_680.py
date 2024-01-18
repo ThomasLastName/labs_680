@@ -44,18 +44,18 @@ if install_assist:
         #
         # ~~~ Packages for downloading files
         import os
-        import sys
         from urllib.request import urlretrieve
-        this_is_running_in_colab = ('google.colab' in sys.modules)
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
-        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, desired_folder_in_Lib=False, verbose=True ):
+        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, deisred_parent_directory=None, verbose=True ):
             #
             # ~~~ Put together the appropriate path
-            python_directory = os.path.dirname(sys.executable)      # ~~~ I basically understand this to be the path where (the version being utilized of) python is installed on your computer
-            python_directory = python_directory.strip("/usr/bin")   # ~~~ seemingly not necessary on Windows, but necessary in Google Colab? I have not actually tested Mac...
-            folder_path = os.path.join( "Lib", folder_name ) if desired_folder_in_Lib else folder_name
-            folder_path = os.path.join( python_directory, folder_path )
+            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")       # ~~~ https://stackoverflow.com/a/74930276
+            if deisred_parent_directory is None:
+                parent_directory = os.path.dirname(os.path.dirname(np.__file__))   # ~~~ the parent directory of numpy
+            if this_is_running_in_colab:
+                parent_directory = ""
+            folder_path = os.path.join( parent_directory, folder_name )
             file_path = os.path.join( folder_path, file_name )
             print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_colab else file_path
             #
@@ -88,7 +88,8 @@ if install_assist:
         #
         # ~~~ "Install/update" answers_680
         folder = "answers_680"
-        files = [ f"answers_week_{(j+1)}.py" for j in range(15) ]
+        files = [ "answers_week_1.py" ]
+        # files = [ f"answers_week_{(j+1)}.py" for j in range(15) ]
         intstall_Toms_code( folder, files )
 
 #
