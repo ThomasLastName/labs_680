@@ -1,5 +1,5 @@
 # MATH 680 LABS
-This is some code that I wrote for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional exercises for students who want to go the extra mile. I wrote these as the teaching assistant for the course in spring 2024, typically building on top of the codebase that accompanies the course: [https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
+This is some code that I wrote for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional exercises for students who want to go the extra mile. I wrote these as the teaching assistant for the course in spring 2024, typically building on top of the codebase that accompanies the text: [https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
 
 ---
 
