@@ -4,7 +4,7 @@ This is some code that I wrote for the python labs of the class MATH 680 at Texa
 ---
 
 # Usage
-Each of these files contains multiple reproducible demonstations, as well as 1-3 exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
+Each of these files contains multiple reproducible demonstations, as well as 1 or more exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
 
 In order to participate in the optional exercise(s), switch from `exercise_mode = False` to `exercise_mode = True` before the import statements. The code will then prompt errors, unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
 
