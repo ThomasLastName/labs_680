@@ -38,9 +38,10 @@ except Exception as probably_ModuleNotFoundError:
 
 #
 # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
-if install_assist:
+this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
+if install_assist or this_is_running_in_colab:              # override necessary permissions if this is running in Colab
     confirm_permission_to_modify_files = not install_assist
-    if (install_assist and confirm_permission_to_modify_files) or os.getenv("COLAB_RELEASE_TAG"):    # ~~~ "if (user gave permission) or this_is_running_in_colab:" see https://stackoverflow.com/a/74930276
+    if (install_assist and confirm_permission_to_modify_files) or this_is_running_in_colab:
         #
         # ~~~ Base package for downloading files
         from urllib.request import urlretrieve
@@ -49,7 +50,7 @@ if install_assist:
         def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, deisred_parent_directory=None, verbose=True ):
             #
             # ~~~ Put together the appropriate path
-            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ https://stackoverflow.com/a/74930276
+            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
             if deisred_parent_directory is None:
                 parent_directory = os.path.dirname(os.path.dirname(np.__file__))   # ~~~ the parent directory of numpy
             if this_is_running_in_colab:
