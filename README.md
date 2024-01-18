@@ -36,7 +36,7 @@ More generally, in order for the `.py` files in this repo to run correctly, you 
 
 ## Installation Using Copy+Paste (environments other than Colab)
 
-Each week, create a blank Python file (or notebook) wherever you prefer (e.g., Colab or IDLE). Copy the code from this week's `.py` file in GitHub, and paste it into your blank Python file. Then, modify the code at the following two points:
+Each week, create a blank Python file (or notebook) wherever you prefer. Copy the code from this week's `.py` file in GitHub, and paste it into your blank Python file. Then, modify the code at the following two points:
  - Replace `install_assist = False` with `install_assist = True`
  - Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = True`
 
