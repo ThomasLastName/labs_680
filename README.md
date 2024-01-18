@@ -11,7 +11,7 @@ In order to participate in the optional exercise(s), switch from `exercise_mode 
 ---
 
 # Prerequisites for Using This Code
-Besides some standard libraries, this repo depends on the folder of code [answers_680](https://github.com/ThomasLastName/answers_680) and, in turn, both depend on the folder of code [quality_of_life](https://github.com/ThomasLastName/quality_of_life). The former's existence is analogous to placing the answers to exercises in the back of a textbook, rather in the same place where the exercises are assigned. The latter is simply a collection of coding shortcuts that I want to be able to use when writing these demos, and in every other python project that I engage in.
+Besides some standard libraries, this repo depends on the folder of code [answers_680](https://github.com/ThomasLastName/answers_680) and, in turn, both depend on the folder of code [quality_of_life](https://github.com/ThomasLastName/quality_of_life). The former's existence is analogous to placing the answers to exercises in the back of a textbook, rather in the same place where the exercises are assigned. The latter is simply a collection of coding shortcuts that I want to emply when writing these demos, just to make my own life easier. See the Installation, below.
 
 **List of Requirements in Order to Use this Code:**
 - [x] Have python installed and know how to edit and run python files
@@ -22,7 +22,11 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 ---
 
-# Installation Using Copy+Paste (recommended)
+# Installation
+
+---
+
+## Installation Using Copy+Paste (recommended)
 
 Each week, create a blank `.py` file wherever you prefer, copy the code from this week's `.py` file in GitHub, and paste it into your blank `.py` file. Then, modify the code at the following two points:
  - Replace `install_assist = False` with `install_assist = True`
@@ -36,7 +40,7 @@ If these two changes are implemented, then the code will automatically download 
 
 ---
 
-# Installation Using the Graphical Interface (not recommended)
+## Installation Using the Graphical Interface (not recommended)
 
 **Additional Prerequisites Using the Graphical Interface:**
 - [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective README's for more info
@@ -49,7 +53,7 @@ If these two changes are implemented, then the code will automatically download 
 
 ---
 
-# Installation Using git
+## Installation Using git
 
 **Additional Prerequisites Using git:**
 - [x] Have the repositories [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) already stored in your `Lib` folder. Those both have their own installation steps, similar to the steps for this repo. See their respective README's for more info
