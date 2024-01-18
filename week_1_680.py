@@ -2,7 +2,7 @@
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
 exercise_mode = False   # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage
-install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
+install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-using-copypaste-environments-other-than-colab
 
 
 ### ~~~
@@ -37,7 +37,7 @@ except Exception as probably_ModuleNotFoundError:
         use_progress_bar = False
 
 #
-# ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
+# ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-using-copypaste-environments-other-than-colab
 this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
 if install_assist or this_is_running_in_colab:              # override necessary permissions if this is running in Colab
     confirm_permission_to_modify_files = not install_assist
