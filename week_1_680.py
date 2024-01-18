@@ -37,7 +37,7 @@ except Exception as probably_ModuleNotFoundError:
         use_progress_bar = False
 
 #
-# ~~~ An automation of the process "Installation Using the Graphical Interface" described at https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-the-graphical-interface-not-recommended
+# ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
 if install_assist:
     confirm_permission_to_modify_files = not install_assist
     if install_assist and confirm_permission_to_modify_files:
