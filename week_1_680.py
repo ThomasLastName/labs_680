@@ -11,6 +11,7 @@ install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab
 
 #
 # ~~~ Standard python libraries
+import os
 import warnings
 import numpy as np
 from matplotlib import pyplot as plt
@@ -18,7 +19,6 @@ from matplotlib import pyplot as plt
 #
 # ~~~ Extra features if you have tensorflow installed
 try:
-    import os               # ~~~ used once for saving/ loading data in the example of CV for NN architecture selection
     import sys                  # ~~~ used in conjunction with os that one time
     from itertools import product   # ~~~ used for conviently assembling a list of candidate NN architectures in the example of CV for NN's
     import tensorflow as tf             # ~~~ one of the major python machine learning libraries
@@ -40,17 +40,16 @@ except Exception as probably_ModuleNotFoundError:
 # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation-using-copypaste-recommended
 if install_assist:
     confirm_permission_to_modify_files = not install_assist
-    if install_assist and confirm_permission_to_modify_files:
+    if (install_assist and confirm_permission_to_modify_files) or os.getenv("COLAB_RELEASE_TAG"):    # ~~~ "if (user gave permission) or this_is_running_in_colab:" see https://stackoverflow.com/a/74930276
         #
-        # ~~~ Packages for downloading files
-        import os
+        # ~~~ Base package for downloading files
         from urllib.request import urlretrieve
         #
         # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
         def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, deisred_parent_directory=None, verbose=True ):
             #
             # ~~~ Put together the appropriate path
-            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")       # ~~~ https://stackoverflow.com/a/74930276
+            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ https://stackoverflow.com/a/74930276
             if deisred_parent_directory is None:
                 parent_directory = os.path.dirname(os.path.dirname(np.__file__))   # ~~~ the parent directory of numpy
             if this_is_running_in_colab:
