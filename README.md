@@ -24,7 +24,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 # Installation
 
-I've made an effort to write this code such that it, if you simply Copy+Paste it into a Colab notebook, then it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
+I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, then it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
 
 More generally, in order for the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders on the path: i.e., put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work. There are a variety of places you can put the folders such that this will work, depending on your Python environment.
 
@@ -34,7 +34,7 @@ More generally, in order for the `.py` files in this repo to run correctly, you 
 
 ---
 
-## Installation Using Copy+Paste (recommended)
+## Installation Using Copy+Paste (environments other than Colab)
 
 Each week, create a blank Python file (or notebook) wherever you prefer (e.g., Colab or IDLE). Copy the code from this week's `.py` file in GitHub, and paste it into your blank Python file. Then, modify the code at the following two points:
  - Replace `install_assist = False` with `install_assist = True`
