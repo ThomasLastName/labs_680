@@ -43,8 +43,8 @@ for directory in sys.path:
 ## Installation Using Copy+Paste (environments other than Colab)
 
 Each week, create a blank Python file (or notebook) wherever you prefer. Copy the code from this week's `.py` file in GitHub, and paste it into your blank Python file. Then, modify the code at the following two points:
- - Replace `install_assist = False` with `install_assist = True`
- - Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = True`
+1. Replace `install_assist = False` with `install_assist = True`
+2. Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = True`
 
 If these two changes are implemented, then the code will automatically download various `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) and attempt to locate them in an adequate directory each time it is executed, erasing and replacing those files (effectively updating them) if they were already present.
 
