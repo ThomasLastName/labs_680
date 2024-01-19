@@ -30,7 +30,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 ## Installation in Colab (beginner friendly)
 
-I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
+I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will just magically work. Although, if you do so, then it's your prerogative to split the code into cells.
 
 
 ## Manual Installation (advanced Users)
@@ -50,7 +50,7 @@ import sys
 sys.path.append(my_favorite_path)
 ```
 
-Advanced csers can place the required files by "git cloning" this as well as the aforementioned two repos to the location of their preference.
+Advanced users can place the required files by "git cloning" this as well as the aforementioned two repos to the location of their preference.
 
 ---
 
