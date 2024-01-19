@@ -24,9 +24,18 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 
 # Installation
 
-I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, then it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
 
-**More generally, for the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work.** Depending on your Python environment, a variety of different directories will accomplish this. You can see several options by running the following code.
+**TLDR: For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work.**
+
+
+## Installation in Colab (beginner friendly)
+
+I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will "magically just work." Although, if you do so, then it's your prerogative to split the code into cells.
+
+
+## Manual Installation (advanced Users)
+
+For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work. Depending on your Python environment, a variety of different directories will accomplish this, including any directory on the path for your environement. You can see all directories on the path for your Python environment by running the following code.
 
 ```
 import sys
@@ -34,26 +43,24 @@ for directory in sys.path:
     print(directory)
 ```
 
-However, the directory `os.getcwd()` should, also, work. Additionally, if you've located the folders `quality_of_life` and `answers_680` inside a parent directory with path `my_path`, you can make sure the code runs by adding the following two lines of code to the import block.
+However, other directories may also work, such as the directory `os.getcwd()`. Additionally, if you've located the folders `quality_of_life` and `answers_680` inside a parent directory with path `my_favorite_path`, you can make sure the code runs by adding the following two lines of code to the import block.
 
 ```
 import sys
-sys.path.append(my_path)
+sys.path.append(my_favorite_path)
 ```
 
-**Advanced Users:** You can place the required files, yourself, by git cloning this as well as the aforementioned two repos to the location of your preference.
- 
-**All Users:** I recommend following the [Installation Using Copy+Paste](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-using-copypaste-environments-other-than-colab) instructions, below.
+Advanced csers can place the required files by "git cloning" this as well as the aforementioned two repos to the location of their preference.
 
 ---
 
-## Installation Using Copy+Paste (environments other than Colab)
+## Assisted Installation for Environments other than Colab (recommended)
 
 Each week, create a blank Python file (or notebook) wherever you prefer. Copy the code from this week's `.py` file in GitHub, and paste it into your blank Python file. Then, modify the code at the following two points:
 1. Replace `install_assist = False` with `install_assist = True`
 2. Replace `confirm_permission_to_modify_files = not install_assist` with `confirm_permission_to_modify_files = True`
 
-If these two changes are implemented, then the code will automatically download various `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) and attempt to locate them in an adequate directory each time it is executed, erasing and replacing those files (effectively updating them) if they were already present.
+That's it! If these two changes are implemented, then the code will automatically download various `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life) and _attempt_ to locate them in an adequate directory each time it is executed, erasing and replacing those files (effectively updating them) if they were already present.
 
 More precisely, if the above two changes are implemented, then the code will look for folders called `answers_680` and `quality_of_life` within the directory where your Python environment stores packages (as determined by `os.path.dirname(os.path.dirname(np.__file__))`), it will create those two folders if they don't already exist, and it will download a variety of `.py` files and place them inside of those folders, erasing the ones of the same name that were previously there (if any).  To see the names of the files that the code will download if the above two changes are implemented, you can Ctrl+f `files = [`, which should appear in two separate places.
 
