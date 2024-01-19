@@ -34,7 +34,7 @@ for directory in sys.path:
     print(directory)
 ```
 
-**Advanced Users:** You can do this yourself by git cloning this as well as the aforementioned two repos to the location of your preference.
+**Advanced Users:** You can place the required files, yourself, by git cloning this as well as the aforementioned two repos to the location of your preference.
  
 **All Users:** I recommend following the [Installation Using Copy+Paste](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-using-copypaste-environments-other-than-colab) instructions, below.
 
