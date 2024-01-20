@@ -7,7 +7,7 @@ This is some code that I wrote for the python labs of the class MATH 680 at Texa
 -  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
 -  [Installation (TLDR)](#installation)
    - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
-   - [Manual Installation (advanced Users)](#manual-installation-advanced-users)
+   - [Manual Installation (advanced users)](#manual-installation-advanced-users)
    - [Assisted Installation for Environments other than Colab (recommended)](#assisted-installation-for-environments-other-than-colab-recommended)
 
 
@@ -43,7 +43,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will just magically work. Although, if you do so, then it's your prerogative to split the code into cells.
 
 
-## Manual Installation (advanced Users)
+## Manual Installation (advanced users)
 
 For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work. Depending on your Python environment, a variety of different directories will accomplish this, including any directory on the path for your environement. You can see all directories on the path for your Python environment by running the following code.
 
