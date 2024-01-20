@@ -8,7 +8,7 @@ This is some code that I wrote for the python labs of the class MATH 680 at Texa
 -  [Installation (TLDR)](#installation)
    - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
    - [Manual Installation (advanced Users)](#manual-installation-advanced-users)
-   - [Assisted Installation for Environments other than Colab (recommended)](#assisted-installation-for-environments-other-than-colab-recommended)
+   - **[Assisted Installation for Environments other than Colab (recommended)](#assisted-installation-for-environments-other-than-colab-recommended)**
 
 
 ---
