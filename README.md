@@ -1,10 +1,20 @@
 # MATH 680 LABS
-This is some code that I wrote for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional exercises for students who want to go the extra mile. I wrote these as the teaching assistant for the course in spring 2024, typically building on top of the codebase that accompanies the text: [https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
+This is some code that I wrote for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional programming exercises. I wrote these as the teaching assistant for the course in spring 2024, typically building on top of [the official codebase for the text](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
+
+## Table of Contents
+
+- [Usage](#usage)
+-  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
+-  [Installation (TLDR)](#installation)
+   - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
+   - [Manual Installation (advanced Users)](#manual-installation-advanced-users)
+   - [Assisted Installation for Environments other than Colab (recommended)](#assisted-installation-for-environments-other-than-colab-recommended)
+
 
 ---
 
 # Usage
-Each of these files contains multiple reproducible demonstations, as well as 1 or more exercises. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
+Each of these files contains multiple reproducible demonstations, as well as 1 or more programming exercises for students seeking more programming experience. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our Thursday meetings at 8:25am in Blocker 129 (in the OAL computer lab).
 
 In order to participate in the optional exercise(s), switch from `exercise_mode = False` to `exercise_mode = True` before the import statements. The code will then prompt errors, unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
 
