@@ -141,14 +141,14 @@ compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"U
 
 #
 # ~~~ ERM with a bigger hypothesis class will be more data hungry, but will perform better if you can satisfy its appetite; in other words, with enough data both models do as well as possible, though how much is "enough" depends on the hypothesis class, as does how good is the outcome "as well as possible"
-d,D = 1,20
-md,mD = 400,25000
+d,D = 2,20
+md,mD = 1200,25000
 x_train, y_train = Foucarts_training_data(m=md)
 more_x_train, more_y_train = Foucarts_training_data(m=mD)
-constant_fit,c = univar_poly_fit( x_train, y_train, degree=d )          # ~~~ degree 0 polynomial regression
+quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )          # ~~~ degree 0 polynomial regression
 dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
 f = lambda x: np.abs(x)                                                 # ~~~ the so called "ground truth" by which x causes y
-side_by_side_prediction_plots( x_train, y_train, f, constant_fit, dodeca_fit, f"With m={md}, Degree {d} Regression Does About as Well as Possible", f"With m={mD}, Degree {D} Regression Does About as Well as Possible", other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4] )
+side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, f"With m={md}, Degree {d} Regression Does About as Well as Possible", f"With m={mD}, Degree {D} Regression Does About as Well as Possible", other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4] )
 
 
 #
