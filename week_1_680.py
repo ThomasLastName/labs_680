@@ -114,21 +114,13 @@ def univar_poly_fit( x, y, degree=1 ):
 
 #
 # ~~~ A helper function that prepares data identical to Fouract's in https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb
-def Foucarts_training_data():
-    # ~~~ equivalent to:
-        # np.random.seed(12)
-        # m = 15
-        # x_train = np.random.uniform(-1,1,m)
-        # x_train.sort()
-        # x_train[0] = -1
-        # x_train[-1] = 1
-        # y_train = abs(x_train) + np.random.normal(0,1,m)
-    x_train = np.array([-1.        , -0.97085008, -0.93315714, -0.72558136, -0.69167432,
-                       -0.47336997, -0.43234329,  0.06747879,  0.21216637,  0.48009939,
-                        0.70547108,  0.80142971,  0.83749402,  0.88845027,  1.        ])
-    y_train = np.array([ 3.73781428,  2.08759803,  2.50769528,  0.63971456,  1.16841094,
-                        -0.13801677,  0.08287235, -0.63793798, -0.12801989,  2.5073981 ,
-                         0.12439097,  1.67456455,  1.7480593 ,  1.93609588, -0.18963857])
+def Foucarts_training_data( m=15 ):
+    np.random.seed(12)
+    x_train = np.random.uniform(-1,1,m)
+    x_train.sort()
+    x_train[0] = -1
+    x_train[-1] = 1
+    y_train = abs(x_train) + np.random.normal(0,1,m)
     return x_train, y_train
 
 #
@@ -145,6 +137,18 @@ quadratic_fit,_ = univar_poly_fit( x_train, y_train, degree=d )     # ~~~ degree
 dodeca_fit,_ = univar_poly_fit( x_train, y_train, degree=D )        # ~~~ degree 20 polynomial regression
 f = lambda x: np.abs(x)                                             # ~~~ the so called "ground truth" by which x causes y
 compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"Underfitting with a Degree {d} Polynomial", f"Overfitting with a Degree {D} Polynomial" )
+
+
+#
+# ~~~ ERM with a bigger hypothesis class will be more data hungry, but will perform better if you can satisfy its appetite; in other words, with enough data both models do as well as possible, though how much is "enough" depends on the hypothesis class, as does how good is the outcome "as well as possible"
+d,D = 1,20
+md,mD = 400,25000
+x_train, y_train = Foucarts_training_data(m=md)
+more_x_train, more_y_train = Foucarts_training_data(m=mD)
+constant_fit,c = univar_poly_fit( x_train, y_train, degree=d )          # ~~~ degree 0 polynomial regression
+dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
+f = lambda x: np.abs(x)                                                 # ~~~ the so called "ground truth" by which x causes y
+side_by_side_prediction_plots( x_train, y_train, f, constant_fit, dodeca_fit, f"With m={md}, Degree {d} Regression Does About as Well as Possible", f"With m={mD}, Degree {D} Regression Does About as Well as Possible", other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4] )
 
 
 #
@@ -424,8 +428,9 @@ def poly_cv( degree, x, y, **kwargs ):
 #
 # ~~~ Example usage of the big bad function we just defined
 x_train, y_train = Foucarts_training_data() # ~~~ for improved reproducibility
-scores =  poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error )
-print(scores)  # ~~~ returns [5.659962939942039, 434.55267825346857], meaning that the model trained on the second half of the data performed terribly
+scores =  poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error )   # ~~~ returns [5.659962939942039, 434.55267825346857], meaning that the model trained on the second half of the data performed terribly
+print( f"Test error {scores[0]:.4f} when trained on the 1st half of the data", f"Test error {scores[1]:.4f} when trained on the 2nd half of the data", sep="\n" )
+
 
 #
 # ~~~ Investigate further by specifying `plot=True`
@@ -434,8 +439,9 @@ _ = poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error, p
 #
 # ~~~ And that's why people shuffle their data...
 np.random.seed(680)     # ~~~ fix seed for improved reproducibility
-scores = poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error, shuffle=True, plot=True )
-print(scores)           # ~~~ returns [1.408731127467586, 1.1814320746081544]; both models fit about as well as they can given how noisy the data is
+scores = poly_cv( degree=2, x=x_train, y=y_train, cv=2, scoring=mean_squared_error, shuffle=True, plot=True )   # ~~~ returns [1.408731127467586, 1.1814320746081544]; both models fit about as well as they can given how noisy the data is
+print( f"Test error {scores[0]:.4f} when trained on the 1st half of the data", f"Test error {scores[1]:.4f} when trained on the 2nd half of the data", sep="\n" )
+
 
 
 
