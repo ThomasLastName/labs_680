@@ -323,7 +323,7 @@ if exercise_mode:
     #
     # ~~~ Perform empirical risk minimization when H is the space of polynomials with degree at most `degree`
     def my_univar_poly_fit( x_train, y_train, degree ):
-        # YOUR CODE HERE
+        # YOUR CODE HERE; Hint: you should just set up the appropriate matrix and call `np.linalg.lstsq`
         return fitted_polynomial, coefficients
 else:
     #
@@ -342,7 +342,7 @@ if exercise_mode:
     #
     # ~~~ Perform empirical risk minimization when H is the space of globally continuous piecewise linear functions with break points occuring only at `knots` (a numpy array)    
     def univar_spline_fit( x_train, y_train, knots ):
-        # YOUR CODE HERE
+        # YOUR CODE HERE; Hint: you should just set up the appropriate matrix and call `np.linalg.lstsq`
         return fitted_spline, coefficients
 else:
     #
