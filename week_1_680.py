@@ -51,10 +51,8 @@ if install_assist or this_is_running_in_colab:              # override necessary
             #
             # ~~~ Put together the appropriate path
             this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
-            if deisred_parent_directory is None:
-                parent_directory = os.path.dirname(os.path.dirname(np.__file__))   # ~~~ the parent directory of numpy
-            if this_is_running_in_colab:
-                parent_directory = ""
+            parent_directory = os.path.dirname(os.path.dirname(np.__file__)) if (deisred_parent_directory is None) else deisred_parent_directory
+            parent_directory = "" if this_is_running_in_colab else parent_directory
             folder_path = os.path.join( parent_directory, folder_name )
             file_path = os.path.join( folder_path, file_name )
             print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_colab else file_path
@@ -70,7 +68,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
             # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
             prefix = "Updated" if os.path.exists(file_path) else "Created"
             urlretrieve( url_to_raw, file_path )
-            if verbose:     # ~~~ craft a message
+            if verbose:
                 suffix = " (click the folder on the left)" if this_is_running_in_colab else ""
                 print( f"{prefix} file {file_name} at {print_path}{suffix}" )
         #
@@ -142,7 +140,7 @@ compare_models_like_Foucart( x_train, y_train, f, quadratic_fit, dodeca_fit, f"U
 #
 # ~~~ ERM with a bigger hypothesis class will be more data hungry, but will perform better if you can satisfy its appetite; in other words, with enough data both models do as well as possible, though how much is "enough" depends on the hypothesis class, as does how good is the outcome "as well as possible"
 d,D = 2,20
-md,mD = 1200,25000
+md,mD = 1200,100000
 x_train, y_train = Foucarts_training_data(m=md)
 more_x_train, more_y_train = Foucarts_training_data(m=mD)
 quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )          # ~~~ degree 0 polynomial regression
@@ -168,7 +166,7 @@ side_by_side_prediction_plots( x_train, y_train, f, quartic_fit, deca_fit, f"A D
 
 if exercise_mode:
     #
-    # ~~~ Create some data with a non-zero level of noise in the y_train such that a degree 10 polynomial regression outperforms degree 4 polynomial regression
+    # ~~~ Create a data set with sample size <20 and an average level of noise >0.01 in the y_train such that degree 10 regression outperforms degree 4 regression
     my_x_train = None           # ~~~ 1d numpy array
     my_y_train = None           # ~~~ 1d numpy array
     my_ground_truth = None      # ~~~ function that acts on 1d numpy arrays
@@ -183,14 +181,23 @@ else:
     from answers_680.answers_week_1 import explanation_a_4  as my_explanation_4
     from answers_680.answers_week_1 import explanation_a_10 as my_explanation_10
 
-
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 ) # ~~~ degree 4 polynomial regression
 deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )   # ~~~ degree 10 polynomial regression
-side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+x_test = np.linspace(-1,1,1000)
+y_test = my_ground_truth(x_test)
+error_10 = ( (deca_fit(x_test)-y_test)**2 ).mean()
+error_4 = ( (quartic_fit(x_test)-y_test)**2 ).mean()
+higher_degree_is_better = error_10<error_4
+noise = abs(my_y_train-my_ground_truth(my_x_train)).mean() > 1e-2   # ~~~ some noise
+small_sample_size = len(y_train)<20                                 # ~~~ sample size <20
+if noise and small_sample_size and higher_degree_is_better:
+    side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+else:
+    raise ValueError("Exercise instructions were not met.")
 
 if exercise_mode:
     #
-    # ~~~ Create some data with a non-zero level of noise in the y_train such that a degree 10 polynomial regression outperforms degree 4 polynomial regression
+    # ~~~ Create a data set with sample size <100 and an average level of noise >0.1 in the y_train such that degree 10 regression outperforms degree 4 regression
     my_x_train = None           # ~~~ 1d numpy array
     my_y_train = None           # ~~~ 1d numpy array
     my_ground_truth = None      # ~~~ function that acts on 1d numpy arrays
@@ -207,7 +214,17 @@ else:
 
 quartic_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=4 ) # ~~~ degree 4 polynomial regression
 deca_fit,_ = univar_poly_fit( my_x_train, my_y_train, degree=10 )   # ~~~ degree 10 polynomial regression
-side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+x_test = np.linspace(-1,1,1000)
+y_test = my_ground_truth(x_test)
+error_10 = ( (deca_fit(x_test)-y_test)**2 ).mean()
+error_4 = ( (quartic_fit(x_test)-y_test)**2 ).mean()
+higher_degree_is_better = error_10<error_4
+noise = abs(my_y_train-my_ground_truth(my_x_train)).mean() > 1e-1   # ~~~ some noise
+small_sample_size = len(y_train)<100                                # ~~~ sample size <100
+if noise and small_sample_size and higher_degree_is_better:
+    side_by_side_prediction_plots( my_x_train, my_y_train, my_ground_truth, quartic_fit, deca_fit, my_explanation_4, my_explanation_10 )
+else:
+    raise ValueError("Exercise instructions were not met.")
 
 
 
