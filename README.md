@@ -35,7 +35,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 # Installation
 
 
-**TLDR: For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work.**
+**TLDR: For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a directory such that import statements like `from quality_of_life import ansi` will work.**
 
 
 ## Installation in Colab (beginner friendly)
@@ -45,7 +45,7 @@ I've made an effort to write this code such that it, if you Copy+Paste it into a
 
 ## Manual Installation (advanced users)
 
-For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a direcory such that import statements like `from quality_of_life import ansi` will work. Depending on your Python environment, a variety of different directories will accomplish this, including any directory on the path for your environement. You can see all directories on the path for your Python environment by running the following code.
+For the `.py` files in this repo to run correctly, you need to download the `.py` files from [answers_680](https://github.com/ThomasLastName/answers_680) and [quality_of_life](https://github.com/ThomasLastName/quality_of_life), put them in respective folders of the same name, and put those folders in a directory such that import statements like `from quality_of_life import ansi` will work. Depending on your Python environment, a variety of different directories will accomplish this, including any directory on the path for your environement. You can see all directories on the path for your Python environment by running the following code.
 
 ```
 import sys
