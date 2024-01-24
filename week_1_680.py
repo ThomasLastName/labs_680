@@ -26,6 +26,8 @@ try:
 except Exception as probably_ModuleNotFoundError:
     if type(probably_ModuleNotFoundError) is ModuleNotFoundError:
         use_tensorflow = False
+    else:
+        raise
 
 #
 # ~~~ In order to reproduce the neural network CV that I ran before lab, you'll "need" the package alive_progres (otherwise, you'll just need to sligly edit my code)
@@ -35,6 +37,8 @@ try:
 except Exception as probably_ModuleNotFoundError:
     if type(probably_ModuleNotFoundError) is ModuleNotFoundError:
         use_progress_bar = False
+    else:
+        raise
 
 #
 # ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
@@ -143,26 +147,34 @@ d,D = 2,20
 md,mD = 1200,100000
 x_train, y_train = Foucarts_training_data(m=md)
 more_x_train, more_y_train = Foucarts_training_data(m=mD)
-quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )          # ~~~ degree 0 polynomial regression
+quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )         # ~~~ degree 0 polynomial regression
 dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
 f = lambda x: np.abs(x)                                                 # ~~~ the so called "ground truth" by which x causes y
 side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, f"With m={md}, Degree {d} Regression Does About as Well as Possible", f"With m={mD}, Degree {D} Regression Does About as Well as Possible", other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4] )
 
-
 #
-# ~~~ Degree 4 polynomial regression still gives plausibale results, while degree 10 does does not do much better than 20
-x_train, y_train = Foucarts_training_data()
-d,D = 4,10
-quartic_fit,_ = univar_poly_fit( x_train, y_train, degree=4 )   # ~~~ degree 4 polynomial regression
-deca_fit,_ = univar_poly_fit( x_train, y_train, degree=10 )     # ~~~ degree 10 polynomial regression
-f = lambda x: np.abs(x)                                         # ~~~ the so called "ground truth" by which x causes y
-side_by_side_prediction_plots( x_train, y_train, f, quartic_fit, deca_fit, f"A Degree {d} Polynomial Still Gives Relatively Palusible Predictions", f"A Degree {D} is Implausibly Wiggly" )
+# ~~~ ERM does *not* seems to be a PAC learning map for the hypothesis class of polynomials, as the results do *not* seem to be *distribution free*
+x_train = abs(x_train)              # ~~~ Change the distribution of the x's (normally y's would need to change accordingly, but not in this particular case)
+more_x_train = abs(more_x_train)    # ~~~ Change the distribution of the x's (normally y's would need to change accordingly, but not in this particular case)
+# y_train, more_y_train = f(x_train), f(more_x_train)                     # remove noise
+quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )         # ~~~ degree 0 polynomial regression
+dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
+side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4], axatitle=None, axbtitle=None, figtitle="ERM is Not a PAC-Learning Map for a Polynomial Hypothesis Class" )
 
 
 
 ### ~~~
 ## ~~~ EXERCISE 1 of 4 (easy): A Simpler Model is *not* Always Best
 ### ~~~
+
+#
+# ~~~ Returning to the original dataa, observe that degree 4 polynomial regression still gives plausibale results, while degree 10 is still about as bad as 20
+x_train, y_train = Foucarts_training_data()
+d,D = 4,10
+quartic_fit,_ = univar_poly_fit( x_train, y_train, degree=4 )   # ~~~ degree 4 polynomial regression
+deca_fit,_ = univar_poly_fit( x_train, y_train, degree=10 )     # ~~~ degree 10 polynomial regression
+f = lambda x: np.abs(x)                                         # ~~~ the so called "ground truth" by which x causes y
+side_by_side_prediction_plots( x_train, y_train, f, quartic_fit, deca_fit, f"A Degree {d} Polynomial Still Gives Relatively Palusible Predictions", f"A Degree {D} is Implausibly Wiggly" )
 
 if exercise_mode:
     #
