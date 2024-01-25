@@ -130,7 +130,6 @@ def Foucarts_training_data( m=15 ):
 def compare_models_like_Foucart( *args, **kwargs ):
     side_by_side_prediction_plots( *args, grid=np.linspace(-1,1,1001), xlim=[-1.1,1.1], ylim=[-1.3,5.3], **kwargs )
 
-
 #
 # ~~~ Retrieve our data and train our two models, then plot the results (reproduces https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition/blob/master/Python/Chapter01.ipynb)
 x_train, y_train = Foucarts_training_data()
@@ -489,19 +488,12 @@ else:
     from answers_680.answers_week_1 import Toms_example_of_the_cv_workflow as full_CV_and_plot_the_result
 
 #
-# ~~~ A simple helper routine for improved organization
-def recall_data():
-    f = lambda x: abs(x)
-    x_train, y_train = Foucarts_training_data()
-    np.random.seed(680)
-    reordered_indices = np.random.permutation( len(y_train) )
-    x_train = x_train[reordered_indices]
-    y_train = y_train[reordered_indices]
-    return x_train, y_train
-
-#
 # ~~~ Do CV for polynomial regression on the data we started out with
-x_train, y_train = recall_data()
+x_train, y_train = Foucarts_training_data()
+np.random.seed(680)
+reordered_indices = np.random.permutation( len(y_train) )
+x_train = x_train[reordered_indices]
+y_train = y_train[reordered_indices]
 my_scores = full_CV_and_plot_the_result( x_train, y_train, n_bins=2, ground_truth=f )
 true_scores = np.array([[2.31622333e+00, 1.75726951e+00],
                         [1.40873113e+00, 1.18143207e+00],
@@ -526,13 +518,7 @@ true_scores = np.array([[2.31622333e+00, 1.75726951e+00],
 assert abs(my_scores-true_scores).max() < 1e-4  # ~~~ the tolerance is high to account for numerical instability (recall the warning the we've surpressed)
 
 #
-# ~~~ Observe what happens when you toggle the number of subsets into which you split the training data
-x_train, y_train = recall_data()
-for n in [2,3,4,5,6,7,8]:
-    _ = full_CV_and_plot_the_result( x_train, y_train, n_bins=n, ground_truth=f )
-
-#
-# ~~~ With a better data set the behavior is different
+# ~~~ More bins usually results in a heavier penalization to model complexity
 np.random.seed(680)
 f = lambda x: abs(x)
 x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=500, noise=0.1 )
