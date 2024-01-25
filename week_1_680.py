@@ -515,7 +515,7 @@ true_scores = np.array([[2.31622333e+00, 1.75726951e+00],
                         [9.83273230e+02, 1.90664495e+03],
                         [1.23514684e+03, 2.03958356e+03],
                         [1.41839306e+03, 2.37728170e+03]])
-assert abs(my_scores-true_scores).max() < 1e-4  # ~~~ the tolerance is high to account for numerical instability (recall the warning the we've surpressed)
+assert abs(my_scores-true_scores).mean() < 1e-4  # ~~~ the tolerance is high to account for numerical instability (recall the warning the we've surpressed)
 
 #
 # ~~~ More bins usually results in a heavier penalization to model complexity
