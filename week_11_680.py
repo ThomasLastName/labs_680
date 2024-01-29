@@ -30,7 +30,6 @@ from quality_of_life.my_base_utils import support_for_progress_bars
 
 #
 # ~~~ set the parent directory where you want to store data on your computer
-my_data_directory = 7
 my_data_directory = "C:\\Users\\thoma\\AppData\\Local\\Programs\\Python\\Python310\\pytorch_data"
 
 
@@ -58,8 +57,8 @@ if exercise_mode:
     #
     # ~~~ write a function that excracts the actual matrices from `MNIST_train` and `MNIST_test`
     def get_data(object_of_class_Dataset):
-        # HINT objects of class torch.utils.data.Dataset aren't matrices but you can still " do [index] to them;" try printing `MNIST_train[0]`
-        return None
+        # HINT objects of class torch.utils.data.Dataset aren't matrices but you can still " do [index] to them;" try printing `MNIST_train[0]` (this works thanks to the __getitem__ method; see https://pytorch.org/tutorials/beginner/basics/data_tutorial.html#getitem)
+        return X, y
 else:
     from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors as get_data
 
@@ -77,10 +76,10 @@ assert (X_test==my_X_test).min() and (y_test==my_y_test).min()  # ~~~ check that
 
 if exercise_mode:
     #
-    # ~~~ write a function that excracts the actual matrices from `MNIST_train` and `MNIST_test`
+    # ~~~ write a function that assembles actual matrices into objects of class torch.utils.data.Dataset like `MNIST_train` and `MNIST_test`
     def assemble_data(object_of_class_Dataset):
         # HINT this is highly googlable
-        return None
+        return Dataset
 else:
     #
     # ~~~ load my left inverse to get_data; note that my implelemntation is *not* a bijection: we have get(assemble(v))=v, but *not* assemble(get(w))=w
@@ -92,14 +91,47 @@ my_X, my_y = get_data(assemble_data(X_test,y_test))     # ~~~ build a torch.util
 assert (X_test==my_X).min() and (y_test==my_y).min()    # ~~~ check that we got back exactly what we started with
 
 
+torch.tensor([3,1,0])
+torch.Tensor([3,1,0])
+torch.tensor([3.,1.,0.])
+torch.Tensor([3.,1.,0.])
+torch.tensor([3.,1.,0.], dtype=torch.int32)
+torch.Tensor([3.,1.,0.], dtype=torch.int32)
 
-model = nn.Sequential(
-            nn.Flatten(),
-            nn.Linear(28*28, 512),
-            nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10),
-            nn.Softmax(dim=1)
-        )
+
+
+
+
+
+# Example of target with class indices
+predicted = torch.tensor([[-1.1933,  0.2766,  1.1250, -0.4440,  2.7818],
+                          [-1.3816, -0.3540, -1.1034,  2.2402,  0.1682],
+                          [-3.2324, -2.3961, -0.1085,  0.0205, -0.3228]])
+targets = torch.tensor([3,1,0])
+
+def my_cross_entropy(predicted,targets):
+    encode = mtu.hot_1_encode_an_integer(n_class=5)
+    p = predicted.softmax(dim=1)
+    t = encode(targets)
+    return ( -t*p.log() ).sum(axis=1).mean()
+
+loss = nn.CrossEntropyLoss()
+
+my_cross_entropy(predicted,targets)
+loss(predicted,targets)
+
+
+
+
+
+
+class Bar:
+    def __init__(self, arg):
+        self.attribute = arg
+    def method(self, extra):
+        print(self.attribute + extra)
+
+foo = Bar("x")
+foo.method(foo,"extra")
+
 
