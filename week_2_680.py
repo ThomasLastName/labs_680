@@ -116,13 +116,15 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 if exercise_mode:
     def augment(X):
-        # YOUR CODE HERE (this is, simply, an exercise in numpy)
-        return # X if X already has a column of all 1's, otherwise return an augmented version of X, with a new column of all 1's
+        dimension = X.shape[0]
+        return np.concatenate([ X, np.ones((dimension,1)) ], axis=1 )
 else:
-    from quality_of_life.my_numpy_utils import augment as my_augment
+    pass
 
+from quality_of_life.my_numpy_utils import augment as my_augment
 X,y = Foucarts_training_data(plot=False)
 assert np.isclose( augment(X), my_augment(X) ).min()
+assert np.isclose( augment(X), augment(augment(X)) ).min()
 
 
 
