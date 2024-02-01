@@ -111,7 +111,7 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of ? (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
+## ~~~ EXERCISE 1 of 5 (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
 ### ~~~
 
 if exercise_mode:
@@ -127,7 +127,7 @@ assert np.isclose( augment(X), my_augment(X) ).min()
 
 
 ### ~~~ 
-## ~~~ EXERCISE 2 of ? (medium): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
+## ~~~ EXERCISE 2 of 5 (medium): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
 ### ~~~ 
 
 if exercise_mode:
@@ -145,7 +145,7 @@ assert abs(slope-0.47692307692307695)<1e-10 and abs(intercept-1.2923076923076924
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of ? (medium): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
+## ~~~ EXERCISE 3 of 5 (medium): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
 ### ~~~
 
 if exercise_mode:
@@ -178,9 +178,8 @@ assert i==77 and np.all(np.isclose(w,correct))
 
 
 ### ~~~ 
-## ~~~ DEMONSTRATION 1 of n: The perceptron algorithm in action
+## ~~~ DEMONSTRATION 1 of 2: The perceptron algorithm in action
 ### ~~~ 
-
 
 #
 # ~~~ A helper routine that plots the data along with the boundary between classification regions
@@ -203,7 +202,7 @@ w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
 w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 2nd update
 w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 3rd update
 w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 4th
-w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ raises StopIteration because no more updates are needed
+# w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ raises StopIteration because no more updates are needed
 w,b = np.array_split(w,2)
 points_with_binary_classifier_line(w,b,X,y) # ~~~ sure enough, the classification appears to be exact
 
@@ -356,7 +355,7 @@ points_with_binary_classifier_line(w,b,X,y)
 
 
 ### ~~~
-## ~~~ EXERCISE 4 of ?: A numerical test for linear separability
+## ~~~ EXERCISE 4 of 5: A numerical test for linear separability
 ### ~~~
 
 #
@@ -368,7 +367,7 @@ def linear_feasibility_program(A,b):
     constraints = [A @ x >= b]  # ~~~ define the constraints of the problem
     objective = cvx.Minimize(cvx.norm1(x))          # ~~~ objective function can be anything for linear feasibility problem
     problem = cvx.Problem(objective, constraints)   # ~~~ put it all together into a complex minimization program
-    problem.solve(solver=cvx.CLARABEL)              # ~~~ try to solve it
+    problem.solve(solver=cvx.ECOS)              # ~~~ try to solve it
     return x.value if problem.status==cvx.OPTIMAL else None
 
 if exercise_mode:
@@ -386,6 +385,7 @@ def linear_programming(X_train,y_train):
         print("The data is not linearly separable")
         return None, None
     else:
+        w_tilde = w_tilde.flatten()
         w,b = w_tilde[:-1], w_tilde[-1]
     return w,b
 
@@ -393,7 +393,7 @@ def linear_programming(X_train,y_train):
 X,y = Foucarts_training_data(plot=False)
 w,b = linear_programming(X,y)
 points_with_binary_classifier_line(w,b,X,y)
-assert abs(w-np.array([[ 4.06811412],[-2.36310124]])).max()<1e-8
+assert abs(w-np.array([4.06811412,-2.36310124])).max()<1e-8
 
 X,y = Foucarts_training_data(plot=False,tag="nonseparable")
 w,b = linear_programming(X,y)
@@ -402,7 +402,7 @@ assert w is None and b is None
 
 
 ### ~~~
-## ~~~ EXERCISE 5 of ? (medium): Define the class  HalfSpaceClassifier that has an __init__ and __call__ method, as well as the attributes w, b, and n_features 
+## ~~~ EXERCISE 5 of 5 (medium): Define the class  HalfSpaceClassifier that has an __init__ and __call__ method, as well as the attributes w, b, and n_features 
 ### ~~~
 
 if exercise_mode:
@@ -428,8 +428,9 @@ assert score(my_classifier,X,y)==1          # ~~~ assert that our classifier is 
 assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indeed has an n_feaures attribute
 
 
+
 ### ~~~
-## ~~~ DEMONSTRATION 2 of n: Real world data
+## ~~~ DEMONSTRATION 2 of 2: Real world data
 ### ~~~
 
 #
