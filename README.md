@@ -28,7 +28,7 @@ Besides some standard libraries, this repo depends on the folder of code [answer
 - [x] Have the prerequisite standard packages installed:
     - `numpy` and `matplotlib` for minimal functionality
     - `tensorflow`, `pytorch`, `sklearn` for ~98% functionality
-    -  `alive_progress` is kind of optional (only used in 1 or 2 examples; will not provoke an error)
+    -  `alive_progress` and `tqdm` are kind of optional (only used in 1 or 2 examples; will not provoke an error)
 
 ---
 
