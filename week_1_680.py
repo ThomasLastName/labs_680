@@ -163,7 +163,7 @@ side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, o
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 4 (easy): A Simpler Model is *not* Always Best
+## ~~~ EXERCISE 1 of 5 (easy): A Simpler Model is *not* Always Best
 ### ~~~
 
 #
@@ -327,7 +327,7 @@ if use_tensorflow:
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 4 (hard): Just as we can get better results using *piecewise linear neural networks*, we can linkewise get better results by using *piecewise linear polynomial regression*: implement it and see for yourself!
+## ~~~ EXERCISE 2 of 5 (hard): Just as we can get better results using *piecewise linear neural networks*, we can linkewise get better results by using *piecewise linear polynomial regression*: implement it and see for yourself!
 ### ~~~
 
 if exercise_mode:
@@ -474,7 +474,7 @@ print( f"Test error {scores[0]:.4f} when trained on the 1st half of the data", f
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 4 (hard): Experiement with CV and implement a full CV work flow
+## ~~~ EXERCISE 3 of 5 (hard): Experiement with CV and implement a full CV work flow
 ### ~~~
 
 #
@@ -602,7 +602,17 @@ if use_tensorflow:
  
 
 ### ~~~
-## ~~~ EXERCISE 4 of 4 (hard): Using CV as above, select a good relu network and good spline regression, and compare the results
+## ~~~ EXERCISE 4 of 5 (hard): Using CV as above, select a good relu network and good spline regression, and compare the results
 ### ~~~
 
 # (hint: to do CV on ReLU instsead of tanh networks, basically, just pass `activations="relu` to make_and_train_1d_network)
+
+
+
+### ~~~
+## ~~~ EXERCISE 5 of 5 (hard): Compute the true risk minimizer, and compare with the empricial risk minimizer
+### ~~~
+
+# Using pen and paper, derive the fact that, if H is a linear subspace of L^2([-1,1]), and if the ground_truth is also in L^2, then the minimizer of true risk in the squared loss is, precisley, the L^2([-1,1]) projection of the ground_truth onto H
+# Using this derivation, write a python script that returns the minimizer of true risk for ground_truth(x)=abs(x) (hint: if e_1,...,e_n are orthonormal, then the projection of f onto \span{e_1,...e_n} is given by \sum_k \langle f,e_k \rangle e_k )
+# How do the polynomials in DEMONSTRAION 1 of 5 (which minimize empirical risk) compare to the true risk minimizers? What about the splines in EXERCISE 2 of 5?
