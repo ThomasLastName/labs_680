@@ -382,9 +382,10 @@ def linear_programming(X_train,y_train):
     A,b = traning_data_to_feasibility_parameters(X_train,y_train)
     w_tilde = linear_feasibility_program(A,b)
     if w_tilde is None:
-        print("The data is not linearly separable")
+        print("The data is not linearly separable.")
         return None, None
     else:
+        print("The data is linearly separable.")
         w_tilde = w_tilde.flatten()
         w,b = w_tilde[:-1], w_tilde[-1]
     return w,b
@@ -423,9 +424,18 @@ def score( classifier, X_test, y_test ):
 
 #
 # ~~~ Check that the class works as intended
+X,y = Foucarts_training_data(plot=False)
+w,b = linear_programming(X,y)
 my_classifier = HalfSpaceClassifier(w,b)    # ~~~ callable; classifier(X) should return a vector with i-th entry to be the binary class predicted of X[i,:]
 assert score(my_classifier,X,y)==1          # ~~~ assert that our classifier is 100% accurate on the training data
 assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indeed has an n_feaures attribute
+
+
+
+### ~~~
+## ~~~ DEMONSTRATION 2 of 2: Real world data
+### ~~~
+
 
 
 
@@ -461,10 +471,11 @@ if use_sklearn:
     #
     # ~~~ The perceptron algorithm converges far faster than the worst case scenario
     m,d = X.shape
-    upper_bound = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max()
+    upper_bound_with_w_chosen_by_compressive_sensing = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
     np.random.seed(680)
     w,b,T = my_perceptron( X, y, max_iter=upper_bound, verbose=False )
-    print(f"Converged in {T} iterations: far fewer than the worst case upper bound {int(upper_bound.item())+1} ")
+    upper_bound_with_w_chosen_by_perceptron = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
+    print(f"Converged in {T} iterations: far fewer than the upper bounds {int(upper_bound_with_w_chosen_by_compressive_sensing)+1} and {int(upper_bound_with_w_chosen_by_perceptron)+1}")
 
 
 # todo: show a linear combination of images
