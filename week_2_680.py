@@ -195,16 +195,22 @@ def points_with_binary_classifier_line( w, b, X_train, y_train ):
     plt.show()
 
 #
-# ~~~ The perceptron algorithm (basic example)
+# ~~~ The perceptron algorithm (basic demonstration)
 np.random.seed(680)
-X,y = Foucarts_training_data(plot=False)
+X,y = Foucarts_training_data(plot=False)    # ~~~ the data
 X_aug = augment(X)
-w = np.zeros(3)  # ~~~ initialization
-w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
-w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 2nd update
-w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 3rd update
-w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform a 4th
-# w,_ = preceptron_update_without_bias(X_aug,y,w) # ~~~ raises StopIteration because no more updates are needed
+w, t = np.zeros(3), 0   # ~~~ initialization
+
+while True:
+    try:
+        w,index = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
+        t += 1
+    except StopIteration:
+        print(f"Perceptron algorithm converged after {t} iterations.")
+        break
+
+#
+# ~~~ Plot the results
 w,b = np.array_split(w,2)
 points_with_binary_classifier_line(w,b,X,y) # ~~~ sure enough, the classification appears to be exact
 
