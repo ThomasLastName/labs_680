@@ -378,7 +378,7 @@ else:
     from answers_680.answers_week_2 import traning_data_to_feasibility_parameters
 
 
-def linear_programming(X_train,y_train):
+def test_for_linear_separability(X_train,y_train):
     A,b = traning_data_to_feasibility_parameters(X_train,y_train)
     w_tilde = linear_feasibility_program(A,b)
     if w_tilde is None:
@@ -392,12 +392,12 @@ def linear_programming(X_train,y_train):
 
 
 X,y = Foucarts_training_data(plot=False)
-w,b = linear_programming(X,y)
+w,b = test_for_linear_separability(X,y)
 points_with_binary_classifier_line(w,b,X,y)
 assert abs(w-np.array([4.06811412,-2.36310124])).max()<1e-8
 
 X,y = Foucarts_training_data(plot=False,tag="nonseparable")
-w,b = linear_programming(X,y)
+w,b = test_for_linear_separability(X,y)
 assert w is None and b is None
 
 
@@ -425,7 +425,7 @@ def score( classifier, X_test, y_test ):
 #
 # ~~~ Check that the class works as intended
 X,y = Foucarts_training_data(plot=False)
-w,b = linear_programming(X,y)
+w,b = test_for_linear_separability(X,y)
 my_classifier = HalfSpaceClassifier(w,b)    # ~~~ callable; classifier(X) should return a vector with i-th entry to be the binary class predicted of X[i,:]
 assert score(my_classifier,X,y)==1          # ~~~ assert that our classifier is 100% accurate on the training data
 assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indeed has an n_feaures attribute
@@ -467,15 +467,21 @@ if use_sklearn:
     show(X[2])
     #
     # ~~~ Check whether or not this data is linearly separable (it is!)
-    w,b = linear_programming(X,y)
+    w,b = test_for_linear_separability(X,y)
     #
     # ~~~ The perceptron algorithm converges far faster than the worst case scenario
     m,d = X.shape
     upper_bound_with_w_chosen_by_compressive_sensing = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
     np.random.seed(680)
-    w,b,T = my_perceptron( X, y, max_iter=upper_bound, verbose=False )
+    w,b,T = my_perceptron( X, y, max_iter=upper_bound_with_w_chosen_by_compressive_sensing, verbose=False )
     upper_bound_with_w_chosen_by_perceptron = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
     print(f"Converged in {T} iterations: far fewer than the upper bounds {int(upper_bound_with_w_chosen_by_compressive_sensing)+1} and {int(upper_bound_with_w_chosen_by_perceptron)+1}")
+    #
+    # ~~~ Images of multiples of 3 fail to be linearly separable from images of digits that are not multiples of 3
+    X,y = scikit_NIST_data(n_class=10,return_X_y=True)  # https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+    assert set(y)=={0,1,2,3,4,5,6,7,8,9}
+    is_multiple_of_3 = y%3
+    w,b = test_for_linear_separability(X,y)
 
 
 # todo: show a linear combination of images
