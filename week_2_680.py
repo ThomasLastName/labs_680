@@ -226,13 +226,13 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         X_train = X_train.T
     assert X_train.shape[0]==m
     #
-    # ~~~ Augment the data if a bias is desired (if its not already augmented) and set d to be the number of features
+    # ~~~ Augment the data if a bias is desired (if it's not already augmented) and set d to be the number of features
     X = augment(X_train) if bias else X_train
     d = X.shape[1]
     if plot and not (d==3 and bias):
         my_warn("The argument `plot=True` is currently only supported when `bias=True` and the number of features is 2.")
     #
-    # ~~~ Allow more max iterations if we're not spending our time on plotting
+    # ~~~ Deafult to more max iterations if we're not spending our time on plotting
     max_iter **= (2-plot)
     #
     # ~~~ Do not support progress bars if tqdm is unavailable
@@ -264,7 +264,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
             # ~~~ Make pic
             plt.scatter( *X_train.T, c=y_train )
             if i is not None:
-                plt.scatter( *X_train[i], c=y[i], marker="x",s=200 )
+                plt.scatter( *X_train[i], c=y[i], marker="x", s=200 )
             for j,params in enumerate(past_few):
                 abline( *compute_slope_and_intercept(*np.array_split(params,2)), color="blue", alpha=alpha[j])
             plt.grid()
@@ -305,19 +305,18 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
                 _ = past_few.pop(0)
                 past_few.append(w)
             #
-            # ~~~ Maintain the progress bar, if applicable
+            # ~~~ Update the progress bar, if applicable
             if progress:
                 n_correct = np.sum( np.sign(X@w)==np.sign(y) )
-                pbar.set_description("Accuracy of " +f"{(n_correct/m):.3}".rjust(4) + f" after {t} iterations.")
+                pbar.set_description("Accuracy is " +f"{(n_correct/m):.3}".rjust(5) + f" after {t} iterations.")
                 pbar.update()
-        if t>max_iter:
-            my_warn(f"Perceptron algorithm did not converge in {max_iter} iterations")
         if progress:
             pbar.close()
+        if t>max_iter:
+            my_warn(f"Perceptron algorithm did not converge in {max_iter} iterations")
     #
     # ~~~ Conclude
     if verbose and early:
-        print("")
         print(f"Converged after {t} iterations.")
     if plot:
         i = None
