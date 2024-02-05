@@ -129,7 +129,7 @@ assert np.isclose( augment(X), augment(augment(X)) ).min()
 
 
 ### ~~~ 
-## ~~~ EXERCISE 2 of 5 (medium): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
+## ~~~ EXERCISE 2 of 5 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
 ### ~~~ 
 
 if exercise_mode:
@@ -140,29 +140,37 @@ else:
     from answers_680.answers_week_2 import compute_slope_and_intercept
 
 w = np.array([ 3.1, -6.5 ])
-b = 8.4
+b = -8.4
 slope, intercept = compute_slope_and_intercept(w,b)
 assert abs(slope-0.47692307692307695)<1e-10 and abs(intercept-1.2923076923076924)<1e-10
+
+#
+# ~~~ Now, we can make a helper routine that plots the data along with the boundary between classification regions
+def points_with_binary_classifier_line( w, b, X_train, y_train ):
+    plt.scatter( *X_train.T, c=y_train )
+    abline( *compute_slope_and_intercept(w,b) )
+    plt.xlabel('One Feature')
+    plt.ylabel('Another Feature')
+    plt.grid()
+    plt.tight_layout()
+    plt.show()
 
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 5 (medium): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
+## ~~~ EXERCISE 3 of 5 (hard): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
 ### ~~~
 
 if exercise_mode:
     def preceptron_update_without_bias( X, y, w, random_update=False ):
         if the_algorithms_stopping_condition_is_met:
-            pass
-            # raise a StopIteration exception
+            pass # raise a StopIteration exception
         else:
             if random_update:
-                pass
-                # update based on a randomly selected misclassified index
+                pass # update based on a randomly selected misclassified index
             else:
-                pass
-                # update based on the first misclassified index (this is the most vanilla version of the algorithm)
-        return # both the updated vector w^{(t+1)} and the index i used to compute it, if there was progress to be made
+                pass # update based on the first misclassified index (this is the most vanilla version of the algorithm)
+        return # both the updated vector w^{(t+1)} and the index i used to compute it
 else:
     from answers_680.answers_week_2 import preceptron_update_without_bias
 
@@ -184,23 +192,11 @@ assert i==77 and np.all(np.isclose(w,correct))
 ### ~~~ 
 
 #
-# ~~~ A helper routine that plots the data along with the boundary between classification regions
-def points_with_binary_classifier_line( w, b, X_train, y_train ):
-    plt.scatter( *X_train.T, c=y_train )
-    abline( *compute_slope_and_intercept(w,b) )
-    plt.xlabel('One Feature')
-    plt.ylabel('Another Feature')
-    plt.grid()
-    plt.tight_layout()
-    plt.show()
-
-#
 # ~~~ The perceptron algorithm (basic demonstration)
 np.random.seed(680)
 X,y = Foucarts_training_data(plot=False)    # ~~~ the data
 X_aug = augment(X)
-w, t = np.zeros(3), 0   # ~~~ initialization
-
+w,t = np.zeros(3),0     # ~~~ initialization
 while True:
     try:
         w,index = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
@@ -216,11 +212,12 @@ points_with_binary_classifier_line(w,b,X,y) # ~~~ sure enough, the classificatio
 
 #
 # ~~~ The perceptron algorithm (with programming bells and whistles)
-def my_perceptron( X_train, y_train, bias=True, initialization="random", random_update=False, max_iter=150, verbose=True, progress=False, plot=False, gif_destination="perceptron_680", **kwargs ):
+def my_perceptron( X_train, y_train, bias=True, initialization="random", random_update=False, max_iter="auto", verbose=True, progress=False, plot=False, gif_destination="perceptron_680", **kwargs ):
     #
     # ~~~ Set m to be the number of data points
     y = y_train.squeeze()
     assert y.ndim==1
+    assert set(y_train)=={-1,1}
     m = len(y)
     if not X_train.shape[0]==m:
         X_train = X_train.T
@@ -233,7 +230,12 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         my_warn("The argument `plot=True` is currently only supported when `bias=True` and the number of features is 2.")
     #
     # ~~~ Deafult to more max iterations if we're not spending our time on plotting
-    max_iter **= (2-plot)
+    if max_iter=="auto":
+        max_iter = 150**(2-plot)
+    elif max_iter is None:
+        pass
+    else:
+        max_iter = int(max_iter)+1  # ~~~ round up to the nearest integer
     #
     # ~~~ Do not support progress bars if tqdm is unavailable
     if not use_tqdm:
@@ -254,7 +256,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
     #
     # ~~~ Introduce plotting parameters
     if plot:
-        alpha = [.2,.3,.4,.5,1]
+        alpha = [.05,.1,.15,.2,1]
         delay = len(alpha)
         linger = delay
         past_few = [initialization]*delay
@@ -274,7 +276,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
             gif.capture()
             #
             # ~~~ Erase
-            plt.clf()
+            plt.close()
     #
     # ~~~ Do the iterations
     t = 0
@@ -324,7 +326,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         for _ in range(linger):
             make_pic_take_pic_erase(i,w)
         gif.develop( destination=gif_destination, verbose=verbose, **kwargs )
-    return ( w[:-1], w[-1], t ) if bias else (w,t)
+    return ( w[:-1], -w[-1], t ) if bias else (w,t)
 
 #
 # ~~~ Deterministic perceptron with a (bad) random initialization and linearly separable data
@@ -341,7 +343,6 @@ initial_w_and_b = -np.random.normal(size=(3,))/np.sqrt(3)
 X,y = Foucarts_training_data( plot=False )
 w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=3, random_update=True, plot=True, gif_destination="680 stochastic stoch good" )
 points_with_binary_classifier_line(w,b,X,y)
-
 
 #
 # ~~~ Deterministic perceptron with the (bad) random initialization and __non__-separable data
@@ -361,50 +362,62 @@ points_with_binary_classifier_line(w,b,X,y)
 
 
 
-
 ### ~~~
-## ~~~ EXERCISE 4 of 5: A numerical test for linear separability
+## ~~~ EXERCISE 4 of 5 (easy): A numerical test for linear separability
 ### ~~~
 
 #
-# ~~~ Try to find a vector x satistfying Ax \geq b
-def linear_feasibility_program(A,b):
-    m,n = A.shape               # ~~~ get the number of rows and columns of A
-    x = cvx.Variable((n,1))     # ~~~ define the optimization variable x
-    assert b.shape==(m,1)       # ~~~ safety feature
-    constraints = [A @ x >= b]  # ~~~ define the constraints of the problem
-    objective = cvx.Minimize(cvx.norm1(x))          # ~~~ objective function can be anything for linear feasibility problem
-    problem = cvx.Problem(objective, constraints)   # ~~~ put it all together into a complex minimization program
-    problem.solve(solver=cvx.ECOS)              # ~~~ try to solve it
-    return x.value if problem.status==cvx.OPTIMAL else None
-
+# ~~~ Given data X and y, build the matrix A and vector b for which linear separability is equivalent to "\exists w : Aw \geq b"
 if exercise_mode:
     def traning_data_to_feasibility_parameters(X_train,y_train):
-        # YOUR CODE HERE
+        # YOUR CODE HERE; Hint: see equation (4.2) in the text
         return A,b  # the thhings for which we want to run the linear feasibility program "find x with Ax \geq b"
 else:
     from answers_680.answers_week_2 import traning_data_to_feasibility_parameters
 
+#
+# ~~~ Try to find a vector x satistfying Ax \geq b
+def linear_feasibility_program( A, b, solver=cvx.ECOS ):
+    m,n = A.shape               # ~~~ get the number of rows and columns of A
+    assert b.shape==(m,1)       # ~~~ safety feature
+    x = cvx.Variable((n,1))     # ~~~ define the optimization variable x
+    constraints = [A @ x >= b]  # ~~~ define the constraints of the problem
+    objective = cvx.Minimize(cvx.norm(x,2))         # ~~~ objective function can be anything for linear feasibility problem
+    problem = cvx.Problem(objective, constraints)   # ~~~ put it all together into a complete minimization program
+    problem.solve(solver=solver)              # ~~~ try to solve it
+    return x.value if problem.status==cvx.OPTIMAL else None
 
-def test_for_linear_separability(X_train,y_train):
+#
+# ~~~ Given data X and y, build the matrix A and vector b for which linear separability is equivalent to Aw \geq b, and test the latter
+def test_for_linear_separability( X_train, y_train, verbose=True, **kwargs ):
+    assert set(y_train)=={-1,1}
     A,b = traning_data_to_feasibility_parameters(X_train,y_train)
-    w_tilde = linear_feasibility_program(A,b)
+    w_tilde = linear_feasibility_program( A, b, **kwargs )
     if w_tilde is None:
-        print("The data is not linearly separable.")
+        if verbose:
+            print("The data is not linearly separable.")
         return None, None
     else:
-        print("The data is linearly separable.")
+        if verbose:
+            print("The data is linearly separable.")
         w_tilde = w_tilde.flatten()
-        w,b = w_tilde[:-1], w_tilde[-1]
+        w,b = w_tilde[:-1], -w_tilde[-1]
     return w,b
 
+#
+# ~~~ Our linear feasibility program was in fact using the objective function for hard svm; see equation (4.3) in the text
+def hard_svm(*args, verbose=True, **kwargs):
+    return test_for_linear_separability( *args, verbose=verbose, **kwargs )
+
+#
+# ~~~ Test whether or not the exercise was completed successfully
 if use_cvx:
     #
     # ~~~ Test it on linearly separable data
     X,y = Foucarts_training_data(plot=False)
     w,b = test_for_linear_separability(X,y)
     points_with_binary_classifier_line(w,b,X,y)
-    assert abs(w-np.array([4.06811412,-2.36310124])).max()<1e-8
+    assert abs(b-1.1512453137620453) + abs(w-np.array([4.06811412,-2.36310124])).max() < 1e-8
     #
     # ~~~ Test it on data that is not linearly seprable 
     X,y = Foucarts_training_data(plot=False,tag="nonseparable")
@@ -436,7 +449,7 @@ def score( classifier, X_test, y_test ):
 #
 # ~~~ Check that the class works as intended
 X,y = Foucarts_training_data(plot=False)
-w,b,T = my_perceptron(X,y,verbose=False)
+w,b = hard_svm(X,y,verbose=False)
 my_classifier = HalfSpaceClassifier(w,b)    # ~~~ callable; classifier(X) should return a vector with i-th entry to be the binary class predicted of X[i,:]
 assert score(my_classifier,X,y)==1          # ~~~ assert that our classifier is 100% accurate on the training data
 assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indeed has an n_feaures attribute
@@ -447,18 +460,11 @@ assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indee
 ## ~~~ DEMONSTRATION 2 of 2: Real world data
 ### ~~~
 
-
-
-
-### ~~~
-## ~~~ DEMONSTRATION 2 of 2: Real world data
-### ~~~
-
 #
-# ~~~ Test whether or not images of zeros and 1's are linearly separable
+# ~~~ Look at images of 0's and 1's
 if use_sklearn:
     plt.gray()
-    plt.clf()
+    plt.close()
     X,y = scikit_NIST_data(n_class=2,return_X_y=True)  # https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
     assert set(y)=={0, 1}
     y = 2*y-1
@@ -476,24 +482,41 @@ if use_sklearn:
     show(X[0])
     show(X[1])
     show(X[2])
-    if use_cvx:
-        #
-        # ~~~ Check whether or not this data is linearly separable (it is!)
-        w,b = test_for_linear_separability(X,y)
-        #
-        # ~~~ The perceptron algorithm converges far faster than the worst case scenario
-        m,d = X.shape
-        upper_bound_with_w_chosen_by_compressive_sensing = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
-        np.random.seed(680)
-        w,b,T = my_perceptron( X, y, max_iter=upper_bound_with_w_chosen_by_compressive_sensing, verbose=False )
-        upper_bound_with_w_chosen_by_perceptron = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
-        print(f"Converged in {T} iterations: far fewer than the upper bounds {int(upper_bound_with_w_chosen_by_compressive_sensing)+1} and {int(upper_bound_with_w_chosen_by_perceptron)+1}")
-        #
-        # ~~~ Images of multiples of 3 fail to be linearly separable from images of digits that are not multiples of 3
-        X,y = scikit_NIST_data(n_class=10,return_X_y=True)  # https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
-        assert set(y)=={0,1,2,3,4,5,6,7,8,9}
-        is_multiple_of_3 = y%3
-        w,b = test_for_linear_separability(X,y)
+
+#
+# ~~~ Test whether or not images of 0's and 1's are linearly separable
+if use_cvx:
+    #
+    # ~~~ Check whether or not this data is linearly separable (it is!)
+    X,y = scikit_NIST_data(n_class=2,return_X_y=True)  # https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+    assert set(y)=={0, 1}
+    y = 2*y-1
+    assert set(y)=={-1, 1}
+    w_svm,b_svm = test_for_linear_separability(X,y)
+    #
+    # ~~~ Observe that perceptron algorithm converges faster than the worst case scenario with an initialization of 0
+    m,d = X.shape
+    upper_bound_with_w_chosen_by_hard_svm = (np.sum(w_svm**2)+b_svm**2) * np.sum( augment(X)**2, axis=1 ).max().item()
+    w,b,T = my_perceptron( X, y, max_iter=upper_bound_with_w_chosen_by_hard_svm, initialization=0, verbose=False )
+    upper_bound_with_w_chosen_by_perceptron = (np.sum(w**2)+b**2) * np.sum( augment(X)**2, axis=1 ).max().item()
+    print(f"The perception with initialization zero converged in {T} iterations, which is fewer than the upper bounds {int(upper_bound_with_w_chosen_by_hard_svm)+1} and {int(upper_bound_with_w_chosen_by_perceptron)+1}.")
+    #
+    # ~~~ For non-zero initializations, the upper bound needs to be modified
+    np.random.seed(680)
+    w0 = np.random.normal(size=(d+1,))/(d+1)
+    ub_svm = np.linalg.norm( np.append(w_svm,b_svm) - w0 )**2 * np.sum( augment(X)**2, axis=1 ).max().item()
+    ub_perceptron  = np.linalg.norm( np.append(w,b) - w0 )**2 * np.sum( augment(X)**2, axis=1 ).max().item()
+    w,b,T = my_perceptron( X, y, max_iter=upper_bound_with_w_chosen_by_hard_svm, initialization=w0, verbose=False )
+    print(f"The perception with random initialization converged in {T} iterations, which is fewer than the modified upper bounds {int(ub_svm)+1} and {int(ub_perceptron)+1}.")
+
+#
+# ~~~ On the other hand, images multiples of 3 fail to be linearly separable from images of digits that are not multiples of 3
+if use_cvx:
+    X,y = scikit_NIST_data(n_class=10,return_X_y=True)  # https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_digits.html
+    assert set(y)=={0,1,2,3,4,5,6,7,8,9}
+    is_multiple_of_3 = y%3==0
+    y = 2*is_multiple_of_3-1
+    w,b = test_for_linear_separability(X,y)
 
 
 # todo: show a linear combination of images

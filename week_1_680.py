@@ -158,7 +158,7 @@ more_x_train = abs(more_x_train)    # ~~~ Change the distribution of the x's (no
 # y_train, more_y_train = f(x_train), f(more_x_train)                     # remove noise
 quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )         # ~~~ degree 0 polynomial regression
 dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
-side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4], axatitle=None, axbtitle=None, figtitle="ERM is Not a PAC-Learning Map for a Polynomial Hypothesis Class" )
+side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4], axatitle=None, axbtitle=None, figtitle="This Outcome is also Consistent with PAC Learning" )
 
 
 
@@ -546,14 +546,14 @@ if use_tensorflow:
     n_bins = 2
     #
     # ~~~ Add save+load functionality
-    folder = os.path.join( os.path.dirname(sys.executable), 'Lib', 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
+    folder = os.path.join( os.getcwd(), 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
     file_name = 'results_of_cv_ch1.npy'
-    assert os.path.exists(folder)
+    good_path = os.path.exists(folder)
     file_path = os.path.join( folder, file_name )
     #
     # ~~~ Do cross validation
     i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently = False
-    if use_progress_bar and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
+    if use_progress_bar and good_path and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
         #
         # ~~~ Run the computations locally
         scores = []
@@ -577,7 +577,7 @@ if use_tensorflow:
         np.save( file_path, np.array(scores) )
     #
     # ~~~ Take the best hyperparameter and train using the full data
-    if os.path.exists(file_path):
+    elif os.path.exists(file_path):
         #
         # ~~~ Load the results of the computations
         scores = np.load(file_path)     # ~~~ reaquires 'results_of_cv_ch1.npy' to be located in Lib\answers_680 along with the answer keys
@@ -598,7 +598,8 @@ if use_tensorflow:
         #
         # ~~~ Plot the results
         side_by_side_prediction_plots( x_train, y_train, f, best_poly, best_nn, f"The Polynomial Model Chosen by CV has Test MSE {mean_squared_error(best_poly(x_test),y_test):.4}", f"The NN model Chosen by CV has Test MSE {mean_squared_error(best_nn(x_test),y_test):.4}" )
- 
+    else:
+        print("Please specify an appropriate path in order to run the last demo.")
  
 
 ### ~~~

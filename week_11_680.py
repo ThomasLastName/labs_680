@@ -20,7 +20,7 @@ from torch import nn
 from collections import OrderedDict
 
 
-from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors, convert_Tensors_to_Dataset
+from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors, convert_Tensors_to_Dataset, hot_1_encode_an_integer
 from quality_of_life.my_base_utils import support_for_progress_bars
 
 
@@ -108,17 +108,19 @@ predicted = torch.tensor([[-1.1933,  0.2766,  1.1250, -0.4440,  2.7818],
                           [-1.3816, -0.3540, -1.1034,  2.2402,  0.1682],
                           [-3.2324, -2.3961, -0.1085,  0.0205, -0.3228]])
 targets = torch.tensor([3,1,0])
+loss = nn.CrossEntropyLoss()
+loss(predicted,targets)
+
+
 
 def my_cross_entropy(predicted,targets):
-    encode = mtu.hot_1_encode_an_integer(n_class=5)
-    p = predicted.softmax(dim=1)
+    encode = hot_1_encode_an_integer(n_class=5)
     t = encode(targets)
+    p = predicted.softmax(dim=1)
     return ( -t*p.log() ).sum(axis=1).mean()
 
-loss = nn.CrossEntropyLoss()
 
 my_cross_entropy(predicted,targets)
-loss(predicted,targets)
 
 
 
