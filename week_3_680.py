@@ -165,45 +165,4 @@ for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture, erase th
 
 gif.develop( "Regularized Polynomial Regression 680", fps=15 )
 
-
-
-# ### ~~~
-# ## ~~~ DEMONSTRATION 2 of 2: And this is what it looks like if you use splines instead of polynomials
-# ### ~~~
-
-# from answers_680.answers_week_1 import univar_spline_fit
-
-# #
-# # ~~~ Wraper that implies a notion of "degree"
-# def spline_with_equidistant_knots( *args, degree, **kwargs):
-#     return univar_spline_fit( *args, knots=np.linspace(-1,1,degree+1), **kwargs )
-
-# #
-# # ~~~ Make some data and then fit two polynomials to that data
-# f = lambda x: np.abs(x) # ~~~ the so called "ground truth" by which x causes y
-# np.random.seed(680)     # ~~~ for reproducibility
-# x_train,y_train,_,_ = generate_random_1d_data(f, n_train=100, noise=.15)
-# d,D = 2,20
-# simple_fit,_ = spline_with_equidistant_knots( x_train, y_train, degree=d )    # ~~~ lo degree polynomial regression
-# complex_fit,_ = spline_with_equidistant_knots( x_train, y_train, degree=D )   # ~~~ hi degree polynomial regression
-# side_by_side_prediction_plots( x_train, y_train, f, simple_fit, complex_fit, f"A Spline with {d} Intervals of Linearity is not Expressive Enough", f"A Spline with {D} Intervals of Linearity is Too 'Wiggly'" )
-
-# #
-# # ~~~ Now, regularize
-# lam = 1.75/np.sqrt(D)
-# regularized_fit,_ = spline_with_equidistant_knots( x_train, y_train, degree=D, penalty=lam )
-# side_by_side_prediction_plots( x_train, y_train, f, simple_fit, regularized_fit, f"A Spline with {d} Intervals of Linearity Still is not Expressive Enough", f"This Regularized Splinewith {D} Intervals of Linearity Does Well", grid=np.linspace(-1,1,501) )
-
-# #
-# # ~~~ Visualize how the fitted polynomial evolves when \lambda increasees (may take a minute to run)
-# np.random.seed(680)
-# y_train += .1*np.random.random( size=y_train.shape )    # ~~~ make the data a little noiser to keep things interesting
-# gif = GifMaker()
-# lambs = np.linspace(0,5,150)**2
-# for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture, erase the graph
-#     regularized_fit,_ = spline_with_equidistant_knots( x_train, y_train, degree=D, penalty=l )
-#     _,_ = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$" )
-#     gif.capture()
-#     plt.close()
-
-# gif.develop( "Regularized Spline Regression 680", fps=15 )
+#
