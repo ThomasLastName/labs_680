@@ -395,8 +395,8 @@ def cross_val_score( estimator, eventual_x_train, eventual_y_train, cv, scoring,
     # ~~~ Boiler plate stuff, not important
     scores = []
     if plot:
-        ncol = 1 if ncol is None else ncol
-        nrow = cv if nrow is None else nrow
+        ncol = cv if ncol is None else ncol
+        nrow = 1  if nrow is None else nrow
         fig,axs = plt.subplots(nrow,ncol)
         axs = axs.flatten()
         xlim = buffer(eventual_x_train)
