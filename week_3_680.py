@@ -70,13 +70,13 @@ if install_assist or this_is_running_in_colab:              # override necessary
 
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
-from quality_of_life.my_visualization_utils import points_with_curves, side_by_side_prediction_plots, GifMaker
+from quality_of_life.my_visualization_utils import points_with_curves, side_by_side_prediction_plots, GifMaker, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data
 
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 1 (medium): define a function that fits a polyonomial to the data with a user-specified regularization parameter called `penalty`
+## ~~~ EXERCISE 1 of 2 (medium): define a function that fits a polyonomial to the data with a user-specified regularization parameter called `penalty`
 ### ~~~
 
 if exercise_mode:
@@ -125,7 +125,7 @@ assert abs(coeffs-my_coeffs).max() + abs( poly(x)-my_poly(x) ).max() < 1e-14    
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 1 of 1: The problem that regularization hopes to solve
+## ~~~ DEMONSTRATION 1 of 2: The problem that regularization hopes to solve
 ### ~~~
 
 #
@@ -153,16 +153,153 @@ side_by_side_prediction_plots( x_train, y_train, f, simple_fit, regularized_fit,
 
 #
 # ~~~ Visualize how the fitted polynomial evolves when \lambda increasees (may take a minute to run)
-np.random.seed(680)
-y_train += .1*np.random.random( size=y_train.shape )    # ~~~ make the data a little noiser to keep things interesting
-gif = GifMaker()
-lambs = np.linspace(0,1.7,150)**2
-for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture, erase the graph
-    regularized_fit,_ = my_univar_poly_fit( x_train, y_train, degree=D, penalty=l )
-    _,_ = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$" )
-    gif.capture()
-    plt.close()
+if False:
+    np.random.seed(680)
+    y_train += .1*np.random.random( size=y_train.shape )    # ~~~ make the data a little noiser to keep things interesting
+    gif = GifMaker()
+    lambs = np.linspace(0,1.7,150)**2
+    for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture, erase the graph
+        regularized_fit,_ = my_univar_poly_fit( x_train, y_train, degree=D, penalty=l )
+        _,_ = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$" )
+        gif.capture()
+        plt.close()
+    gif.develop( "Regularized Polynomial Regression 680", fps=15 )
 
-gif.develop( "Regularized Polynomial Regression 680", fps=15 )
+
+
+### ~~~
+## ~~~ DEMONSTRATION 2 of 2: **Cross validation** -- a standard workflow for model selection (which in this case means selecting the appropriate polynomial degree and regularization parameter)
+### ~~~
 
 #
+# ~~~ Measure how well the model does when certain subsets of the data are withheld from training (written to mimic the sklearn.model_selection function of the same name)
+def cross_val_score( estimator, eventual_x_train, eventual_y_train, cv, scoring, shuffle=False, plot=False, ncol=None, nrow=None, f=None, grid=None ):
+    #
+    # ~~~ Boiler plate stuff, not important
+    scores = []
+    if plot:
+        ncol = cv if ncol is None else ncol
+        nrow = 1  if nrow is None else nrow
+        fig,axs = plt.subplots(nrow,ncol)
+        axs = axs.flatten()
+        xlim = buffer(eventual_x_train)
+        ylim = buffer(eventual_y_train)
+        grid = np.linspace( min(xlim), max(xlim), 1001 )
+    #
+    # ~~~ Partition the training data
+    if shuffle: # ~~~ shuffle the data before partitionint it
+        reordered_indices = np.random.permutation( len(eventual_y_train) )
+        eventual_x_train = eventual_x_train[reordered_indices]
+        eventual_y_train = eventual_y_train[reordered_indices]
+    x_val_sets = np.array_split( eventual_x_train, cv )     # ~~~ split `eventual_x_train` into `cv` different pieces
+    y_val_sets = np.array_split( eventual_y_train, cv )     # ~~~ split `eventual_y_train` into `cv` different pieces
+    #
+    # ~~~ For each one of the pieces (say, the i-th piece) into which we split our data set...
+    for i in range(cv):
+        #
+        # ~~~ Use the i-th subset of our data (which is 1/cv percent of our data) to train a model
+        x_train = x_val_sets[i]
+        y_train = y_val_sets[i]
+        model = estimator( x_train, y_train )
+        #
+        # ~~~ Use the remaining cv-1 parts of our data (i.e., (cv-1)/cv percent of our data) to test the fit
+        x_test = np.concatenate( x_val_sets[:i] + x_val_sets[(i+1):] )  # ~~~ all the data we didn't train on
+        y_test = np.concatenate( y_val_sets[:i] + y_val_sets[(i+1):] )  # ~~~ all the data we didn't train on
+        scores.append(scoring( y_test, model(x_test) ))
+        #
+        # ~~~ Plot the model that was trained on this piece of the data, if desired (this is mostly useful for building intuition)
+        if plot:
+            axs[i].plot( x_train, y_train, "o", color="blue", label="Training Data" )
+            axs[i].plot( x_test, y_test, "o", color="green", label="Test Data" )
+            axs[i].plot( grid, model(grid), "-", color="blue", label="Predictions" )
+            if (f is not None and grid is not None):
+                axs[i].plot( grid, f(grid), "--", color="green", label="Ground Truth" )
+            axs[i].set_xlim(xlim)
+            axs[i].set_ylim(ylim)
+            axs[i].grid()
+            axs[i].legend()
+    if plot:    # ~~~ after the loop is over, perform the final configuration of the plot, if applicable, and then render it
+        fig.tight_layout()
+        plt.show()
+    return scores
+
+#
+# ~~~ Define the metric by which we will assess accurcay: mean squared error
+def mean_squared_error( true, predicted ):
+    return np.mean( (true-predicted)**2 )
+    # ~~~ usually you'd load this or one of the other options from sklearn.meatrics (https://scikit-learn.org/stable/modules/model_evaluation.html#common-cases-predefined-values)
+    # ~~~ we have defined it explicitly for transparency and simplicity
+
+#
+# ~~~ A simple wrapper
+def poly_cv_scores( degree, x, y, penalty=None, **kwargs ):
+    polynomial_regression = lambda x_train,y_train: my_univar_poly_fit( x_train, y_train, degree=degree, penalty=penalty )[0]       # ~~~ define the modeling technique    
+    return cross_val_score( estimator=polynomial_regression, eventual_x_train=x, eventual_y_train=y, **kwargs ) # ~~~ do cv with this modeling technique and data
+
+#
+# ~~~ Make a slightly smaller, noisier data set to keep things interesting
+np.random.seed(680)     # ~~~ for reproducibility
+f = lambda x: np.abs(x) # ~~~ the so called "ground truth" by which x causes y
+x_train,y_train,x_test,y_test = generate_random_1d_data(f, n_train=80, noise=.2)
+
+#
+# ~~~ Hyperparameters for the example
+d,D = 5,10
+lamb = 1/D
+
+#
+# ~~~ A printing routine
+def print_scores(vector_of_scores,header=None):
+    N = len(vector_of_scores)
+    if header is not None:
+        print(header)
+    print( "\n".join([f"Test error {score:.4f} when trained on subset {j+1} of {N}" for j,score in enumerate(vector_of_scores)]) )
+
+#
+# ~~~ Cross validation with a high degree of polynomial regression
+high_degree_scores = poly_cv_scores( degree=D, x=x_train, y=y_train, cv=3, penalty=0, scoring=mean_squared_error, plot=True )
+print_scores( high_degree_scores, header= 10*"-" + f" Results of Cross Validation: degree={D}, lambda=0 " + 10*"-" )
+
+#
+# ~~~ Cross validation with a low degree of polynomial regression
+low_degree_scores = poly_cv_scores( degree=d, x=x_train, y=y_train, cv=3, penalty=0, scoring=mean_squared_error, plot=True )
+print_scores( low_degree_scores, header= 10*"-" + f" Results of Cross Validation: degree={d}, lambda=0 " + 10*"-" )
+
+#
+# ~~~ Cross validation with a low degree of polynomial regression
+regularized_scores = poly_cv_scores( degree=D, x=x_train, y=y_train, cv=3, penalty=lamb, scoring=mean_squared_error, plot=True )
+print_scores( regularized_scores, header= 10*"-" + f" Results of Cross Validation: degree={D}, lambda={lamb} " + 10*"-" )
+
+#
+# ~~~ Does a regularized degree D polynomial ever perform better than a degree 5 polynomial on this data? Use CV to find out
+scores = []
+possible_hyper_parameters = np.linspace(0,1.5,101)**2
+for lamb in possible_hyper_parameters:
+    scores.append(poly_cv_scores( degree=D, x=x_train, y=y_train, cv=3, penalty=lamb, scoring=mean_squared_error ))
+
+#
+# ~~~ Collect the results
+best = np.median(scores,axis=1).argmin()    # ~~~ index for which the median error is smallest
+lamb = possible_hyper_parameters[best]      # ~~~ the lambda value corresponding to that index
+
+#
+# ~~~ See the improvement? (or not!)
+low_degree_fit,_ = my_univar_poly_fit( x_train, y_train, degree=d )
+hi_regular_fit,_ = my_univar_poly_fit( x_train, y_train, degree=D, penalty=lamb )
+side_by_side_prediction_plots( x_train, y_train, f, low_degree_fit, hi_regular_fit, f"This Simple Model has Test Error {mean_squared_error(low_degree_fit(x_test),y_test):.2}", f"This Regularized Complex Model has Test Error {mean_squared_error(hi_regular_fit(x_test),y_test):.2}" )
+
+
+
+### ~~~
+## ~~~ EXERCISE 2 of 2 (medium): Implement a full CV work flow in order to choose the best combination of degree and hyperparameter with this data. In particular, how much is \lambda in this best case? Finally, regress on the full data set with the degree and \lambda chosen by cross-validation and test the result
+### ~~~
+
+#
+# ~~~ First, define our hyper-hyper-parameters: namely, the grid of hyper-parameters to be considered
+possible_degree = [ j+1 for j in range(20) ]    # ~~~ our first hyper-parameter: the degree of polynomial regression
+possible_lambda = np.linspace(0,1.5,101)**2     # ~~~ our second hyper-parameter: the penalization coefficient
+
+#
+# ~~~ Do CV to find the combination of degree and \lambda with smallest median error
+# YOUR CODE HERE
+# with cv=3, I got lamb=0.245025 and degree=4, but I found that the test error when I regressed on the whole data set still exceeds that of a simple degree 5 polynomial regression
