@@ -81,7 +81,9 @@ from quality_of_life.my_numpy_utils         import generate_random_1d_data
 
 if exercise_mode:
     def my_univar_poly_fit( x_train, y_train, degree, penalty=0 ):
-        # YOUR CODE HERE; Hint: you should just set up the appropriate matrix and call a least squares solver
+        # YOUR CODE HERE
+        # Hint: you should just set up the appropriate matrix and call a least squares solver
+        # Hint: if the assertion statements fail, try printing out out comparing the coefficients, try plotting both polynomials
         return poly, coeffs
 else:
     from answers_680.answers_week_1 import my_univar_poly_fit
