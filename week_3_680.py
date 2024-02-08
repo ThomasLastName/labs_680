@@ -76,7 +76,7 @@ from quality_of_life.my_numpy_utils         import generate_random_1d_data
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 2 (medium): define a function that fits a polyonomial to the data with a user-specified regularization parameter called `penalty`
+## ~~~ EXERCISE 1 of 2 (hard?): define a function that fits a polyonomial to the data with a user-specified regularization parameter called `penalty` (viz. equation 6.3 in the text, where the parameter is instead called \lambda)
 ### ~~~
 
 if exercise_mode:
@@ -129,13 +129,6 @@ assert abs(coeffs-my_coeffs).max() + abs( poly(x)-my_poly(x) ).max() < 1e-14    
 ### ~~~
 ## ~~~ DEMONSTRATION 1 of 2: The problem that regularization hopes to solve
 ### ~~~
-
-#
-# ~~~ A helper function for polynomial regression
-def univar_poly_fit( x, y, degree=1 ):
-    coeffs = np.polyfit( x, y, degree )
-    poly = np.poly1d(coeffs)
-    return poly, coeffs
 
 #
 # ~~~ Make some data and then fit two polynomials to that data
