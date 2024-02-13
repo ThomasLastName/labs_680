@@ -140,14 +140,14 @@ else:
     from answers_680.answers_week_2 import compute_slope_and_intercept
 
 w = np.array([ 3.1, -6.5 ])
-b = -8.4
+b = 8.4
 slope, intercept = compute_slope_and_intercept(w,b)
 assert abs(slope-0.47692307692307695)<1e-10 and abs(intercept-1.2923076923076924)<1e-10
 
 #
 # ~~~ Now, we can make a helper routine that plots the data along with the boundary between classification regions
 def points_with_binary_classifier_line( w, b, X_train, y_train ):
-    plt.scatter( *X_train.T, c=y_train )
+    plt.scatter( *X_train.T, c=np.where( y_train>0, "r", "b" ) )
     abline( *compute_slope_and_intercept(w,b) )
     plt.xlabel('One Feature')
     plt.ylabel('Another Feature')
@@ -261,22 +261,19 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         linger = delay
         past_few = [initialization]*delay
         gif = GifMaker()
-        def make_pic_take_pic_erase(i,params):
+        def make_and_take_pic(i,past_few):
             #
             # ~~~ Make pic
-            plt.scatter( *X_train.T, c=y_train )
-            if i is not None:
-                plt.scatter( *X_train[i], c=y[i], marker="x", s=200 )
-            for j,params in enumerate(past_few):
-                abline( *compute_slope_and_intercept(*np.array_split(params,2)), color="blue", alpha=alpha[j])
+            plt.scatter( *X_train.T, c=np.where( y_train>0, "r", "b" ) )    # ~~~ scatter plot of the data
+            if i is not None:   # ~~~ mark with an "X" on the scatter plot the index i that was used to update the model (if applicable)
+                plt.scatter( *X_train[i], color=("r" if y[i]>0 else "b"), marker="x", s=200 )
+            for j,params in enumerate(past_few):    # ~~~ plot the classification boundary regions for the previous few iterations
+                abline( *compute_slope_and_intercept( *np.array_split(params,2)), color="black", alpha=alpha[j] )
             plt.grid()
             plt.tight_layout()
             #
             # ~~~ Take pic
             gif.capture()
-            #
-            # ~~~ Erase
-            plt.close()
     #
     # ~~~ Do the iterations
     t = 0
@@ -289,7 +286,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
             #
             # ~~~ Capture the image of the state before updating
             if plot:
-                make_pic_take_pic_erase(i,w)
+                make_and_take_pic(i,past_few)
             #
             # ~~~ Update the model parameters
             try:
@@ -322,11 +319,12 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         print(f"Converged after {t} iterations.")
     if plot:
         i = None
-        alpha = [0,0,0,0,1]
+        alpha = [1]
+        past_few = [w]
         for _ in range(linger):
-            make_pic_take_pic_erase(i,w)
+            make_and_take_pic(i,past_few)
         gif.develop( destination=gif_destination, verbose=verbose, **kwargs )
-    return ( w[:-1], -w[-1], t ) if bias else (w,t)
+    return ( w[:-1], w[-1], t ) if bias else (w,t)
 
 #
 # ~~~ Deterministic perceptron with a (bad) random initialization and linearly separable data
@@ -369,11 +367,11 @@ points_with_binary_classifier_line(w,b,X,y)
 #
 # ~~~ Given data X and y, build the matrix A and vector b for which linear separability is equivalent to "\exists w : Aw \geq b"
 if exercise_mode:
-    def traning_data_to_feasibility_parameters(X_train,y_train):
+    def training_data_to_feasibility_parameters(X_train,y_train):
         # YOUR CODE HERE; Hint: see equation (4.2) in the text
-        return A,b  # the thhings for which we want to run the linear feasibility program "find x with Ax \geq b"
+        return A,b  # the things for which we want to run the linear feasibility program "find x with Ax \geq b"
 else:
-    from answers_680.answers_week_2 import traning_data_to_feasibility_parameters
+    from answers_680.answers_week_2 import training_data_to_feasibility_parameters
 
 #
 # ~~~ Try to find a vector x satistfying Ax \geq b
@@ -391,7 +389,7 @@ def linear_feasibility_program( A, b, solver=cvx.ECOS ):
 # ~~~ Given data X and y, build the matrix A and vector b for which linear separability is equivalent to Aw \geq b, and test the latter
 def test_for_linear_separability( X_train, y_train, verbose=True, **kwargs ):
     assert set(y_train)=={-1,1}
-    A,b = traning_data_to_feasibility_parameters(X_train,y_train)
+    A,b = training_data_to_feasibility_parameters(X_train,y_train)
     w_tilde = linear_feasibility_program( A, b, **kwargs )
     if w_tilde is None:
         if verbose:
@@ -401,7 +399,7 @@ def test_for_linear_separability( X_train, y_train, verbose=True, **kwargs ):
         if verbose:
             print("The data is linearly separable.")
         w_tilde = w_tilde.flatten()
-        w,b = w_tilde[:-1], -w_tilde[-1]
+        w,b = w_tilde[:-1], w_tilde[-1]
     return w,b
 
 #
@@ -417,7 +415,7 @@ if use_cvx:
     X,y = Foucarts_training_data(plot=False)
     w,b = test_for_linear_separability(X,y)
     points_with_binary_classifier_line(w,b,X,y)
-    assert abs(b-1.1512453137620453) + abs(w-np.array([4.06811412,-2.36310124])).max() < 1e-8
+    assert abs(b+1.1512453137620453) + abs(w-np.array([4.06811412,-2.36310124])).max() < 1e-8
     #
     # ~~~ Test it on data that is not linearly seprable 
     X,y = Foucarts_training_data(plot=False,tag="nonseparable")
