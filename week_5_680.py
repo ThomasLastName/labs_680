@@ -108,7 +108,7 @@ def naive_column_PCA(X_Foucarts_format,k=None):
 # ~~~ Apply PCA on a matrix assuming that each *row* is a data point (as in most data science settings)
 def naive_row_PCA(X_data_format,k=None):
     U,s,Vt = np.linalg.svd(X_data_format)
-    V = Vt.T        # ~~~ the right singular vectors of a matrix's transpose are the same as the left singular vectors of the matrix itself
+    V = Vt.T    # ~~~ the right singular vectors of a matrix's transpose are the same as the left singular vectors of the matrix itself
     components = V if k is None else Vt[:,:k]  
     singular_values = s if s is None else s[:k] # ~~~ these are also nice to have
     return components, singular_values
@@ -119,7 +119,7 @@ visualize_images( -components.T, labeler=lambda i: f"'{i+1}-th' Principal Image"
 
 
 ### ~~~
-## ~~~  EXERCISE 1 of 3 (hard): Implement PCA efficiently as advised by Remark 8.2 in the text
+## ~~~  EXERCISE 1 of 6 (hard): Implement PCA efficiently in the manner advised by Remark 8.2 in the text
 ### ~~~
 
 if exercise_mode:
@@ -135,9 +135,9 @@ else:
 # ~~~ Attempt to validate the new implementation by comparing it to the old implementation
 attempted_components, attempt_singular_values = row_PCA(X_lowres)   # ~~~ compare with what was computed in the prior demonstration
 fig, (ax_attempted,ax_correct) = plt.subplots( 1, 2, figsize=(12, 6), subplot_kw={'xticks': (), 'yticks': ()})
-ax_attempted.imshow( attempted_components[:,2].reshape((8,8)) )
+ax_attempted.imshow( attempted_components[:,1].reshape((8,8)) )
 ax_attempted.set_title("The new implementation")
-ax_correct.imshow( components[:,2].reshape((8,8)) )
+ax_correct.imshow( components[:,1].reshape((8,8)) )
 ax_correct.set_title("\nThe direct (naive) implementation")
 fig.suptitle( "If these look similar (not necessarily identical) then the exercise was completed successfully.", fontsize=16 )
 fig.tight_layout()
@@ -208,7 +208,15 @@ visualize_images( components.T, labeler=lambda i: f"'{i+1}-th' Principal Face", 
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 3 (easy): figure out why sklearn's implementation of PCA is not equivalent to ours'
+## ~~~ EXERCISE 2 of 6 (easy): Is every linear combination of the first left k singular faces, also, an image of a face?
+### ~~~
+
+# HINT: it's pretty simple; take a linear combination of the first left k singular vectors, plot it; is it an image of a face?
+
+
+
+### ~~~
+## ~~~ EXERCISE 3 of 6 (easy): figure out why sklearn's implementation of PCA is not equivalent to ours'
 ### ~~~
 
 # Hint: this is one of the first things mentioned in the sklearn documentation for PCA: https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html
@@ -226,8 +234,23 @@ def sklearn_PCA(X_data_format):
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 3 (medium): add a pre-processing step such that if you pre-process and call row_PCA, it is equivalent to the sklearn implementation
+## ~~~ EXERCISE 4 of 6 (medium): add a pre-processing step such that if you pre-process and call row_PCA, it is equivalent to the sklearn implementation
 ### ~~~
 
 # HINT: the key lies in the statistical interpretation of PCA; look at the empirical covariance matrix...
+
+
+
+### ~~~
+## ~~~ EXERCISE 5 of 6 (hard): Use PCA to project the MNIST data set into the plane (R^2) and make a scatter plot of this projected data, labeled with a key for what digit it is
+### ~~~
+
+# hint: simply pass c=y_MNIST to plt.scatter in order to color the points based on their label; does label=y_MNIST also work?
+
+
+
+### ~~~
+## ~~~ EXERCISE 6 of 6 (hard): Write a function that computes the term which Theorem 8.1 says that PCA minimizes; also, normalize it by dividing by m; I'd call this the "mean squared error" of the projection
+### ~~~
+
 
