@@ -108,7 +108,7 @@ def naive_column_PCA(X_Foucarts_format,k=None):
 # ~~~ Apply PCA on a matrix assuming that each *row* is a data point (as in most data science settings)
 def naive_row_PCA(X_data_format,k=None):
     U,s,Vt = np.linalg.svd(X_data_format)
-    V = Vt.T    # ~~~ the right singular vectors of a matrix's transpose are the same as the left singular vectors of the matrix itself
+    V = Vt.T    # ~~~ the left singular vectors of a matrix's transpose are the same as the right singular vectors of the matrix itself
     components = V if k is None else Vt[:,:k]  
     singular_values = s if s is None else s[:k] # ~~~ these are also nice to have
     return components, singular_values
