@@ -88,7 +88,7 @@ def visualize_images( X, labeler, process_data=lambda x:x ):
     fig, axes = plt.subplots(3, 5, figsize=(12, 8), subplot_kw={'xticks': (), 'yticks': ()})    # ~~~ change this to change the number of subplots
     for i, ax in enumerate(axes.flat):
         ax.imshow( process_data(X[i]), cmap='gray' )
-        ax.set_title(labeler(i))  # Show only the last name for brevity
+        ax.set_title(labeler(i))
     fig.tight_layout()
     plt.show()
 
