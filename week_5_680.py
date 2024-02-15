@@ -176,7 +176,7 @@ components, singular_values = row_PCA(X_MNIST)
 
 #
 # ~~~ Inspect the singular components
-visualize_images( -components.T, labeler=lambda i: f"'{i+1}-th' Principal Image", process_data=lambda x:x.reshape((28,28)) )
+visualize_images( components.T, labeler=lambda i: f"'{i+1}-th' Principal Image", process_data=lambda x:x.reshape((28,28)) )
 
 
 
@@ -203,7 +203,7 @@ components, singular_values = row_PCA(X_faces)
 
 #
 # ~~~ Inspect the singular components
-visualize_images( -components.T, labeler=lambda i: f"'{i+1}-th' Principal Face", process_data=lambda x:x.reshape((p1,p2)) )
+visualize_images( components.T, labeler=lambda i: f"'{i+1}-th' Principal Face", process_data=lambda x:x.reshape((p1,p2)) )
 
 
 
