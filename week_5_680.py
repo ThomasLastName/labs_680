@@ -124,7 +124,7 @@ visualize_images( -components.T, labeler=lambda i: f"'{i+1}-th' Principal Image"
 
 if exercise_mode:
     #
-    # ~~~ Instead of implementing a full SVD and extracting the left singular values (as in naive_row_PCA), implement a mathematically equivalent operation following Remark 8.2 of the text
+    # ~~~ Instead of implementing a full SVD and extracting the needed singular vectors (as in naive_row_PCA), implement a mathematically equivalent operation following Remark 8.2 of the text
     def row_PCA( X_data, k=None ):
         # YOUR CODE HERE
         return components, singular_values 
