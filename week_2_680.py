@@ -50,6 +50,7 @@ except Exception as probably_ModuleNotFoundError:
 
 #
 # ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
+import os
 this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
 if install_assist or this_is_running_in_colab:              # override necessary permissions if this is running in Colab
     confirm_permission_to_modify_files = not install_assist
