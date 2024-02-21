@@ -71,7 +71,6 @@ if install_assist or this_is_running_in_colab:              # override necessary
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.ansi import bcolors
-from quality_of_life.my_torch_utils import torch_seed
 from quality_of_life.my_visualization_utils import points_with_curves
 
 
@@ -200,7 +199,7 @@ def fit_polynomial_by_gd( x_train, y_train, deg=1, learning_rate=None, initial_g
 
 #
 # ~~~ Run it and see
-torch_seed(680)                             # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)                             # ~~~ set the random seed for reproducibility
 x_train = 2*torch.rand(100)-1               # ~~~ make up some random data
 f = lambda x: torch.abs(x)                  # ~~~ make up some ground truth
 y_train = f(x_train) + 0.1*torch.randn(100) # ~~~ produce noisy measurements
@@ -225,7 +224,7 @@ print(f"As soon as eta>2/L, gradient descent suddenly diverges. In this case, th
 
 #
 # ~~~ Define several things, as well as some function z of those things
-torch_seed(680)     # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
 x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
@@ -252,7 +251,7 @@ assert b.grad == 1.     # ~~~ similarly, here is stored the gradient with respec
 
 #
 # ~~~ Define several things, as well as some function f using those things
-torch_seed(680)     # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
 x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
@@ -278,7 +277,7 @@ print(f"The gradient is {w.grad}")
 
 #
 # ~~~ This block of code is included only for the sake of reproducibility
-torch_seed(680)     # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
 x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
@@ -404,7 +403,7 @@ def gradient_descent( f, learning_rage, initial_guess, max_iter=10000 ):
 
 #
 # ~~~ Run it and see
-torch_seed(680)                 # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)                 # ~~~ set the random seed for reproducibility
 x_train = 2*torch.rand(100)-1   # ~~~ make up some random data
 f = lambda x: torch.abs(x)      # ~~~ make up some ground truth
 y_train = f(x_train) + 0.1*torch.randn(100)   # ~~~ produce noisy measurements
