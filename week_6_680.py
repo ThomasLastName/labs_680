@@ -443,7 +443,7 @@ overall_loss = build_objective_from_data( x_train, y_train, deg=degree )
 L = compute_lambda( x_train, y_train, deg=degree )
 coefficients = gradient_descent( overall_loss, learning_rage=len(x_train)/L, initial_guess=torch.zeros(degree+1) )
 poly, coeffs = fit_polynomial_by_gd( x_train, y_train, deg=degree )
-assert abs(coeffs-coefficients).max() < 1e-14
+assert abs(coeffs-coefficients).max() < 1e-14    # ~~~ if this assertion passes, it demonstrates that the two implementations are equivalent
 
 
 ### ~~~
