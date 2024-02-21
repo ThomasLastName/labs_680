@@ -30,7 +30,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
             #
             # ~~~ Put together the appropriate path
             this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
-            parent_directory = os.path.dirname(os.path.dirname(np.__file__)) if (deisred_parent_directory is None) else deisred_parent_directory
+            parent_directory = os.path.dirname(os.path.dirname(torch.__file__)) if (deisred_parent_directory is None) else deisred_parent_directory
             parent_directory = "" if this_is_running_in_colab else parent_directory
             folder_path = os.path.join( parent_directory, folder_name )
             file_path = os.path.join( folder_path, file_name )
@@ -60,7 +60,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
-        files = [ "ansi.py", "my_base_utils.py", "my_torch_utils.py" "my_visualization_utils.py" ]
+        files = [ "ansi.py", "my_base_utils.py", "my_torch_utils.py", "my_visualization_utils.py" ]
         intstall_Toms_code( folder, files )
         #
         # ~~~ "Install/update" answers_680
