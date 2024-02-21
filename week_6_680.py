@@ -119,7 +119,9 @@ learning_rate = 1/compute_lambda( a, b, c )
 for _ in range(100):
     x -= learning_rate * q_prime(x)
 
+assert x == -b/(2*a)    # ~~~ which is the true minimizer
 print(f"Gradient descent found x={x:.4} which matches the true minimizer {-b/(2*a)}")
+
 
 
 ### ~~~
