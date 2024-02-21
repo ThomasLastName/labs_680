@@ -94,7 +94,7 @@ def build_objective( quadratic_term, slope, intercept=0 ):
     return q
 
 #
-# ~~~ Analogously to exercise 2 below, define a function that, itself, defines a function which applies an exact formula to compute the gradient of the function we want to minimize
+# ~~~ Analogously to exercise 2 below, define a function that, itself, defines a function which applies an exact formula to compute the derivative of the function we want to minimize
 def formula_for_the_derivative( quadratic_term, slope, intercept=0 ):
     def derivative(number):
         return 2*quadratic_term*number + slope
@@ -133,10 +133,9 @@ print(f"Gradient descent found x={x:.4} which matches the true minimizer {-b/(2*
 def mse( vector_of_target_values, vector_of_predicted_values ):
     return torch.mean(( vector_of_target_values - vector_of_predicted_values )**2)
 
-
 if exercise_mode:
     #
-    # ~~~ In analogy to the above `build_line`, write a function that (when loss_function=mse) returns the function f(w)=mse(y,p_w(x))
+    # ~~~ In analogy to the above function `build_objective`, write a function that (when loss_function=mse) returns the function f(w)=mse(y,p_w(x))
     def build_objective_from_data( x_train, y_train, deg=1, loss_function=mse ):
         #
         # ~~~ Define the objective function as a function of the polynomial coefficients only
@@ -161,10 +160,12 @@ assert your_objective_function(w) == mse( y, p_w(x) )   # ~~~ this is mse of the
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 5 (medium -- computing the gradient of a quadratic function): on pen and paper, derive a formula for the gradient \nabla f(w) of the function f(w)=mse(y,p_w(x)) and then write a python function that returns a function that applies this formula to return the exactly computed gradient
+## ~~~ EXERCISE 2 of 5 (medium -- computing the gradient of a quadratic function): Write a function that, based on given data, returns the callable gradient function R^p \to R^p of the function that one would like to minimize when fitting a polynomial to that data
 ### ~~~
 
 if exercise_mode:
+    #
+    # ~~~ In analogy to the above function `formula_for_the_derivative`, write a function that, itself, defines a function which applies an exact formula to compute the gradient of the function we want to minimize
     def formula_for_the_gradient( x_train, y_train, deg=1 ):
         def gradient(w): # of the function f(w)=mse(y,p_w(x)) returned by `build_objective_from_data(x_train,y_train,deg=deg)`
             # YOUR CODE HERE
@@ -179,16 +180,18 @@ w = torch.tensor([0.7133, 0.5497, 1.1640])  # ~~~ some random coefficients
 x = torch.arange(100)                       # ~~~ some arbitrary data
 y = torch.arange(100)                       # ~~~ some arbitrary data
 grad = formula_for_the_gradient(x,y,deg=2)
-g = grad(w)     # ~~~ should be the gradient of in w of the funcion f(w)=mse(y,p_w(x)) returned by `build_objective_from_data(x,y,deg=2)`
+g = grad(w)                                 # ~~~ should be the gradient of in w of the funcion f(w)=mse(y,p_w(x)) returned by `build_objective_from_data(x,y,deg=2)`
 assert max(abs(torch.tensor([ 760083.49, 56753169.66, 4518777464.85 ])-g)) < 1e-6   # ~~~ the gradient should be torch.tensor([ 760083.49, 56753169.66, 4518777464.85 ]) up to computer arithmetic error
 
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 5 (medium -- compute the Lipschitz parameter of an affine function): on pen and paper, derive a formula for the lambda-smoothness parameter of f(w)=mse(y,p_w(x)) and then write a function that applies this formula to exactly compute the lambda-smoothness parameter
+## ~~~ EXERCISE 3 of 5 (hard -- compute the lambda-smoothness parameter): Write a function that, based on the given data, computes the lambd-smoothness parameter of the function that one would like to minimize when fitting a polynomial to that data
 ### ~~~
 
 if exercise_mode:
+    #
+    # ~~~ In analogy to the function of the same name above, define a function that applies a formula to compute the lambda-smoothness parameter of the quadratic function we want to minimize when fitting a polynomial to our data
     def compute_lambda( x_train, y_train, deg=1 ):
         # YOUR CODE HERE
         return the_lambda_smoothness_parameter_of_the_objective_function_in_the_polynomial_regression_problem
@@ -227,7 +230,7 @@ def fit_polynomial_by_gd( x_train, y_train, deg=1, learning_rate=None, initial_g
 
 #
 # ~~~ Run it and see
-torch.manual_seed(680)                             # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)                      # ~~~ set the random seed for reproducibility
 x_train = 2*torch.rand(100)-1               # ~~~ make up some random data
 f = lambda x: torch.abs(x)                  # ~~~ make up some ground truth
 y_train = f(x_train) + 0.1*torch.randn(100) # ~~~ produce noisy measurements
@@ -252,8 +255,8 @@ print(f"As soon as eta>2/L, gradient descent suddenly diverges. In this case, th
 
 #
 # ~~~ Define several things, as well as some function z of those things
-torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
-x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
+torch.manual_seed(680)  # ~~~ set the random seed for reproducibility
+x = torch.randn(3)      # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
 z = torch.inner(x,w)+b  # ~~~ compute z = \langle w,x \rangle + b
@@ -279,8 +282,8 @@ assert b.grad == 1.     # ~~~ similarly, here is stored the gradient with respec
 
 #
 # ~~~ Define several things, as well as some function f using those things
-torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
-x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
+torch.manual_seed(680)  # ~~~ set the random seed for reproducibility
+x = torch.randn(3)      # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
 f = lambda x: torch.inner(x,w)+b    # ~~~ an affine functional
@@ -305,8 +308,8 @@ print(f"The gradient is {w.grad}")
 
 #
 # ~~~ This block of code is included only for the sake of reproducibility
-torch.manual_seed(680)     # ~~~ set the random seed for reproducibility
-x = torch.randn(3)  # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
+torch.manual_seed(680)  # ~~~ set the random seed for reproducibility
+x = torch.randn(3)      # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
 z = torch.inner(x,w)+b  # ~~~ compute z = \langle w,x \rangle + b
@@ -431,7 +434,7 @@ def gradient_descent( f, learning_rage, initial_guess, max_iter=10000 ):
 
 #
 # ~~~ Run it and see
-torch.manual_seed(680)                 # ~~~ set the random seed for reproducibility
+torch.manual_seed(680)          # ~~~ set the random seed for reproducibility
 x_train = 2*torch.rand(100)-1   # ~~~ make up some random data
 f = lambda x: torch.abs(x)      # ~~~ make up some ground truth
 y_train = f(x_train) + 0.1*torch.randn(100)   # ~~~ produce noisy measurements
