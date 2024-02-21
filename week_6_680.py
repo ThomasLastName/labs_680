@@ -74,26 +74,52 @@ from quality_of_life.ansi import bcolors
 from quality_of_life.my_visualization_utils import points_with_curves
 
 
+
 ### ~~~
-## ~~~ DEMONSTRATION 1 of 7: In python, we can define a function which itslef defines another function (this is background for the first exercise)
+## ~~~ DEMONSTRATION 1 of 7: Use gradient descent to minimize a univariate quadratic (this also demonstrates what the next exercises should kind of look like)
 ### ~~~
 
 #
-# ~~~ Define a function that, itself, defines another function
-def build_line( slope, intercept=0 ):
+# ~~~ Analogously to exercise 1 below, define a function that, itself, defines a quadratic function that we'd like to minimize based on some user-supplied info
+def build_objective( quadratic_term, slope, intercept=0 ):
     #
-    # ~~~ Define a function that increments whatever number you supply
-    def line(number):
-        return slope*number + intercept
+    # ~~~ Safety feature
+    assert quadratic_term>=0     # ~~~ for only then is the quadratic function convex and even bounded from below
+    #
+    # ~~~ Define a quadratic function
+    def q(number):
+        return quadratic_term*number**2 + slope*number + intercept
     #
     # ~~~ Return the function
-    return line
+    return q
+
+#
+# ~~~ Analogously to exercise 2 below, define a function that, itself, defines a function which applies an exact formula to compute the gradient of the function we want to minimize
+def formula_for_the_derivative( quadratic_term, slope, intercept=0 ):
+    def derivative(number):
+        return 2*quadratic_term*number + slope
+    return derivative
+
+#
+# ~~~ Analogously to exercise 3 below, define a function that applies a formula to compute the lambda-smoothness parameter of a quadratic function
+def compute_lambda( quadratic_term, slope, intercept=0 ):
+    return 2*abs(quadratic_term)
 
 #
 # ~~~ Test it out
-line = build_line( slope=2, intercept=5.3 ) # ~~~ line(x) == 2*x + 5.3
-assert line(3)==11.3
+q = build_objective( quadratic_term=1, slope=2, intercept=5.3 ) # ~~~ q(x) == x**2 + 2*x + 5.3
+assert q(-2.4)==6.26
 
+#
+# ~~~ Intended usage
+a, b, c = 1, 2, 5.3
+x = 0
+q_prime = formula_for_the_derivative( a, b, c )
+learning_rate = 1/compute_lambda( a, b, c )
+for _ in range(100):
+    x -= learning_rate * q_prime(x)
+
+print(f"Gradient descent found x={x:.4} which matches the true minimizer {-b/(2*a)}")
 
 
 ### ~~~
@@ -133,7 +159,7 @@ assert your_objective_function(w) == mse( y, p_w(x) )   # ~~~ this is mse of the
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 5 (medium -- computing the gradient of a quadratic function): on pen and paper, derive a formula for the gradient \nabla f(w) of the function f(w)=mse(y,p_w(x)) and then write a python functino that applies this formula to return the exactly computed gradient
+## ~~~ EXERCISE 2 of 5 (medium -- computing the gradient of a quadratic function): on pen and paper, derive a formula for the gradient \nabla f(w) of the function f(w)=mse(y,p_w(x)) and then write a python function that returns a function that applies this formula to return the exactly computed gradient
 ### ~~~
 
 if exercise_mode:
