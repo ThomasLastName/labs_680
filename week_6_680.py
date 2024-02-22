@@ -60,7 +60,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
-        files = [ "ansi.py", "my_base_utils.py", "my_torch_utils.py", "my_visualization_utils.py" ]
+        files = [ "ansi.py", "my_base_utils.py", "my_visualization_utils.py" ]
         intstall_Toms_code( folder, files )
         #
         # ~~~ "Install/update" answers_680
@@ -181,7 +181,7 @@ x = torch.arange(100)                       # ~~~ some arbitrary data
 y = torch.arange(100)                       # ~~~ some arbitrary data
 grad = formula_for_the_gradient(x,y,deg=2)
 g = grad(w)                                 # ~~~ should be the gradient of in w of the funcion f(w)=mse(y,p_w(x)) returned by `build_objective_from_data(x,y,deg=2)`
-assert max(abs(torch.tensor([ 760083.49, 56753169.66, 4518777464.85 ])-g)) < 1e-6   # ~~~ the gradient should be torch.tensor([ 760083.49, 56753169.66, 4518777464.85 ]) up to computer arithmetic error
+assert max(abs(torch.tensor([ 7600.8349, 567531.6966, 45187774.6485 ])-g)) < 1e-8   # ~~~ the gradient should be torch.tensor([ 760083.49, 56753169.66, 4518777464.85 ]) up to computer arithmetic error
 
 
 
@@ -202,7 +202,7 @@ else:
 # ~~~ Validate that the code gives the expected output
 x = torch.arange(100)   # ~~~ some made-up data
 y = torch.arange(100)   # ~~~ some made-up data
-assert compute_lambda(x,y,deg=2)==3901282438.475482     # ~~~ admittedly, this == assertion could give false negatives due to computer arithmetic error
+assert compute_lambda(x,y,deg=2)==39012824.38475482     # ~~~ admittedly, this == assertion could give false negatives due to computer arithmetic error
 
 
 
@@ -244,7 +244,7 @@ points_with_curves( x_train, y_train, (poly,f) )    # ~~~ plot it and see that i
 ### ~~~
 
 L = compute_lambda( x_train, y_train, deg=4 )   # ~~~ the lambda-smoothness parameter (i.e., the Lipschitz parameter of the gradient) of the function you gotta minimize for polynomial regression
-_, coeffs = fit_polynomial_by_gd( x_train, y_train, deg=4, learning_rate=2/L+0.000005 )
+_, coeffs = fit_polynomial_by_gd( x_train, y_train, deg=4, learning_rate=2/L+0.0005 )
 print(f"As soon as eta>2/L, gradient descent suddenly diverges. In this case, the coefficient vector ended up with norm {coeffs.norm().item():.6}")   
 
 
@@ -416,7 +416,7 @@ if exercise_mode:
 ## ~~~ DEMONSTRATION 7 of 7: Instead of computing derivatives by hand, let pytorch do it for us
 ### ~~~
 
-def gradient_descent( f, learning_rage, initial_guess, max_iter=10000 ):
+def gradient_descent( f, learning_rate, initial_guess, max_iter=10000 ):
     x = initial_guess
     x.requires_grad = True
     for _ in range(max_iter):
@@ -429,23 +429,30 @@ def gradient_descent( f, learning_rage, initial_guess, max_iter=10000 ):
         #
         # ~~~ Use the gradient
         with torch.no_grad():
-            x -= learning_rage * grad_x
+            x -= learning_rate * grad_x
     return x
 
+
 #
-# ~~~ Run it and see
+# ~~~ Make up some fake data
 torch.manual_seed(680)          # ~~~ set the random seed for reproducibility
 x_train = 2*torch.rand(100)-1   # ~~~ make up some random data
 f = lambda x: torch.abs(x)      # ~~~ make up some ground truth
 y_train = f(x_train) + 0.1*torch.randn(100)   # ~~~ produce noisy measurements
+
+#
+# ~~~ Introduce the function that you need to minimize to fit a polynomial (of degree `deg`) to that data
 degree = 4
 overall_loss = build_objective_from_data( x_train, y_train, deg=degree )
+
+#
+# ~~~ Get the optimal learning rate by computing the lambda-smoothness parameter of the function you need to minimize
 L = compute_lambda( x_train, y_train, deg=degree )
-coefficients = gradient_descent( overall_loss, learning_rage=len(x_train)/L, initial_guess=torch.zeros(degree+1) )
+
+#
+# ~~~ Run gradient descent to minimize this function using torch.autograd, and compare with the results `coeffs` obtained using formulas derived by hand
+coefficients = gradient_descent( overall_loss, learning_rate=1/L, initial_guess=torch.zeros(degree+1) )
 poly, coeffs = fit_polynomial_by_gd( x_train, y_train, deg=degree )
-assert abs(coeffs-coefficients).max() < 1e-14    # ~~~ if this assertion passes, it demonstrates that the two implementations are equivalent
+assert abs(coeffs-coefficients).max() < 1e-14
 
-
-### ~~~
-## ~~~ EXERCISE 5 of 5 (hard -- involves understanding a lot of context): determine for yourself why, in the preceding DEMO, I up-scale the learning rate by len(x_train); i.e., why do I take learning_rage=len(x_train)/L instead of 1/L?
-### ~~~
+#
