@@ -125,7 +125,7 @@ print(f"Gradient descent found x={x:.4} which matches the true minimizer {-b/(2*
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 5 (medium -- defining a quadratic function): Write a function that, based on given data, returns the function that one would like to minimize when fitting a polynomial to that data
+## ~~~ EXERCISE 1 of 4 (medium -- defining a quadratic function): Write a function that, based on given data, returns the function that one would like to minimize when fitting a polynomial to that data
 ### ~~~
 
 #
@@ -160,7 +160,7 @@ assert your_objective_function(w) == mse( y, p_w(x) )   # ~~~ this is mse of the
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 5 (medium -- computing the gradient of a quadratic function): Write a function that, based on given data, returns the callable gradient function R^p \to R^p of the function that one would like to minimize when fitting a polynomial to that data
+## ~~~ EXERCISE 2 of 4 (medium -- computing the gradient of a quadratic function): Write a function that, based on given data, returns the callable gradient function R^p \to R^p of the function that one would like to minimize when fitting a polynomial to that data
 ### ~~~
 
 if exercise_mode:
@@ -186,7 +186,7 @@ assert max(abs(torch.tensor([ 7600.8349, 567531.6966, 45187774.6485 ])-g)) < 1e-
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 5 (hard -- compute the lambda-smoothness parameter): Write a function that, based on the given data, computes the lambd-smoothness parameter of the function that one would like to minimize when fitting a polynomial to that data
+## ~~~ EXERCISE 3 of 4 (hard -- compute the lambda-smoothness parameter): Write a function that, based on the given data, computes the lambd-smoothness parameter of the function that one would like to minimize when fitting a polynomial to that data
 ### ~~~
 
 if exercise_mode:
@@ -383,7 +383,7 @@ if True:
 
 
 ### ~~~
-## ~~~ EXERCISE 4 of 5 (hard -- demands an understanding of torch.autograd): debug the following code (as presented, the graident computation is correct, but the update does not work)
+## ~~~ EXERCISE 4 of 4 (hard -- demands an understanding of torch.autograd): debug the following code (as presented, the graident computation is correct, but the update does not work)
 ### ~~~
 
 if exercise_mode:
