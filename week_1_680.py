@@ -96,7 +96,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import side_by_side_prediction_plots, buffer
-from quality_of_life.my_numpy_utils         import generate_random_1d_data, my_min, my_max
+from quality_of_life.my_numpy_utils         import generate_random_1d_data
 from quality_of_life.my_base_utils          import support_for_progress_bars 
 if use_tensorflow:
     from quality_of_life.my_keras_utils     import keras_seed, make_keras_network   # ~~~ optional: only necessary for the examples involving neural networks
