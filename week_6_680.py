@@ -286,12 +286,12 @@ torch.manual_seed(680)  # ~~~ set the random seed for reproducibility
 x = torch.randn(3)      # ~~~ x should be tensor([0.7133, 0.5497, 1.1640])
 w = torch.randn(3,requires_grad=True)   # ~~~ set `requires_grad=True` to enable computing derivatives with respect to w
 b = torch.randn(1,requires_grad=True)   # ~~~ also enable computing derivatives with respect to b
-f = lambda x: torch.inner(x,w)+b    # ~~~ an affine functional
+f = lambda x: torch.inner(x,w)+b        # ~~~ an affine functional
 
 #
 # ~~~ Correct usage
 y = f(x)        # ~~~ machine learner like to call this "the forward step"
-y.backward()    # ~~~ P.S. the function that computes derivatives is calleed `backward` because machine learners like to call it "the backward step" when you compute derivatives
+y.backward()    # ~~~ P.S. the function that computes derivatives is called `backward` because machine learners like to call it "the backward step" when you compute derivatives
 print(f"The gradient is {w.grad}")
 
 #
@@ -398,14 +398,14 @@ if exercise_mode:
         #
         # ~~~ Use pytorch to compute f'(x)
         y = f(x)
-        y.backward()  # retain_grad=True?                      # ~~~ compute f'(x) and store its value in x.grad
+        y.backward()  # retain_grad=True?   # ~~~ compute f'(x) and store its value in x.grad
         y_prime = torch.clone(x.grad)       # ~~~ record the value before zeroing out the gradient
         _ = x.grad.zero_()                  # ~~~ zero out the gradient ASAP to hopefully appease pytorch
         #
         # ~~~ Update x according to the gradient descent algorithm (BUG IS HERE)
         update = eta * y/y_prime
         x = x - update              # ~~~ we won't be able to call x.grad anymore after this, for the same reason why we can't call y.grad: it's not a "leaf variable" (basically, a primitative variable that depends on nothing else)
-        progress = eta*abs(update)  # ~~~ the absolute value of the difference between x's values before and after the update
+        progress = eta*abs(update)  # ~~~ this is the absolute value of the difference between x's values before and after the update
     #
     # ~~~ If correctly implemented, this assertion should pass
     assert abs(x.item()-0.922231674) < 1e-8 # ~~~ for the expected output is x==0.9222316741943359
