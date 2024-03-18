@@ -25,7 +25,7 @@ from quality_of_life.my_base_utils import support_for_progress_bars
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of?: Download MNIST
+## ~~~ EXERCISE 1 of ?: Download MNIST
 ###  ~~~
 
 #
@@ -50,7 +50,7 @@ MNIST_test = torchvision.datasets.MNIST(
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of?: Get the actual data out of pytorch's Dataset class
+## ~~~ EXERCISE 2 of ?: Get the actual data out of pytorch's Dataset class
 ### ~~~
 
 if exercise_mode:
@@ -71,7 +71,7 @@ assert (X_test==my_X_test).min() and (y_test==my_y_test).min()  # ~~~ check that
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of?: Build a torch.utils.data.Dataset out of plain old numbers
+## ~~~ EXERCISE 3 of ?: Build a torch.utils.data.Dataset out of plain old numbers
 ### ~~~
 
 if exercise_mode:
@@ -91,14 +91,22 @@ my_X, my_y = get_data(assemble_data(X_test,y_test))     # ~~~ build a torch.util
 assert (X_test==my_X).min() and (y_test==my_y).min()    # ~~~ check that we got back exactly what we started with
 
 
-torch.tensor([3,1,0])
-torch.Tensor([3,1,0])
-torch.tensor([3.,1.,0.])
-torch.Tensor([3.,1.,0.])
-torch.tensor([3.,1.,0.], dtype=torch.int32)
-torch.Tensor([3.,1.,0.], dtype=torch.int32)
 
+### ~~~
+## ~~~ EXERCISE 4 of ?: Identify where a,b,c,d,e,f,g,h below are valid, and which of them are identical to which others
+### ~~~
 
+if exercise_mode:
+    #
+    # ~~~ Delete any of these that are invalid; determine which are identical to which others
+    a = torch.Tensor([3,1,0])
+    b = torch.tensor([3,1,0])
+    c = torch.Tensor([3.,1.,0.])
+    d = torch.tensor([3.,1.,0.])
+    e = torch.Tensor([3.,1.,0.], dtype=torch.int32)
+    f = torch.tensor([3.,1.,0.], dtype=torch.int32)
+    g = torch.Tensor([3.,1.,0.], dtype=torch.int64)
+    h = torch.tensor([3.,1.,0.], dtype=torch.int64)
 
 
 
