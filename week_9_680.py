@@ -72,7 +72,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 from quality_of_life.my_base_utils import support_for_progress_bars
 from quality_of_life.my_numpy_utils import generate_random_1d_data
 from quality_of_life.my_visualization_utils import points_with_curves, GifMaker
-from answers_680.answers_week_8 import build_shallow_network
+# from answers_680.answers_week_8 import build_shallow_network
 
 #
 # ~~~ Define function that tests whether or not some permutation of a vector is equal to another vector, i.e., whether one is just a possibly rearranged version of the other
@@ -259,79 +259,79 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 ## ~~~ DEMONSTRATION 1 of 1: Visualize the difference between GD and SGD
 ### ~~~
 
-def xavier_uniform(d,n):
-    a = np.random.uniform( low=-1, high=1, size=(n,) ) * np.sqrt(6/(n+1))
-    W = np.random.uniform( low=-1, high=1, size=(n,d) ) * np.sqrt(6/(n+d))
-    return a, W, np.zeros(n), 0
+# def xavier_uniform(d,n):
+#     a = np.random.uniform( low=-1, high=1, size=(n,) ) * np.sqrt(6/(n+1))
+#     W = np.random.uniform( low=-1, high=1, size=(n,d) ) * np.sqrt(6/(n+d))
+#     return a, W, np.zeros(n), 0
 
 
-def visualize_GD( eta, width, x_train, y_train, ground_truth, max_iter=120, batch_size=1, ell_prime=ell_prime, gif_name="GDSGD", **kwargs ):
-    #
-    # ~~~ Generate some initial parameters for the desired architecture (in this case, the desired number of hidden units)
-    a, W, b, c = xavier_uniform(1,width)
-    initial_model = build_shallow_network(a,W,b,c,ReLU)
-    #
-    # ~~~ Establish some plotting parameters
-    alphas = [.05,.1,.15,.2,1]
-    delay = len(alphas)
-    linger = delay
-    past_few = [initial_model]*delay
-    gif = GifMaker()
-    #
-    # ~~~ Abbreviate the creation of a plot by defining it to be `snap()`
-    def snap():
-        _ = points_with_curves(
-            x = x_train,
-            y = y_train,
-            curves = past_few + [ground_truth,],
-            curve_colors = delay*["midnightblue"] + ["green"],
-            curve_alphas = alphas + [1,],
-            curve_marks = delay*["-"] + ["--"],
-            title = gif_name,
-            show = False,
-            legend = False,
-            model_fit = False   # ~~~ surpresses a warning that we are not using defaults
-            )
-        gif.capture()
-    #
-    # ~~~ Take several (identical) snapshots of the initial model
-    for _ in range(linger):
-        snap()
-    #
-    # ~~~ Now, do GD or SGD
-    batch_size = len(x_train) if batch_size=="full" else max(batch_size,len(x_train))
-    with support_for_progress_bars():
-        for _ in trange(max_iter):
-            #
-            # ~~~ Compute the gradients and update the parameters accordingly
-            indices_to_use_for_update = np.random.choice( len(x_train), size=batch_size, replace=False )
-            for i in indices_to_use_for_update:
-                grad_a, grad_W, grad_b, grad_c = grad_of_item_loss( a=a, W=W, b=b, c=c, x=x_train[i], y=y_train[i], sigma=ReLU, sigma_prime=ReLU_prime, ell_prime=ell_prime, flatten_and_concatenate=False )
-                a -= eta*grad_a
-                W -= eta*grad_W
-                b -= eta*grad_b
-                c -= eta*grad_c
-            #
-            # ~~~ Take a snapshot including the new, updated model
-            _ = past_few.pop(0)
-            past_few.append( build_shallow_network(a=a,W=W,b=b,c=c,sigma=ReLU) )
-            snap()
-    #
-    # ~~~ Fially, take several
-    gif.develop( destination=gif_name, **kwargs )
-    return a,W,b,c, build_shallow_network(a=a,W=W,b=b,c=c,sigma=ReLU)
+# def visualize_GD( eta, width, x_train, y_train, ground_truth, max_iter=120, batch_size=1, ell_prime=ell_prime, gif_name="GDSGD", **kwargs ):
+#     #
+#     # ~~~ Generate some initial parameters for the desired architecture (in this case, the desired number of hidden units)
+#     a, W, b, c = xavier_uniform(1,width)
+#     initial_model = build_shallow_network(a,W,b,c,ReLU)
+#     #
+#     # ~~~ Establish some plotting parameters
+#     alphas = [.05,.1,.15,.2,1]
+#     delay = len(alphas)
+#     linger = delay
+#     past_few = [initial_model]*delay
+#     gif = GifMaker()
+#     #
+#     # ~~~ Abbreviate the creation of a plot by defining it to be `snap()`
+#     def snap():
+#         _ = points_with_curves(
+#             x = x_train,
+#             y = y_train,
+#             curves = past_few + [ground_truth,],
+#             curve_colors = delay*["midnightblue"] + ["green"],
+#             curve_alphas = alphas + [1,],
+#             curve_marks = delay*["-"] + ["--"],
+#             title = gif_name,
+#             show = False,
+#             legend = False,
+#             model_fit = False   # ~~~ surpresses a warning that we are not using defaults
+#             )
+#         gif.capture()
+#     #
+#     # ~~~ Take several (identical) snapshots of the initial model
+#     for _ in range(linger):
+#         snap()
+#     #
+#     # ~~~ Now, do GD or SGD
+#     batch_size = len(x_train) if batch_size=="full" else max(batch_size,len(x_train))
+#     with support_for_progress_bars():
+#         for _ in trange(max_iter):
+#             #
+#             # ~~~ Compute the gradients and update the parameters accordingly
+#             indices_to_use_for_update = np.random.choice( len(x_train), size=batch_size, replace=False )
+#             for i in indices_to_use_for_update:
+#                 grad_a, grad_W, grad_b, grad_c = grad_of_item_loss( a=a, W=W, b=b, c=c, x=x_train[i], y=y_train[i], sigma=ReLU, sigma_prime=ReLU_prime, ell_prime=ell_prime, flatten_and_concatenate=False )
+#                 a -= eta*grad_a
+#                 W -= eta*grad_W
+#                 b -= eta*grad_b
+#                 c -= eta*grad_c
+#             #
+#             # ~~~ Take a snapshot including the new, updated model
+#             _ = past_few.pop(0)
+#             past_few.append( build_shallow_network(a=a,W=W,b=b,c=c,sigma=ReLU) )
+#             snap()
+#     #
+#     # ~~~ Fially, take several
+#     gif.develop( destination=gif_name, **kwargs )
+#     return a,W,b,c, build_shallow_network(a=a,W=W,b=b,c=c,sigma=ReLU)
 
 
 
-f = lambda x: 2*np.cos(np.pi*((x+0.2))) + np.exp(2.5*(x+0.2))/2.5   # ~~~ a somewhat easy function to approximate
-f = lambda x: abs(x) + np.exp(-1.5*x**2) # ~~~ a quite difficult function to approximate
+# f = lambda x: abs(x) + np.exp(-1.5*x**2) # ~~~ a quite difficult function to approximate
+# f = lambda x: 2*np.cos(np.pi*((x+0.2))) + np.exp(2.5*(x+0.2))/2.5   # ~~~ a somewhat easy function to approximate
 
-np.random.seed(680)
-x_train, y_train, _, _ = generate_random_1d_data( ground_truth=f, n_train=30, n_test=1001, noise=.1 )
-lr = 0.005
-for n in (50,500):
-    np.random.seed(680)
-    a,W,b,c, model = visualize_GD( eta=lr, max_iter=485, width=n, x_train=x_train, y_train=y_train, ground_truth=f, batch_size="full", gif_name=f"Full GD on a Complex Ground Truth, Width {n}, lr={lr}", fps=60 )
+# np.random.seed(680)
+# x_train, y_train, _, _ = generate_random_1d_data( ground_truth=f, n_train=30, n_test=1001, noise=.1 )
+# lr = 0.005
+# for n in (50,500):
+#     np.random.seed(680)
+#     a,W,b,c, model = visualize_GD( eta=lr, max_iter=485, width=n, x_train=x_train, y_train=y_train, ground_truth=f, batch_size="full", gif_name=f"Full GD on a Complex Ground Truth, Width {n}, lr={lr}", fps=60 )
 
 
 # for i in range(len(x_train)):
