@@ -14,6 +14,60 @@ import torch
 from tqdm import trange
 
 #
+# ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
+import os
+this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
+if install_assist or this_is_running_in_colab:              # ~~~ override necessary permissions if this is running in Colab
+    confirm_permission_to_modify_files = not install_assist
+    if (install_assist and confirm_permission_to_modify_files) or this_is_running_in_colab:
+        #
+        # ~~~ Base package for downloading files
+        from urllib.request import urlretrieve
+        #
+        # ~~~ Define a routine that downloads a raw file from GitHub and locates it at a specified path
+        def download_dotpy_from_GitHub_raw( url_to_raw, file_name, folder_name, deisred_parent_directory=None, verbose=True ):
+            #
+            # ~~~ Put together the appropriate path
+            this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
+            parent_directory = os.path.dirname(os.path.dirname(np.__file__)) if (deisred_parent_directory is None) else deisred_parent_directory
+            parent_directory = "" if this_is_running_in_colab else parent_directory
+            folder_path = os.path.join( parent_directory, folder_name )
+            file_path = os.path.join( folder_path, file_name )
+            print_path = os.path.join("/content",folder_name,file_name) if this_is_running_in_colab else file_path
+            #
+            # ~~~ Create the folder if it doesn't already exist
+            if not os.path.exists(folder_path):
+                os.makedirs(folder_path)
+                if verbose:
+                    print("")
+                    print(f"Folder {folder_name} created at {os.path.dirname(print_path)}")
+                    print("")
+            #
+            # ~~~ Download that file and place it at the path `file_path`, overwritting a file of the same name in the same location, if one exists
+            prefix = "Updated" if os.path.exists(file_path) else "Created"
+            urlretrieve( url_to_raw, file_path )
+            if verbose:
+                suffix = " (click the folder on the left)" if this_is_running_in_colab else ""
+                print( f"{prefix} file {file_name} at {print_path}{suffix}" )
+        #
+        # ~~~ A routine that downloads from Tom's GitHub repos
+        def intstall_Toms_code( folder_name, files, repo_name=None, verbose=True ):
+            repo_name = folder_name if repo_name is None else repo_name
+            base_url = f"https://raw.githubusercontent.com/ThomasLastName/{repo_name}/main/"
+            for file_name in files:
+                download_dotpy_from_GitHub_raw( url_to_raw=base_url+file_name, file_name=file_name, folder_name=folder_name, verbose=verbose )
+        #
+        # ~~~ "Install/update" quality_of_life
+        folder = "quality_of_life"
+        files = [ "ansi.py", "my_base_utils.py", "my_numpy_utils.py", "my_visualization_utils.py" ]
+        intstall_Toms_code( folder, files )
+        #
+        # ~~~ "Install/update" answers_680
+        folder = "answers_680"
+        files = [ "answers_week_9.py" ]
+        intstall_Toms_code( folder, files )
+
+#
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_base_utils import support_for_progress_bars
 from quality_of_life.my_numpy_utils import generate_random_1d_data
@@ -36,7 +90,7 @@ def check_permuted_equality( vec, shuffled_vec, short_only=True ):
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of n (hard): Write a function using only numpy that, given x (a vector, not matrix) and sigma (the activation function), computes the gradient of the function f(a,W.flatten()) = a^T\sigma(Wx)
+## ~~~ EXERCISE 1 of 3(hard): Write a function using only numpy that, given x (a vector, not matrix) and sigma (the activation function), computes the gradient of the function f(a,W.flatten()) = a^T\sigma(Wx)
 ### ~~~
 
 if exercise_mode:
@@ -85,7 +139,7 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of n (medium, given the prior exercise): Write a function using only numpy that, given x and sigma, computes the gradient of the function f(a,W,b,c) = c + a^T\sigma(Wx + b)
+## ~~~ EXERCISE 2 of 3(medium, given the prior exercise): Write a function using only numpy that, given x and sigma, computes the gradient of the function f(a,W,b,c) = c + a^T\sigma(Wx + b)
 ### ~~~
 
 if exercise_mode:
@@ -137,7 +191,7 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of n (easy, given the prior exercise): Write a function using only numpy that, given an input x (a vector, not matrix) and response y (scalar, not vector), computes the gradient of the function \ell(a,W,b,c) = \ell( y, c + a^T\sigma(Wx+b) ) using info about \ell and \sigma
+## ~~~ EXERCISE 3 of 3(easy, given the prior exercise): Write a function using only numpy that, given an input x (a vector, not matrix) and response y (scalar, not vector), computes the gradient of the function \ell(a,W,b,c) = \ell( y, c + a^T\sigma(Wx+b) ) using info about \ell and \sigma
 ### ~~~
 
 if exercise_mode:
@@ -202,7 +256,7 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 1 of ?: Visualize the difference between GD and SGD
+## ~~~ DEMONSTRATION 1 of 1: Visualize the difference between GD and SGD
 ### ~~~
 
 def xavier_uniform(d,n):
@@ -270,12 +324,12 @@ def visualize_GD( eta, width, x_train, y_train, ground_truth, max_iter=120, batc
 
 
 f = lambda x: 2*np.cos(np.pi*((x+0.2))) + np.exp(2.5*(x+0.2))/2.5   # ~~~ a somewhat easy function to approximate
-f = lambda x: abs(x) + np.exp(-1.5*x^2) # ~~~ a quite difficult function to approximate
+f = lambda x: abs(x) + np.exp(-1.5*x**2) # ~~~ a quite difficult function to approximate
 
 np.random.seed(680)
 x_train, y_train, _, _ = generate_random_1d_data( ground_truth=f, n_train=30, n_test=1001, noise=.1 )
 lr = 0.005
-for n in (50,150,1000,5000,10000):
+for n in (50,500):
     np.random.seed(680)
     a,W,b,c, model = visualize_GD( eta=lr, max_iter=485, width=n, x_train=x_train, y_train=y_train, ground_truth=f, batch_size="full", gif_name=f"Full GD on a Complex Ground Truth, Width {n}, lr={lr}", fps=60 )
 
