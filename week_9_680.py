@@ -90,7 +90,7 @@ def check_permuted_equality( vec, shuffled_vec, short_only=True ):
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 3(hard): Write a function using only numpy that, given x (a vector, not matrix) and sigma (the activation function), computes the gradient of the function f(a,W.flatten()) = a^T\sigma(Wx)
+## ~~~ EXERCISE 1 of 3 (hard): Write a function using only numpy that, given x (a vector, not matrix) and sigma (the activation function), computes the gradient of the function f(a,W.flatten()) = a^T\sigma(Wx)
 ### ~~~
 
 if exercise_mode:
@@ -101,10 +101,9 @@ if exercise_mode:
         assert W.shape==(H,d)
         assert a.shape==(H,)
         # NOTE: the intent is that you work out the derivative by hand and then hard-code the forumla for the derivative
-        return #the gradient of the function f(theta) that sends parameters theta=(a,W) to the prediction at x of the shallow network f(theta) = a.T@sigma(W@x)
+        return #the gradient of the function f(theta) that sends parameters theta=(a,W) to the prediction f(theta)=a.T@sigma(W@x) at x of the shallow network
 else:
     from answers_680.answers_week_9 import par_grad_lacking_bias
-
 
 #
 # ~~~ Some made up data and stuff
@@ -113,7 +112,6 @@ W = np.random.normal(size=(2,2))
 a = np.random.normal(size=(2,))
 ReLU_prime = lambda x: (x>=0) +1.-1.    # ~~~ the `+1.-1.` achieves a module-agnostic converstion to float, i.e., works whether x is a torch.tensor or numpy array
 ReLU = lambda x: x*ReLU_prime(x)        # ~~~ equvalent to np.maximum(x,0) if x is a numpy array, or torch.clamp(x,min=0) if x is a torch.tensor
-
 
 #
 # ~~~ Collect my implementation
@@ -131,7 +129,6 @@ f = torch.inner(a,ReLU(W@x))
 f.backward()
 torch_gradient = np.concatenate(( a.grad.numpy(), W.grad.numpy().flatten() ))
 
-
 #
 # ~~~ The order of `my_gradient` depends on how you choose to enumerate the parameters, which is an arbitrary convention; we search for equality agnostic to that convention
 assert check_permuted_equality( my_gradient, torch_gradient )
@@ -139,7 +136,7 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 3(medium, given the prior exercise): Write a function using only numpy that, given x and sigma, computes the gradient of the function f(a,W,b,c) = c + a^T\sigma(Wx + b)
+## ~~~ EXERCISE 2 of 3 (medium, given the prior exercise): Write a function using only numpy that, given x and sigma, computes the gradient of the function f(a,W,b,c) = c + a^T\sigma(Wx + b)
 ### ~~~
 
 if exercise_mode:
@@ -191,7 +188,7 @@ assert check_permuted_equality( my_gradient, torch_gradient )
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 3(easy, given the prior exercise): Write a function using only numpy that, given an input x (a vector, not matrix) and response y (scalar, not vector), computes the gradient of the function \ell(a,W,b,c) = \ell( y, c + a^T\sigma(Wx+b) ) using info about \ell and \sigma
+## ~~~ EXERCISE 3 of 3 (easy, given the prior exercise): Write a function using only numpy that, given an input x (a vector, not matrix) and response y (scalar, not vector), computes the gradient of the function \ell(a,W,b,c) = \ell( y, c + a^T\sigma(Wx+b) ) using info about \ell and \sigma
 ### ~~~
 
 if exercise_mode:
@@ -209,7 +206,6 @@ if exercise_mode:
         return # the gradient of the function \ell(a,W,b,c) = \ell( y, c + a^T\sigma(Wx+b) )
 else:
     from answers_680.answers_week_9 import grad_of_item_loss
-
 
 #
 # ~~~ Some made up data and stuff
@@ -251,7 +247,6 @@ torch_gradient = np.concatenate((
 #
 # ~~~ The order of `my_gradient` depends on how you choose to enumerate the parameters, which is an arbitrary convention; we search for equality agnostic to that convention
 assert check_permuted_equality( my_gradient, torch_gradient )
-
 
 
 
