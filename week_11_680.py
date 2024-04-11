@@ -70,7 +70,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from answers_680.answers_week_6 import build_objective_from_data, formula_for_the_gradient, compute_lambda
-from quality_of_life.ansi import bcolors
+
 
 
 ### ~~~
@@ -146,9 +146,7 @@ try:
     print("This worked: z.backward() was called successfully!")
 except RuntimeError as e:
     print("This didn't work: calling z.backward() provoked a RuntimeError with the following message:")
-    error_message = str(e)
-    red_error_message = bcolors.FAIL + error_message
-    print(red_error_message)    # ~~~ The error message isn't great.... it says we must specify `retain_graph=True` but doesn't elaborate where
+    print(str(e))    # ~~~ The error message isn't great.... it says we must specify `retain_graph=True` but doesn't elaborate where
 
 #
 # ~~~ The error message neglects to mention that it's already too late: this can't be done retroactively
@@ -157,9 +155,7 @@ try:
     print("This worked: z.backward() was called successfully!")
 except RuntimeError as e:
     print("Again, this didn't work: calling z.backward() provoked a RuntimeError with the following message:")
-    error_message = str(e)
-    red_error_message = bcolors.FAIL + error_message
-    print(red_error_message)
+    print(str(e))
 
 #
 # ~~~ By default, pytorch already forgot how it computed the gradient of z and you can't undo the "forgetting" unless you redo the computations
@@ -170,9 +166,7 @@ try:
     print("This worked: z.backward() was called successfully!")
 except RuntimeError as e:
     print("This didn't work: calling z.backward() provoked a RuntimeError with the following message:")
-    error_message = str(e)
-    red_error_message = bcolors.FAIL + error_message
-    print(red_error_message)
+    print(str(e))
 
 #
 # ~~~ However, pytorch fails to warn us that there is another issue entirely...
