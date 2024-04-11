@@ -75,6 +75,7 @@ from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors, convert_T
 from quality_of_life.my_base_utils import support_for_progress_bars
 
 
+
 ### ~~~
 ## ~~~ EXERCISE 1 of 5: Download MNIST
 ###  ~~~
