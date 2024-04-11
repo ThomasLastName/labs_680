@@ -70,7 +70,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from answers_680.answers_week_6 import build_objective_from_data, formula_for_the_gradient, compute_lambda
-
+from quality_of_life.ansi import bcolors
 
 
 ### ~~~
@@ -276,7 +276,18 @@ L = compute_lambda( x_train, y_train, deg=degree )
 #
 # ~~~ Run gradient descent to minimize this function using torch.autograd, and compare with the results `coeffs` obtained using formulas derived by hand
 coefficients = gradient_descent( overall_loss, learning_rate=1/L, initial_guess=torch.zeros(degree+1) )
-poly, coeffs = fit_polynomial_by_gd( x_train, y_train, deg=degree )
-assert abs(coeffs-coefficients).max() < 1e-14
+coefficients.requires_grad = False
+
+#
+# ~~~ Do it the old fashioned way, for comparison
+def univar_poly_fit( x, y, deg=1 ):
+    coeffs = np.polyfit( x, y, degree )
+    poly = np.poly1d(coeffs)
+    return poly, coeffs
+
+
+poly, coeffs = univar_poly_fit( x_train, y_train, deg=degree )
+assert abs( coeffs[::-1] - coefficients.numpy() ).max() < 1e-9
+
 
 #
