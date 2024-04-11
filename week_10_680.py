@@ -71,7 +71,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
-from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors, convert_Tensors_to_Dataset, hot_1_encode_an_integer
+from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors, convert_Tensors_to_Dataset
 from quality_of_life.my_base_utils import support_for_progress_bars
 
 
