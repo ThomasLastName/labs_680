@@ -77,11 +77,11 @@ from quality_of_life.my_torch_utils import convert_Dataset_to_Tensors
 
 
 ### ~~~
-## ~~~ EXERCISE 1 of 3: Download MNIST
+## ~~~ EXERCISE 1 of 3 (easy): Download MNIST
 ### ~~~
 
 #
-# ~~~ set the parent directory where you want to store data on your computer
+# ~~~ Set the parent directory where you want to store data on your computer
 my_data_directory = "C:\\Users\\thoma\\AppData\\Local\\Programs\\Python\\Python310\\pytorch_data"
 
 MNIST_train = torchvision.datasets.MNIST(
@@ -125,7 +125,7 @@ except ModuleNotFoundError:
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 3: Write a funciton which tests the model's accuracy on some data
+## ~~~ EXERCISE 2 of 3 (medium): Write a funciton which tests the model's accuracy on some data
 ### ~~~
 
 if exercise_mode:
@@ -152,7 +152,7 @@ assert measure_accuracy(model,X_test,y_test)==0.11599999666213989   # ~~~ the ac
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 3: Reproduce pytorch's nn.CrossEntropyLoss()
+## ~~~ EXERCISE 3 of 3 (hard): Reproduce pytorch's nn.CrossEntropyLoss()
 ### ~~~
 
 #

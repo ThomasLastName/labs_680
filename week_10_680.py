@@ -81,7 +81,7 @@ from quality_of_life.my_base_utils import support_for_progress_bars
 ###  ~~~
 
 #
-# ~~~ set the parent directory where you want to store data on your computer
+# ~~~ Set the parent directory where you want to store data on your computer
 my_data_directory = "C:\\Users\\thoma\\AppData\\Local\\Programs\\Python\\Python310\\pytorch_data"
 
 MNIST_train = torchvision.datasets.MNIST(
