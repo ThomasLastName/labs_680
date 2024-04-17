@@ -130,8 +130,7 @@ except ModuleNotFoundError:
 
 if exercise_mode:
     def measure_accuracy(model,X_test,y_test):
-        n_test,n_class = X_test.shape
-        assert ( y_test.unique()==torch.arange(n_class) ).all()
+        n_test = ____
         with torch.no_grad():
             predicted = model(X_test)   # ~~~ a matrix of shape (n_test,n_class) or, more generally, of shape
             target = y_test             # ~~~ a vector of shape (n_test,)
