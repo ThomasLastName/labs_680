@@ -84,7 +84,6 @@ from quality_of_life.my_base_utils import support_for_progress_bars
 # ~~~ set the parent directory where you want to store data on your computer
 my_data_directory = "C:\\Users\\thoma\\AppData\\Local\\Programs\\Python\\Python310\\pytorch_data"
 
-
 MNIST_train = torchvision.datasets.MNIST(
         root = my_data_directory,   # where to look for the data on your computer (if the data isn't there and download=True, then it will download the data and put it there)
         train = True,               # specify whether you want the training data or the test data
@@ -163,38 +162,33 @@ if exercise_mode:
 
 
 ### ~~~
-## ~~~ EXERCISE 5 of 5: Identify where a,b,c,d,e,f,g,h below are valid, and which of them are identical to which others
+## ~~~ EXERCISE 5 of 5 (medium): Reproduce a pytorch dataloader
 ### ~~~
 
-#
-# ~~~ Example of what a neural network might spit out
-predicted = torch.tensor([[-1.1933,  0.2766,  1.1250, -0.4440,  2.7818],
-                          [-1.3816, -0.3540, -1.1034,  2.2402,  0.1682],
-                          [-3.2324, -2.3961, -0.1085,  0.0205, -0.3228]])
-
-#
-# ~~~ Example of some class labels (from 0 to 4 inclusive)
-targets = torch.tensor([3,1,0])
-
-#
-# ~~~ What `loss_fn(predicted,targets)` would do
-loss_fn = nn.CrossEntropyLoss()
-loss_fn(predicted,targets)
-
-#
-# ~~~ Based on the documentation for `nn.CrossEntropyLoss()` (which you must look up), write the loss function yourself
 if exercise_mode:
-    def my_cross_entropy(predicted,targets):
-        return #the same value as loss_fn(predicted,targets)
+    #
+    # ~~~ Write a function that takes a pytorch dataset as input, and splits the data and label into batches of the desired size, optionally shuffling those batches
+    def my_dataloader( Dataset, batch_size=1, shuffle=False ):
+        all_X, all_y = convert_Dataset_to_Tensors(Dataset)
+        # YOUR CODE HERE which rearranges the data if `shuffle==True`
+        X_batches = a_list_of_tensors       # YOUR CODE HERE which splilts the data into subsets of size `batch_size`
+        y_batches = another_list_of_tensors # YOUR CODE HERE which splilts the data into subsets of size `batch_size`
+        return tuple(zip(X_batches,y_batches))
 else:
-    from answers_680.answers_week_10 import my_cross_entropy
-
+    from answers_680.answers_week_10 import my_dataloader
 
 #
-# ~~~ Do the two match?
-print("These should be the same:")
-print(loss_fn(predicted,targets))
-print(my_cross_entropy(predicted,targets))
+# ~~~ Validate your implementation
+unofficial_dataloader = my_dataloader( MNIST_train, batch_size=40 )
+official_dataloader = torch.utils.data.DataLoader( MNIST_train, batch_size=40 )
+try:
+    for j,(X,y) in enumerate(official_dataloader):
+        (XX,yy) = unofficial_dataloader[j]
+        assert (X==XX).all() and (y==yy).all()
+    print("Success!")
+except AssertionError:
+    print("Failure! Try Again!")
+
 
 
 
