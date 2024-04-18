@@ -213,7 +213,7 @@ points_with_binary_classifier_line(w,b,X,y) # ~~~ sure enough, the classificatio
 
 #
 # ~~~ The perceptron algorithm (with programming bells and whistles)
-def my_perceptron( X_train, y_train, bias=True, initialization="random", random_update=False, max_iter="auto", verbose=True, progress=False, plot=False, gif_destination="perceptron_680", **kwargs ):
+def my_perceptron( X_train, y_train, bias=True, initialization="random", random_update=False, max_iter="auto", verbose=True, progress=False, plot=False, gif_title="perceptron_680", **kwargs ):
     #
     # ~~~ Set m to be the number of data points
     y = y_train.squeeze()
@@ -271,6 +271,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
             for j,params in enumerate(past_few):    # ~~~ plot the classification boundary regions for the previous few iterations
                 abline( *compute_slope_and_intercept( *np.array_split(params,2)), color="black", alpha=alpha[j] )
             plt.grid()
+            plt.title(gif_title)
             plt.tight_layout()
             #
             # ~~~ Take pic
@@ -324,7 +325,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
         past_few = [w]
         for _ in range(linger):
             make_and_take_pic(i,past_few)
-        gif.develop( destination=gif_destination, verbose=verbose, **kwargs )
+        gif.develop( destination=gif_title, verbose=verbose, **kwargs )
     return ( w[:-1], w[-1], t ) if bias else (w,t)
 
 #
@@ -332,7 +333,7 @@ def my_perceptron( X_train, y_train, bias=True, initialization="random", random_
 np.random.seed(680)
 initial_w_and_b = -np.random.normal(size=(3,))/np.sqrt(3)
 X,y = Foucarts_training_data( plot=False )
-w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=3, plot=True, gif_destination="680 perceptron det good" )
+w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=3, plot=True, gif_title="Perceptron Algorithm on Linearly Separable Data" )
 points_with_binary_classifier_line(w,b,X,y)
 
 #
@@ -340,7 +341,7 @@ points_with_binary_classifier_line(w,b,X,y)
 np.random.seed(680)
 initial_w_and_b = -np.random.normal(size=(3,))/np.sqrt(3)
 X,y = Foucarts_training_data( plot=False )
-w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=3, random_update=True, plot=True, gif_destination="680 stochastic stoch good" )
+w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=3, random_update=True, plot=True, gif_title="Stochastic Perceptron Algorithm on Linearly Separable Data" )
 points_with_binary_classifier_line(w,b,X,y)
 
 #
@@ -348,7 +349,7 @@ points_with_binary_classifier_line(w,b,X,y)
 np.random.seed(680)
 initial_w_and_b = -np.random.normal(size=(3,))/np.sqrt(3)
 X,y = Foucarts_training_data( plot=False, tag="nonseparable" )
-w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=15, plot=True, progress=True, gif_destination="680 perceptron det bad" )
+w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=15, plot=True, progress=True, gif_title="Perceptron Algorithm on Data not Linearly Separable" )
 points_with_binary_classifier_line(w,b,X,y)
 
 #
@@ -356,7 +357,7 @@ points_with_binary_classifier_line(w,b,X,y)
 np.random.seed(680)
 initial_w_and_b = -np.random.normal(size=(3,))/np.sqrt(3)
 X,y = Foucarts_training_data( plot=False, tag="nonseparable" )
-w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=15, random_update=True, plot=True,  progress=True, gif_destination="680 perceptron stoch bad" )
+w,b,T = my_perceptron( X, y, initialization=initial_w_and_b, fps=15, random_update=True, plot=True,  progress=True, gif_title="Stochastic Perceptron Algorithm on Data not Linearly Separable" )
 points_with_binary_classifier_line(w,b,X,y)
 
 
