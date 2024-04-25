@@ -154,7 +154,7 @@ gif = GifMaker()
 lambs = np.linspace(0,1.7,150)**2
 for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture
     regularized_fit,_ = my_univar_poly_fit( x_train, y_train, degree=D, penalty=l )
-    _,_ = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$" )
+    fig,ax = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$", fig=(fig if "fig" in globals() else "new"), ax=(ax if "ax" in globals() else "new") )
     gif.capture()
 
 
