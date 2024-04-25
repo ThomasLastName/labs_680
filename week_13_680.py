@@ -95,7 +95,7 @@ from answers_680.answers_week_1             import univar_spline_fit
 
 #
 # ~~~ A function that applies Proposition 10.3 with dim(V)==deg
-def H1_with_V_hat( x_train, y_train, deg, ):
+def H1_with_V_hat( x_train, y_train, deg, tol=1e-13 ):
     #
     # ~~~ Transform the data to the interior of the unit interval [0,1]
     lo, hi = min(x_train), max(x_train)
@@ -114,16 +114,22 @@ def H1_with_V_hat( x_train, y_train, deg, ):
     #
     # ~~~ Apply the formulas 10.12 in the text
     try:
-        G_u_inv = np.linalg.inv(G_u)
-    except np.linalg.LinAlgError:
-        warn("G_u matrix is singular. This is probably due to two data points being too close together.")
-        raise
-    try:
-        b = np.linalg.solve( C.T@G_u_inv@C, C.T@G_u_inv@y_train )
-    except np.linalg.LinAlgError:
-        warn("The equation for b is singular. This may be due to dim(V) being too large.")
-        raise
-    a = G_u_inv@y_train - G_u_inv@C@b
+        b = np.linalg.lstsq(C,y_train,rcond=None)[0]    # ~~~ notice that if Cb=y then b satisfies the first equation 10.12
+        assert (y_train-C@b).mean() < tol
+        print("Nice! y_train is in the range of C!")
+        a = np.linalg.solve(G_u,y_train-C@b)            # ~~~ and, in that case, there is no need to invert G_u, at all
+    except AssertionError:
+        try:
+            G_u_inv = np.linalg.inv(G_u)
+        except np.linalg.LinAlgError:
+            warn("G_u matrix is singular. This is probably due to two data points being too close together.")
+            raise
+        try:
+            b = np.linalg.solve( C.T@G_u_inv@C, C.T@G_u_inv@y_train )
+        except np.linalg.LinAlgError:
+            warn("The equation for b is singular. This may be due to dim(V) being too large.")
+            raise
+        a = G_u_inv@y_train - G_u_inv@C@b
     #
     # ~~~ Apply formula 10.11 in the text
     return lambda x, a=a, b=b: kernel((x-lo)/(hi-lo),x_train)@a + np.column_stack([ phi((x-lo)/(hi-lo)) for phi in V ])@b
