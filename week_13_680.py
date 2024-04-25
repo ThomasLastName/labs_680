@@ -84,7 +84,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_numpy_utils         import generate_random_1d_data, list_all_the_hat_functions
-from quality_of_life.my_visualization_utils import points_with_curves, buffer, side_by_side_prediction_plots
+from quality_of_life.my_visualization_utils import points_with_curves, side_by_side_prediction_plots
 from answers_680.answers_week_1             import univar_spline_fit
 
 
@@ -98,7 +98,7 @@ from answers_680.answers_week_1             import univar_spline_fit
 def H1_with_V_hat( x_train, y_train, deg, gap=0. ):
     #
     # ~~~ Transform the data to the interior of the unit interval [0,1]
-    lo,hi = buffer( x_train, multiplier=gap )
+    lo, hi = min(x_train), max(x_train)
     x_train = (x_train-lo)/(hi-lo)
     #
     # ~~~ Define the matrices G_u, G_v, and C from the Proposition
@@ -112,7 +112,7 @@ def H1_with_V_hat( x_train, y_train, deg, gap=0. ):
     # G_v = h*(2*np.eye(deg) - np.eye(deg,k=1) - np.eye(deg,k=-1))
     # G_v[0][0] += 1    # ~~~ the inner product in question is that from exercise 5.4
     #
-    # ~~~ Apply the formulas (10.12) in the text
+    # ~~~ Apply the formulas 10.12 in the text
     try:
         G_u_inv = np.linalg.inv(G_u)
     except np.linalg.LinAlgError:
@@ -125,7 +125,7 @@ def H1_with_V_hat( x_train, y_train, deg, gap=0. ):
         raise
     a = G_u_inv@y_train - G_u_inv@C@b
     #
-    # ~~~ Apply formula (10.11) in the text
+    # ~~~ Apply formula 10.11 in the text
     return lambda x, a=a, b=b: kernel((x-lo)/(hi-lo),x_train)@a + np.column_stack([ phi((x-lo)/(hi-lo)) for phi in V ])@b
 
 #
@@ -136,12 +136,12 @@ n_train = 40
 x_train, y_train, x_test, y_test = generate_random_1d_data( f, n_train=n_train )
 
 #
-# ~~~ Apply the fitting method of Proposition 10.3 with this choice of V, etc.
+# ~~~ Apply the fitting method of Proposition 10.3 with this choice of V and ambeint space H
 dim_of_V = 10
 Delta = H1_with_V_hat( x_train, y_train, deg=dim_of_V )
 
 #
-# ~~~ Do linear spline regression, for comparison
+# ~~~ Do spline regression, for comparison
 spline,_ = univar_spline_fit( x_train, y_train, knots=np.linspace(-1,1,dim_of_V) )
 
 #
@@ -151,7 +151,9 @@ side_by_side_prediction_plots( x_train, y_train, f, Delta, spline, "Optimal Reco
 #
 # ~~~ A relu network, for comparison
 if pytorch_is_available:
-    torch.manual_seed(680)  # ~~~ try playing around with this seed to see how the initialization affects the outcome
+    torch.manual_seed(680)  # ~~~ try playing with this seed to see how the initialization affects the outcome
+    #
+    # ~~~ Instantiate an untrained neural network
     model = nn.Sequential(
             nn.Unflatten( dim=-1, unflattened_size=(-1,1) ),
             nn.Linear(1, 20),
