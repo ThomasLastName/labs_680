@@ -59,7 +59,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
-        files = [ "ansi.py", "my_base_utils.py", "my_numpy_utils.py", "my_visualization_utils.py" ]
+        files = [ "ansi.py", "my_base_utils.py" ]
         intstall_Toms_code( folder, files )
         #
         # ~~~ "Install/update" answers_680
@@ -69,7 +69,7 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
 
 #
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
-from answers_680.answers_week_6 import build_objective_from_data, formula_for_the_gradient, compute_lambda
+from answers_680.answers_week_6 import build_objective_from_data, compute_lambda
 
 
 
