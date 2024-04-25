@@ -95,7 +95,7 @@ from answers_680.answers_week_1             import univar_spline_fit
 
 #
 # ~~~ A function that applies Proposition 10.3 with dim(V)==deg
-def H1_with_V_hat( x_train, y_train, deg, gap=0. ):
+def H1_with_V_hat( x_train, y_train, deg, ):
     #
     # ~~~ Transform the data to the interior of the unit interval [0,1]
     lo, hi = min(x_train), max(x_train)
@@ -171,7 +171,6 @@ if pytorch_is_available:
     y_t = torch.from_numpy(y_train).reshape(-1,1)
     optimizer = torch.optim.Adam( model.parameters(), lr=eta )
     #
-    # ~~~ Do training
     for iter in trange(1000):
         loss = loss_fn( model(x_t), y_t ) 
         loss.backward()
