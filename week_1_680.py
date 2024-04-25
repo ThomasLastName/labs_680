@@ -158,7 +158,7 @@ more_x_train = abs(more_x_train)    # ~~~ Change the distribution of the x's (no
 # y_train, more_y_train = f(x_train), f(more_x_train)                     # remove noise
 quadratic_fit,c = univar_poly_fit( x_train, y_train, degree=d )         # ~~~ degree 0 polynomial regression
 dodeca_fit,_ = univar_poly_fit( more_x_train, more_y_train, degree=D )  # ~~~ degree 20 polynomial regression
-side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4], axatitle=None, axbtitle=None, figtitle="This Outcome is also Consistent with PAC Learning" )
+side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4], title_a=None, title_b=None, figtitle="This Outcome is also Consistent with PAC Learning" )
 
 
 
