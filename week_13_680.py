@@ -73,12 +73,12 @@ if install_assist or this_is_running_in_colab:              # ~~~ override neces
         #
         # ~~~ "Install/update" quality_of_life
         folder = "quality_of_life"
-        files = [ "ansi.py", "my_base_utils.py", "my_torch_utils.py" ]
+        files = [ "ansi.py", "my_base_utils.py", "my_numpy_utils.py", "my_visualization_utils.py" ]
         intstall_Toms_code( folder, files )
         #
         # ~~~ "Install/update" answers_680
         folder = "answers_680"
-        files = [ "answers_week_12.py" ]
+        files = [ "answers_week_1.py" ]
         intstall_Toms_code( folder, files )
 
 #
@@ -151,6 +151,7 @@ side_by_side_prediction_plots( x_train, y_train, f, Delta, spline, "Optimal Reco
 #
 # ~~~ A relu network, for comparison
 if pytorch_is_available:
+    torch.manual_seed(680)  # ~~~ try playing around with this seed to see how the initialization affects the outcome
     model = nn.Sequential(
             nn.Unflatten( dim=-1, unflattened_size=(-1,1) ),
             nn.Linear(1, 20),
@@ -177,15 +178,7 @@ if pytorch_is_available:
     #
     # ~~~ Look at the result
     f_t = lambda x: f(x.numpy())
-    points_with_curves( x_train, y_train, (model,f_t) )
+    points_with_curves( x_train, y_train, (model,f_t), title="A ReLU Network" )
 
 
-
-
-
-
-
-
-
-
-
+#
