@@ -5,10 +5,10 @@ This is some code that I wrote for the python labs of the class MATH 680 at Texa
 
 - [Usage](#usage)
 -  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
--  [Installation (TLDR)](#installation)
+-  [Installing Tom's Packages]([#installation](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installing-toms-packages))
    - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
-   - [Manual Installation (advanced users)](#manual-installation-advanced-users)
-   - [Assisted Installation for Environments other than Colab (recommended)](#assisted-installation-for-environments-other-than-colab-recommended)
+   - [Installation in Any Environment Using `git` (requires `git`)](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-in-any-environment-using-git-requires-git)
+   - [Assisted Installation for Environments other than Colab (deprecated)](#assisted-installation-for-environments-other-than-colab-deprecated)
 
 
 ---
