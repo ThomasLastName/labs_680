@@ -534,7 +534,8 @@ if use_tensorflow:
     n_bins = 2
     #
     # ~~~ Add save+load functionality
-    folder = os.path.join( os.getcwd(), 'answers_680' )      # ~~~ replace with your preferred path; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
+    from answers_680 import __path__
+    folder = __path__[0]      # ~~~ replace with your preferred path if desired; e.g., "C:\\Users\\thoma\\Downloads" if I wanted to load/save a file from/to my Downloads folder
     file_name = 'results_of_cv_ch1.npy'
     good_path = os.path.exists(folder)
     file_path = os.path.join( folder, file_name )
