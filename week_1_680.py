@@ -30,17 +30,6 @@ except Exception as probably_ModuleNotFoundError:
         raise
 
 #
-# ~~~ In order to reproduce the neural network CV that I ran before lab, you'll "need" the package alive_progres (otherwise, you'll just need to sligly edit my code)
-try:
-    from alive_prgress import alive_bar    # ~~~ sorry, I'm gonna make you install this package lol
-    use_progress_bar = True
-except Exception as probably_ModuleNotFoundError:
-    if type(probably_ModuleNotFoundError) is ModuleNotFoundError:
-        use_progress_bar = False
-    else:
-        raise
-
-#
 # ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
 this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
 if install_assist or this_is_running_in_colab:              # override necessary permissions if this is running in Colab
@@ -97,7 +86,6 @@ if install_assist or this_is_running_in_colab:              # override necessary
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import side_by_side_prediction_plots, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data
-from quality_of_life.my_base_utils          import support_for_progress_bars 
 if use_tensorflow:
     from quality_of_life.my_keras_utils     import keras_seed, make_keras_network   # ~~~ optional: only necessary for the examples involving neural networks
 
@@ -553,25 +541,19 @@ if use_tensorflow:
     #
     # ~~~ Do cross validation
     i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently = False
-    if use_progress_bar and good_path and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
+    if good_path and i_am_ok_with_this_running_for_an_hour_or_two_because_tom_coded_it_inefficiently:
         #
         # ~~~ Run the computations locally
         scores = []
         current_scores = [np.nan,np.nan]
-        with support_for_progress_bars():
-            with alive_bar( len(possible_hyperparameters), bar="classic" ) as bar:
-                #
-                # ~~~ Do basically what we did for polynomials, except with a different estimator, except with extra baggage in order to suppport the progress bar
-                for (architecture,n_epochs) in possible_hyperparameters:
-                    bar.text(f"Now training with {architecture} for {n_epochs} epochs. Last round had {current_scores[0]:.3}, {current_scores[1]:.3}")      # ~~~ for the progress bar
-                    #
-                    # ~~~ Begin key functionality (c.f., `"Do cross validation" for a bunch of different polynomial degrees`)
-                    estimator = lambda x_train,y_train: make_and_train_1d_network( x_train, y_train, hidden_layers=architecture, epochs=n_epochs )[0]  # ~~~ as before
-                    current_scores = cross_val_score( estimator, x_train, y_train, cv=n_bins, scoring=mean_squared_error )                        # ~~~ as before
-                    scores.append(current_scores)                                                                                                   # ~~~ as before
-                    # ~~~ End key functionality
-                    #
-                    bar()                                                                                                                                   # ~~~ for the progress bar
+        #
+        # ~~~ Do basically what we did for polynomials, except with a different estimator
+        for (architecture,n_epochs) in tqdm(possible_hyperparameters):
+            #
+            # ~~~ c.f., `"Do cross validation" for a bunch of different polynomial degrees`
+            estimator = lambda x_train,y_train: make_and_train_1d_network( x_train, y_train, hidden_layers=architecture, epochs=n_epochs )[0]  # ~~~ as before
+            current_scores = cross_val_score( estimator, x_train, y_train, cv=n_bins, scoring=mean_squared_error )                        # ~~~ as before
+            scores.append(current_scores)                                                                                                   # ~~~ as before
         #
         # ~~~ Save the result of all that for future convenience
         np.save( file_path, np.array(scores) )
