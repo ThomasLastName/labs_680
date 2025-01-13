@@ -6,7 +6,7 @@ This is some code that I wrote for the python labs of the class MATH 680 at Texa
 # Usage
 Each of these files contains multiple reproducible demonstations, as well as 1 or more programming exercises for students seeking more programming experience. I've tried to comment them well enough that they can be read independently. However, I'll also walk you through them during our **Tuesday meetings at 5:30pm in Blocker 122.**
 
-**In order to participate in the optional exercise(s), switch from `exercise_mode = False` to `exercise_mode = True`** before the import statements. The code will then prompt errors, unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
+**In order to participate in the optional exercise(s), switch from `exercise_mode = False` to `exercise_mode = True`** before the import statements. The code will then prompt errors, unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE". You may find the answer key [here](https://github.com/ThomasLastName/answers-680).
 
 **For a user-friendly experience, I've packaged the code in colab notebooks, accessible [HERE](https://drive.google.com/drive/folders/1rhDQxKEpeTkqFpTRY6NqJma0naKqD4Nd?usp=drive_link)**  with a Google sign in.
 
