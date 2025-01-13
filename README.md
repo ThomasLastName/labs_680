@@ -12,17 +12,6 @@ Each of these files contains multiple reproducible demonstations, as well as 1 o
 
 ---
 
-## Table of Contents
-
-- [Usage](#usage)
--  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
--  [Installing Tom's Packages](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installing-toms-packages)
-   - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
-   - [Installation in Any Environment Using `git` (requires `git`)](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-in-any-environment-using-git-requires-git)
-   - [Assisted Installation for Environments other than Colab (deprecated)](#assisted-installation-for-environments-other-than-colab-deprecated)
-
----
-
 # Prerequisites for Using This Code
 Besides some standard libraries, this repo depends two packaes that I wrote: [answers-680](https://github.com/ThomasLastName/answers-680) and [quality-of-life](https://github.com/ThomasLastName/quality-of-life). The former is analogous to placing the answers to exercises in the back of a textbook, rather in the same place where the exercises are assigned. The latter is simply a collection of coding shortcuts that I want to have access to when writing these demos, to make my own life easier. **See [Installing Tom's Packages](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#installation), below.**
 
