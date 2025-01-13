@@ -1,16 +1,6 @@
 # MATH 680 LABS
 This is some code that I wrote for the python labs of the class MATH 680 at Texas A&amp;M University. The labs (by means of this code) demonstrate concrete applications of the concepts presented in lecture, and present several optional programming exercises. I wrote these as the teaching assistant for the course in spring 2024, typically building on top of [the official codebase for the text](https://github.com/foucart/Mathematical_Pictures_at_a_Data_Science_Exhibition).
 
-## Table of Contents
-
-- [Usage](#usage)
--  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
--  [Installing Tom's Packages](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installing-toms-packages)
-   - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
-   - [Installation in Any Environment Using `git` (requires `git`)](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-in-any-environment-using-git-requires-git)
-   - [Assisted Installation for Environments other than Colab (deprecated)](#assisted-installation-for-environments-other-than-colab-deprecated)
-
-
 ---
 
 # Usage
@@ -19,6 +9,17 @@ Each of these files contains multiple reproducible demonstations, as well as 1 o
 **In order to participate in the optional exercise(s), switch from `exercise_mode = False` to `exercise_mode = True`** before the import statements. The code will then prompt errors, unless of course you complete the exercise(s), which you can locate by Crtl+F-ing either "exercise_mode" or (case sensitively) "EXERCISE".
 
 **For a user-friendly experience, I've packaged the code in colab notebooks, accessible [HERE](https://drive.google.com/drive/folders/1rhDQxKEpeTkqFpTRY6NqJma0naKqD4Nd?usp=drive_link)**  with a Google sign in.
+
+---
+
+## Table of Contents
+
+- [Usage](#usage)
+-  [Prerequisites for Using This Code](#prerequisites-for-using-this-code)
+-  [Installing Tom's Packages](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installing-toms-packages)
+   - [Installation in Colab (beginner friendly)](#installation-in-colab-beginner-friendly)
+   - [Installation in Any Environment Using `git` (requires `git`)](https://github.com/ThomasLastName/labs_680/blob/main/README.md#installation-in-any-environment-using-git-requires-git)
+   - [Assisted Installation for Environments other than Colab (deprecated)](#assisted-installation-for-environments-other-than-colab-deprecated)
 
 ---
 
