@@ -14,7 +14,7 @@ import torch    # ~~~ pytorch is simply required for this lab (actually a lot of
 torch.set_default_dtype(torch.double)   # ~~~ use high precision computer arithmetic
 
 #
-# ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
+# ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#assisted-installation-for-environments-other-than-colab-deprecated
 import os
 this_is_running_in_colab = os.getenv("COLAB_RELEASE_TAG")   # ~~~ see https://stackoverflow.com/a/74930276
 if install_assist or this_is_running_in_colab:              # override necessary permissions if this is running in Colab
