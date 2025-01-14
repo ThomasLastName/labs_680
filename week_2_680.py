@@ -117,8 +117,8 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 if exercise_mode:
     def augment(X):
-        dimension = X.shape[0]
-        return np.concatenate([ X, np.ones((dimension,1)) ], axis=1 )
+        # YOUR CODE HERE (this is, simply, an exercise in numpy)
+        return # X if X already has a column of all 1's, otherwise return an augmented version of X, with a new column of all 1's
 else:
     pass
 
