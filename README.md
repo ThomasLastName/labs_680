@@ -29,12 +29,12 @@ Besides some standard libraries, this repo depends two packaes that I wrote: [an
 
 ## Installation in Colab (beginner friendly)
 
-I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will just magically work. Although, if you do so, then it's your prerogative to split the code into cells. As allueded to above, I've done this for you. See [usage](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage).
+I've made an effort to write this code such that it, if you Copy+Paste it into a Colab notebook, it will magically just work. Although, if you do so, then it's your prerogative to split the code into cells. As allueded to above, I've done this for you. See [usage](https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage).
 
 
 ## Installation in Any Environment Using `git` (requires `git`)
 
-`pip install --upgrade git+https://github.com/ThomasLastName/answers-680.git` should take care of everything for you. If the code doesn't work after that, please tell me and/or submit at [issue](https://github.com/ThomasLastName/labs_680/issues)!
+`pip install --upgrade git+https://github.com/ThomasLastName/answers-680.git` should take care of everything for you. If the code doesn't work after that, please tell me and/or submit an [issue](https://github.com/ThomasLastName/labs_680/issues)!
 
 ---
 

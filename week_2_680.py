@@ -117,8 +117,8 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 if exercise_mode:
     def augment(X):
-        dimension = X.shape[0]
-        return np.concatenate([ X, np.ones((dimension,1)) ], axis=1 )
+        # YOUR CODE HERE (this is, simply, an exercise in numpy)
+        return # X if X already has a column of all 1's, otherwise return an augmented version of X, with a new column of all 1's
 else:
     pass
 
@@ -165,13 +165,15 @@ def points_with_binary_classifier_line( w, b, X_train, y_train ):
 if exercise_mode:
     def preceptron_update_without_bias( X, y, w, random_update=False ):
         if the_algorithms_stopping_condition_is_met:
-            pass # raise a StopIteration exception
+            raise StopIteration # this just raises a flag that can be caught by try/excpet blocks outside of the context of this function
         else:
             if random_update:
-                pass # update based on a randomly selected misclassified index
+                pass # YOUR CODE HERE update based on a randomly selected misclassified index (there are typically several; choose one at random)
             else:
-                pass # update based on the first misclassified index (this is the most vanilla version of the algorithm)
-        return # both the updated vector w^{(t+1)} and the index i used to compute it
+                pass # YOUR CODE HERE update based on the **first** misclassified index (this is the vanilla version of the algorithm)
+        new_w # = the updated vector w^{(t+1)}
+        i # = the index i used to compute it
+        return new_w, i # return both the updated vector w^{(t+1)} and the index i used to compute it
 else:
     from answers_680.answers_week_2 import preceptron_update_without_bias
 

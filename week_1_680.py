@@ -140,7 +140,7 @@ f = lambda x: np.abs(x)                                                 # ~~~ th
 side_by_side_prediction_plots( x_train, y_train, f, quadratic_fit, dodeca_fit, f"With m={md}, Degree {d} Regression Does About as Well as Possible", f"With m={mD}, Degree {D} Regression Does About as Well as Possible", other_x=more_x_train, other_y=more_y_train, grid=np.linspace(-1,1,1000), xlim=[-1,1], ylim=[-2,4] )
 
 #
-# ~~~ ERM does *not* seems to be a PAC learning map for the hypothesis class of polynomials, as the results do *not* seem to be *distribution free*
+# ~~~ ERM seems like it could be a PAC learning map for the hypothesis class of polynomials, as the results do appear to be *distribution free*
 x_train = abs(x_train)              # ~~~ Change the distribution of the x's (normally y's would need to change accordingly, but not in this particular case)
 more_x_train = abs(more_x_train)    # ~~~ Change the distribution of the x's (normally y's would need to change accordingly, but not in this particular case)
 # y_train, more_y_train = f(x_train), f(more_x_train)                     # remove noise
