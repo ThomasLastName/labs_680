@@ -2,7 +2,8 @@
 # ~~~ Tom Winckelman wrote this; maintained at: https://github.com/ThomasLastName/labs_680
 
 exercise_mode = False   # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#usage
-install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680/blob/main/README.md#assisted-installation-for-environments-other-than-colab-recommended
+install_assist = False  # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#assisted-installation-for-environments-other-than-colab-deprecated
+
 
 ### ~~~
 ## ~~~ Boiler plate stuff; basically just loading packages
@@ -225,7 +226,7 @@ visualize_images( -components.T, labeler=lambda i: f"'{i+1}-th' Principal Face",
 # ~~~ sklearn's implementation
 def sklearn_PCA(X_data_format):
     m,d = X_data_format.shape
-    pca = PCA(n_components=d)
+    pca = PCA(n_components=min(m,d))
     pca.fit(X_data_format)
     components = pca.components_.T
     singular_values = pca.singular_values_
