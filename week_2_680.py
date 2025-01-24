@@ -111,31 +111,13 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 
 
-### ~~~
-## ~~~ EXERCISE 1 of 5 (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
-### ~~~
-
-if exercise_mode:
-    def augment(X):
-        # YOUR CODE HERE (this is, simply, an exercise in numpy)
-        return # X if X already has a column of all 1's, otherwise return an augmented version of X, with a new column of all 1's
-else:
-    pass
-
-from quality_of_life.my_numpy_utils import augment as my_augment
-X,y = Foucarts_training_data(plot=False)
-assert np.isclose( augment(X), my_augment(X) ).min()
-assert np.isclose( augment(X), augment(augment(X)) ).min()
-
-
-
 ### ~~~ 
-## ~~~ EXERCISE 2 of 5 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
+## ~~~ EXERCISE 1 of 5 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
 ### ~~~ 
 
 if exercise_mode:
     def compute_slope_and_intercept(w,b):
-        # YOUR CODE HERE
+        # YOUR CODE HERE (technically, this is pre-calculus; I recommend working it out with pen and paper so that you know what to code)
         return slope, intercept
 else:
     from answers_680.answers_week_2 import compute_slope_and_intercept
@@ -155,6 +137,24 @@ def points_with_binary_classifier_line( w, b, X_train, y_train ):
     plt.grid()
     plt.tight_layout()
     plt.show()
+
+
+
+### ~~~
+## ~~~ EXERCISE 2 of 5 (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
+### ~~~
+
+if exercise_mode:
+    def augment(X):
+        # YOUR CODE HERE (this is, simply, an exercise in numpy)
+        return # X if X already has a column of all 1's, otherwise return an augmented version of X, with a new column of all 1's
+else:
+    pass
+
+from quality_of_life.my_numpy_utils import augment as my_augment
+X,y = Foucarts_training_data(plot=False)
+assert np.isclose( augment(X), my_augment(X) ).min()
+assert np.isclose( augment(X), augment(augment(X)) ).min()
 
 
 
