@@ -164,6 +164,7 @@ assert np.isclose( augment(X), augment(augment(X)) ).min()
 
 if exercise_mode:
     def preceptron_update_without_bias( X, y, w, random_update=False ):
+        the_algorithms_stopping_condition_is_met = None # True or False, depending on the supplied X, y, and w (YOUR CODE HERE)
         if the_algorithms_stopping_condition_is_met:
             raise StopIteration # this just raises a flag that can be caught by try/excpet blocks outside of the context of this function
         else:
@@ -365,7 +366,7 @@ points_with_binary_classifier_line(w,b,X,y)
 
 
 ### ~~~
-## ~~~ EXERCISE 4 of 5 (easy): A numerical test for linear separability
+## ~~~ EXERCISE 4 of 5 (medium): A numerical test for linear separability
 ### ~~~
 
 #
@@ -434,12 +435,12 @@ if use_cvx:
 
 if exercise_mode:
     class HalfSpaceClassifier:
-        def __init__(arguments):
-            # YOUR CODE HERE: define w, b, and n_features as attrebutes
+        def __init__(self,w,b):
+            # YOUR CODE HERE: define w, b, and n_features as attributes
             pass
-        def __call__(arguments):
-            # YOUR CODE HERE: define how w and b are used to clasify new data
-            pass
+        def __call__(self,x):
+            predictions = None # YOUR CODE HERE: define the predictions on x using w and b
+            return predictions
 else:
     from answers_680.answers_week_2 import HalfSpaceClassifier
 
