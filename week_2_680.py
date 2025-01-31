@@ -198,12 +198,12 @@ assert i==77 and np.all(np.isclose(w,correct))
 #
 # ~~~ The perceptron algorithm (basic demonstration)
 np.random.seed(680)
-X,y = Foucarts_training_data(plot=False)    # ~~~ the data
+X, y = Foucarts_training_data(plot=False)    # ~~~ the data
 X_aug = augment(X)
-w,t = np.zeros(3),0     # ~~~ initialization
+w, t = np.zeros(3), 0     # ~~~ initialization
 while True:
     try:
-        w,index = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
+        w, index = preceptron_update_without_bias(X_aug,y,w) # ~~~ perform an update
         t += 1
     except StopIteration:
         print(f"Perceptron algorithm converged after {t} iterations.")
@@ -211,7 +211,7 @@ while True:
 
 #
 # ~~~ Plot the results
-w,b = np.array_split(w,2)
+w, b = w[:-1], w[-1]
 points_with_binary_classifier_line(w,b,X,y) # ~~~ sure enough, the classification appears to be exact
 
 #
