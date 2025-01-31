@@ -112,7 +112,7 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 
 ### ~~~ 
-## ~~~ EXERCISE 1 of 5 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
+## ~~~ EXERCISE 1 of 6 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
 ### ~~~ 
 
 if exercise_mode:
@@ -141,7 +141,7 @@ def points_with_binary_classifier_line( w, b, X_train, y_train ):
 
 
 ### ~~~
-## ~~~ EXERCISE 2 of 5 (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
+## ~~~ EXERCISE 2 of 6 (easy): Write a helper function that attaches a column of all 1's to a matrix, if there isn't a column of all 1's alreay
 ### ~~~
 
 if exercise_mode:
@@ -159,7 +159,7 @@ assert np.isclose( augment(X), augment(augment(X)) ).min()
 
 
 ### ~~~
-## ~~~ EXERCISE 3 of 5 (hard): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
+## ~~~ EXERCISE 3 of 6 (hard): Implement the perceptron algorithm (without bias) in a manner that raises a `StopIteration` exception if the supplied w meets the stopping condition already
 ### ~~~
 
 if exercise_mode:
@@ -366,7 +366,7 @@ points_with_binary_classifier_line(w,b,X,y)
 
 
 ### ~~~
-## ~~~ EXERCISE 4 of 5 (medium): A numerical test for linear separability
+## ~~~ EXERCISE 4 of 6 (medium): A numerical test for linear separability
 ### ~~~
 
 #
@@ -385,17 +385,17 @@ def linear_feasibility_program( A, b, solver=cvx.ECOS ):
     assert b.shape==(m,1)       # ~~~ safety feature
     x = cvx.Variable((n,1))     # ~~~ define the optimization variable x
     constraints = [A @ x >= b]  # ~~~ define the constraints of the problem
-    objective = cvx.Minimize(cvx.norm(x,2))         # ~~~ objective function can be anything for linear feasibility problem
+    objective = cvx.Minimize(0.)                    # ~~~ objective function can be anything for linear feasibility problem
     problem = cvx.Problem(objective, constraints)   # ~~~ put it all together into a complete minimization program
-    problem.solve(solver=solver)              # ~~~ try to solve it
+    problem.solve(solver=solver)                    # ~~~ try to solve it
     return x.value if problem.status==cvx.OPTIMAL else None
 
 #
 # ~~~ Given data X and y, build the matrix A and vector b for which linear separability is equivalent to Aw \geq b, and test the latter
-def test_for_linear_separability( X_train, y_train, verbose=True, **kwargs ):
+def seek_separating_hyperplane( X_train, y_train, verbose=True, subproblem=linear_feasibility_program, **kwargs ):
     assert set(y_train)=={-1,1}
     A,b = training_data_to_feasibility_parameters(X_train,y_train)
-    w_tilde = linear_feasibility_program( A, b, **kwargs )
+    w_tilde = subproblem( A, b, **kwargs )
     if w_tilde is None:
         if verbose:
             print("The data is not linearly separable.")
@@ -408,29 +408,59 @@ def test_for_linear_separability( X_train, y_train, verbose=True, **kwargs ):
     return w,b
 
 #
-# ~~~ Our linear feasibility program was in fact using the objective function for hard svm; see equation (4.3) in the text
-def hard_svm(*args, verbose=True, **kwargs):
-    return test_for_linear_separability( *args, verbose=verbose, **kwargs )
-
-#
 # ~~~ Test whether or not the exercise was completed successfully
 if use_cvx:
     #
     # ~~~ Test it on linearly separable data
     X,y = Foucarts_training_data(plot=False)
-    w,b = test_for_linear_separability(X,y)
+    w,b = seek_separating_hyperplane(X,y)
     points_with_binary_classifier_line(w,b,X,y)
     assert abs(b+1.1512453137620453) + abs(w-np.array([4.06811412,-2.36310124])).max() < 1e-8
     #
     # ~~~ Test it on data that is not linearly seprable 
     X,y = Foucarts_training_data(plot=False,tag="nonseparable")
-    w,b = test_for_linear_separability(X,y)
+    w,b = seek_separating_hyperplane(X,y)
     assert w is None and b is None
 
 
 
 ### ~~~
-## ~~~ EXERCISE 5 of 5 (medium): Define the class  HalfSpaceClassifier that has an __init__ and __call__ method, as well as the attributes w, b, and n_features 
+## ~~~ EXERCISE 5 of 6 (medium): Hard SVM
+### ~~~
+
+#
+# ~~~ Define a function with the same syntax as `linear_feasibility_program` but, instead of solving a linear feasibility program, it solves the constrained optimization program necessary for hard SVM (part of the exercise is to review the text and recall that constrained optimization program)
+if exercise_mode:
+    def optimization_problem_for_hard_SVM( A, b, solver=cvx.ECOS ):
+        # YOUR CODE HERE; Hint: review the text to see what optimization problem you need to solve
+        return # the solution in the form of a column vector (a numpy array)
+else:
+    from answers_680.answers_week_2 import optimization_problem_for_hard_svm
+
+#
+# ~~~ Use this oprtimization as the "backend" in hard SVM
+hard_svm = lambda *args, **kwargs: seek_separating_hyperplane( *args, subproblem=optimization_problem_for_hard_svm, **kwargs )
+w_feasible, b_feasible = seek_separating_hyperplane(X,y)
+w_hard, b_hard = hard_svm(X,y)
+
+#
+# ~~~ Visualize the advantage of hard SVM over the linear feasibility program
+fig, (ax0,ax1) = plt.subplots(1,2,figsize=(12,6))
+for ax in (ax0,ax1):
+    ax.scatter( *X.T, c=np.where( y>0, "r", "b" ) )
+    ax.grid()
+
+abline( *compute_slope_and_intercept(w_feasible,b_feasible), ax=ax0 )
+abline( *compute_slope_and_intercept(w_hard,b_hard), ax=ax1 )
+ax0.set_title("Separating Hyperplane Found by Linear Feasibility Program")
+ax1.set_title("That of Maximal Margin Found (i.e., Hard SVM)")
+fig.tight_layout()
+plt.show()
+
+
+
+### ~~~
+## ~~~ EXERCISE 6 of 6 (medium): Define the class  HalfSpaceClassifier that has an __init__ and __call__ method, as well as the attributes w, b, and n_features
 ### ~~~
 
 if exercise_mode:
@@ -495,7 +525,7 @@ if use_cvx:
     assert set(y)=={0, 1}
     y = 2*y-1
     assert set(y)=={-1, 1}
-    w_svm,b_svm = test_for_linear_separability(X,y)
+    w_svm,b_svm = seek_separating_hyperplane(X,y)
     #
     # ~~~ Observe that perceptron algorithm converges faster than the worst case scenario with an initialization of 0
     m,d = X.shape
@@ -519,7 +549,7 @@ if use_cvx:
     assert set(y)=={0,1,2,3,4,5,6,7,8,9}
     is_multiple_of_3 = y%3==0
     y = 2*is_multiple_of_3-1
-    w,b = test_for_linear_separability(X,y)
+    w,b = seek_separating_hyperplane(X,y)
 
 
 # todo: show a linear combination of images
