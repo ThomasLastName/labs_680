@@ -450,8 +450,8 @@ for ax in (ax0,ax1):
     ax.scatter( *X.T, c=np.where( y>0, "r", "b" ) )
     ax.grid()
 
-abline( *compute_slope_and_intercept(w_feasible,b_feasible), ax=ax0 )
-abline( *compute_slope_and_intercept(w_hard,b_hard), ax=ax1 )
+abline( *compute_slope_and_intercept(w_feasible,-b_feasible), ax=ax0 )
+abline( *compute_slope_and_intercept(w_hard,-b_hard), ax=ax1 )
 ax0.set_title("Separating Hyperplane Found by Linear Feasibility Program")
 ax1.set_title("That of Maximal Margin Found (i.e., Hard SVM)")
 fig.tight_layout()
