@@ -112,7 +112,7 @@ from quality_of_life.my_visualization_utils import GifMaker, abline
 
 
 ### ~~~ 
-## ~~~ EXERCISE 1 of 6 (easy): Compute the slope and intercept of the boundary between classification regions (that line you see plots of) for a classifier with weight vector w and bias b
+## ~~~ EXERCISE 1 of 6 (easy): Given a vector w \in R^2 and a scalar b, compute the slope and intercept of the line { x \in R^2 : \langle w,b \rangle+b == 0 }
 ### ~~~ 
 
 if exercise_mode:
