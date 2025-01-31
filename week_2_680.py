@@ -484,7 +484,7 @@ def score( classifier, X_test, y_test ):
 # ~~~ Check that the class works as intended
 X,y = Foucarts_training_data(plot=False)
 w,b = hard_svm(X,y,verbose=False)
-my_classifier = HalfSpaceClassifier(w,b)    # ~~~ callable; classifier(X) should return a vector with i-th entry to be the binary class predicted of X[i,:]
+my_classifier = HalfSpaceClassifier(w,-b)   # ~~~ callable; classifier(X) should return a vector with i-th entry to be the binary class predicted of X[i,:]
 assert score(my_classifier,X,y)==1          # ~~~ assert that our classifier is 100% accurate on the training data
 assert hasattr(my_classifier,"n_features")  # ~~~ check that my_classifier indeed has an n_feaures attribute
 
