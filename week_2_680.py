@@ -414,8 +414,8 @@ if use_cvx:
     # ~~~ Test it on linearly separable data
     X,y = Foucarts_training_data(plot=False)
     w,b = seek_separating_hyperplane(X,y)
-    points_with_binary_classifier_line(w,b,X,y)
-    assert abs(b+1.1512453137620453) + abs(w-np.array([4.06811412,-2.36310124])).max() < 1e-8
+    points_with_binary_classifier_line(w,-b,X,y)
+    assert all( y*(X@w-b) >= y )
     #
     # ~~~ Test it on data that is not linearly seprable 
     X,y = Foucarts_training_data(plot=False,tag="nonseparable")
@@ -439,6 +439,7 @@ else:
 
 #
 # ~~~ Use this oprtimization as the "backend" in hard SVM
+X,y = Foucarts_training_data(plot=False)
 hard_svm = lambda *args, **kwargs: seek_separating_hyperplane( *args, subproblem=optimization_problem_for_hard_svm, **kwargs )
 w_feasible, b_feasible = seek_separating_hyperplane(X,y)
 w_hard, b_hard = hard_svm(X,y)
@@ -453,7 +454,7 @@ for ax in (ax0,ax1):
 abline( *compute_slope_and_intercept(w_feasible,-b_feasible), ax=ax0 )
 abline( *compute_slope_and_intercept(w_hard,-b_hard), ax=ax1 )
 ax0.set_title("Separating Hyperplane Found by Linear Feasibility Program")
-ax1.set_title("That of Maximal Margin Found (i.e., Hard SVM)")
+ax1.set_title("Separating Hyperplane of Maximal Margin (i.e., Hard SVM)")
 fig.tight_layout()
 plt.show()
 
@@ -554,10 +555,7 @@ if use_cvx:
 
 # todo: show a linear combination of images
 # todo: test whether or not other digits like 8's vs. multiples of three are linearly separable
-# todo: perceptron on MNIST 0's and 1's
 # todo experiment with different initializations in the perceptron algorithm
 # experiment with how sharp empirically is our estimate T < R^2\|\tilde{w}^\ast\|^2; try scaling the data by a factor R>0 and see how/whether this effects the number of iterations
-# are the 0's and 1's of MNIST linearly separable?
-# what happens when you run the perceptron algorithm on some data that is not linearly separable?
 # todo: what is the effect on the algorithm if we permute the positions of the classes?
 
