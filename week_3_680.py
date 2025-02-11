@@ -72,6 +72,7 @@ if install_assist or this_is_running_in_colab:              # override necessary
 # ~~~ Tom's helper routines (which the above block of code installs for you); maintained at https://github.com/ThomasLastName/quality_of_life
 from quality_of_life.my_visualization_utils import points_with_curves, side_by_side_prediction_plots, GifMaker, buffer
 from quality_of_life.my_numpy_utils         import generate_random_1d_data
+from answers_680.answers_week_3             import LASSO_polyfit
 
 
 
@@ -127,7 +128,7 @@ assert abs(coeffs-my_coeffs).max() + abs( poly(x)-my_poly(x) ).max() < 1e-14    
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 1 of 2: The problem that regularization hopes to solve
+## ~~~ DEMONSTRATION 1 of 3: The problem that regularization hopes to solve
 ### ~~~
 
 #
@@ -163,7 +164,27 @@ gif.develop( "Regularized Polynomial Regression 680", fps=15 )
 
 
 ### ~~~
-## ~~~ DEMONSTRATION 2 of 2: **Cross validation** -- a standard workflow for model selection (which in this case means selecting the appropriate polynomial degree and regularization parameter)
+## ~~~ DEMONSTRATION 2 of 3: Does Lasso look any different?
+### ~~~
+
+#
+# ~~~ Visualize how the fitted polynomial evolves when \lambda increasees (may take a minute to run)
+del fig
+del ax
+gif = GifMaker()
+lambs = np.linspace(0,1.7,150)**2
+for l in lambs:     # ~~~ fit the polynomial, graph it, take a picture
+    coeffs = LASSO_polyfit( x_train, y_train, degree=D, lam=l )
+    regularized_fit = lambda x: np.column_stack([ x**i for i in range(D+1) ]) @ coeffs
+    fig,ax = points_with_curves( x_train, y_train, (regularized_fit,f), show=False, title=r"Progressively Increasing the Regularization Parameter $\lambda$", fig=(fig if "fig" in globals() else "new"), ax=(ax if "ax" in globals() else "new") )
+    gif.capture()
+
+gif.develop( "Regularized Polynomial Regression 680", fps=15 )
+
+
+
+### ~~~
+## ~~~ DEMONSTRATION 3 of 3: **Cross validation** -- a standard workflow for model selection (which in this case means selecting the appropriate polynomial degree and regularization parameter)
 ### ~~~
 
 #
