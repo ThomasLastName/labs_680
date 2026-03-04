@@ -25,7 +25,7 @@ try:
     torch.set_default_dtype(torch.double)
     pytorch_is_available = True
 except ModuleNotFoundError:
-    pytorch_is_available
+    pytorch_is_available = False
 
 #
 # ~~~ see https://github.com/ThomasLastName/labs_680?tab=readme-ov-file#assisted-installation-for-environments-other-than-colab-deprecated
